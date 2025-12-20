@@ -32,7 +32,7 @@ export type AggregatedTelemetryPoint = {
   meetingsHeld: number;
 };
 
-type RawReading = {
+export type RawReading = {
   device_id: string;
   infection_status: 0 | 1;
   proximity_mask: string; // JSON-encoded array

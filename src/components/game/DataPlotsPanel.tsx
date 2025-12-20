@@ -30,12 +30,12 @@ import ScatterChart from "../charts/ScatterChart";
 import HistogramChart from "../charts/HistogramChart";
 import { buildScatterPlotData } from "../../utils/buildScatterPlotData";
 import { buildHistogramPlotData } from "../../utils/buildHistogramPlotData";
-
-
+import { loadRawSession } from "../../analytics/loadRawSession";
 
 const telemetry = aggregateTelemetry(
-    Object.values(rawSession.readings)
-  );
+  loadRawSession(rawSession)
+);
+
 
   
 type PlotTypeId = "line" | "scatter" | "histogram";

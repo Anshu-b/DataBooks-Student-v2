@@ -1,12 +1,21 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import App from "./App";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+import App from "./App";
+import { LoggingProvider } from "./logging/LoggingProvider";
+import { ConsoleLogger } from "./logging/consoleLogger";
+
+const logger = new ConsoleLogger();
+
+ReactDOM.createRoot(
+  document.getElementById("root")!
+).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <LoggingProvider logger={logger}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </LoggingProvider>
   </React.StrictMode>
 );
