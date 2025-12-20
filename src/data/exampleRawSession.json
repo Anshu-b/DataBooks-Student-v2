@@ -1,0 +1,42 @@
+{
+    "activeSessionId": "20250711period2",
+    "readings": {
+      "r1": {
+        "device_id": "T1",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:46:00Z"
+      },
+      "r2": {
+        "device_id": "T2",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,0,0]",
+        "timestamp": "2025-07-11T19:46:10Z"
+      },
+      "r3": {
+        "device_id": "T3",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,1,0]",
+        "timestamp": "2025-07-11T19:46:30Z"
+      },
+      "r4": {
+        "device_id": "T1",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:47:05Z"
+      },
+      "r5": {
+        "device_id": "T2",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,0]",
+        "timestamp": "2025-07-11T19:47:15Z"
+      },
+      "r6": {
+        "device_id": "T3",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,1,0]",
+        "timestamp": "2025-07-11T19:47:40Z"
+      }
+    }
+  }
+  

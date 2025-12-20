@@ -1,0 +1,82 @@
+/**
+ * GameStateContext
+ * ----------------
+ * React Context responsible for owning and mutating GameState.
+ *
+ * This is the ONLY place where game state is created and updated.
+ * UI components should consume state via useGameState().
+ */
+
+import { createContext, useContext, useState } from "react";
+import type { GameState, JournalAnswer } from "../types/gameState";
+
+type GameStateContextValue = {
+  gameState: GameState;
+  setJournalAnswer: (round: number, answer: JournalAnswer) => void;
+  nextRound: () => void;
+};
+
+const GameStateContext = createContext<GameStateContextValue | null>(null);
+
+type Props = {
+  gameId: string;
+  playerName: string;
+  children: React.ReactNode;
+};
+
+export function GameStateProvider({ gameId, playerName, children }: Props) {
+  const [gameState, setGameState] = useState<GameState>({
+    gameId,
+    player: { name: playerName },
+    currentRound: 1,
+    rounds: {
+      1: { roundNumber: 1, journalAnswers: {} },
+    },
+  });
+
+  function setJournalAnswer(round: number, answer: JournalAnswer) {
+    setGameState((prev) => ({
+      ...prev,
+      rounds: {
+        ...prev.rounds,
+        [round]: {
+          ...prev.rounds[round],
+          journalAnswers: {
+            ...prev.rounds[round].journalAnswers,
+            [answer.questionId]: answer,
+          },
+        },
+      },
+    }));
+  }
+
+  function nextRound() {
+    setGameState((prev) => {
+      const next = prev.currentRound + 1;
+      return {
+        ...prev,
+        currentRound: next,
+        rounds: {
+          ...prev.rounds,
+          [next]: { roundNumber: next, journalAnswers: {} },
+        },
+      };
+    });
+  }
+
+  return (
+    <GameStateContext.Provider
+      value={{ gameState, setJournalAnswer, nextRound }}
+    >
+      {children}
+    </GameStateContext.Provider>
+  );
+}
+
+export function useGameStateContext() {
+  const ctx = useContext(GameStateContext);
+  if (!ctx) {
+    throw new Error("useGameStateContext must be used within GameStateProvider");
+  }
+  return ctx;
+}
