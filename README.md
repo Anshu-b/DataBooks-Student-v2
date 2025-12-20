@@ -16,6 +16,7 @@ Version 2 focuses on **clean architecture**, **explicit data boundaries**, and *
 
 ## Application Architecture (High Level)
 
+```
 src/
 ├── pages/ # Route-level pages
 ├── components/ # Reusable UI components
@@ -26,6 +27,7 @@ src/
 ├── data/ # Example / mock datasets
 ├── hooks/ # Shared React hooks
 ├── types/ # Shared domain types
+```
 
 
 Each folder represents a **single responsibility domain**.
@@ -206,7 +208,7 @@ These are intentionally **separated** in code and will be separated in storage.
 
 ---
 
-## Next Steps
+## Next Steps (TODO)
 
 1. Initialize Firebase project
 2. Add environment variables (`.env`)
@@ -214,5 +216,6 @@ These are intentionally **separated** in code and will be separated in storage.
 4. Implement `FirebaseLogger`
 5. Wire ESP ingestion → Firebase
 6. Enable real-time session analysis
+
 
 
