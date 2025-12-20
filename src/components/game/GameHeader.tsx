@@ -80,7 +80,7 @@ function GameHeader({
       <span
         style={{
           fontWeight: 700,
-          fontSize: "1.1rem",
+          fontSize: "1.4rem",
           letterSpacing: "0.5px",
           textShadow: "1px 1px 3px rgba(0, 0, 0, 0.2)",
           display: "flex",
@@ -102,7 +102,7 @@ function GameHeader({
             background: "rgba(255, 255, 255, 0.25)",
             padding: "0.3rem 0.8rem",
             borderRadius: "6px",
-            fontSize: "0.95rem",
+            fontSize: "1.2rem",
             fontWeight: 600,
           }}
         >
