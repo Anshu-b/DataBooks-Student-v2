@@ -35,6 +35,7 @@ function GameHeader({
   activePanel,
   onSelectPanel,
 }: Props) {
+
   return (
     <header
       style={{

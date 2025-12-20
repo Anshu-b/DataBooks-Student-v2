@@ -18,9 +18,11 @@
 
 import { JOURNAL_ROUNDS } from "../../config/journal";
 import { useGameState } from "../../hooks/useGameState";
+import { useLogger } from "../../logging/LoggingProvider";
 
 function JournalPanel() {
   const { gameState, setJournalAnswer } = useGameState();
+  const logger = useLogger();
   const currentRound = gameState.currentRound;
 
   const roundConfig = JOURNAL_ROUNDS.find(
@@ -84,7 +86,7 @@ function JournalPanel() {
               margin: 0,
             }}
           >
-            Journal Questions
+            Journal
           </h2>
           <div
             style={{
@@ -94,13 +96,53 @@ function JournalPanel() {
               marginTop: "0.25rem",
             }}
           >
-            Round {currentRound} Reflections
+            Round {currentRound} Questions
           </div>
         </div>
       </div>
 
+      {/* Helpful Tips Section */}
+      <div
+        style={{
+          maxWidth: "900px",
+          margin: "2rem auto 2rem",
+          background: "rgba(243, 156, 18, 0.1)",
+          borderRadius: "12px",
+          padding: "1.25rem",
+          border: "2px solid rgba(243, 156, 18, 0.2)",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
+            marginBottom: "0.5rem",
+          }}
+        >
+          <span style={{ fontSize: "1.2rem" }}>💡</span>
+          <strong style={{ color: "#2d3748", fontSize: "1.25rem" }}>
+            Writing Tips
+          </strong>
+        </div>
+        <ul
+          style={{
+            margin: "0.5rem 0 0 1.5rem",
+            padding: 0,
+            color: "#4a5568",
+            fontSize: "1.1rem",
+            lineHeight: "1.6",
+          }}
+        >
+          <li>Use evidence from the data plots to support your answers</li>
+          <li>Explain your reasoning clearly</li>
+          <li>Think like a scientist - what patterns do you notice?</li>
+        </ul>
+
+      </div>
+
       {/* Questions */}
-      <div style={{ maxWidth: "700px", margin: "0 auto" }}>
+      <div style={{ maxWidth: "950px", margin: "0 auto" }}>
         {roundConfig.questions.map((q, index) => (
           <div
             key={q.id}
@@ -141,7 +183,7 @@ function JournalPanel() {
               <p
                 style={{
                   fontWeight: 600,
-                  fontSize: "1.05rem",
+                  fontSize: "1.25rem",
                   color: "#2d3748",
                   margin: 0,
                   lineHeight: "1.6",
@@ -178,12 +220,35 @@ function JournalPanel() {
                   })
                 }
                 onFocus={(e) => {
+                  // Log when user clicks into the textarea
+                  // logger.log({
+                  //   type: "journal.input",
+                  //   action: "answer_focused",
+                  //   details: {
+                  //     round: currentRound,
+                  //     questionIndex: index + 1,
+                  //   },
+                  // });
+
                   e.currentTarget.style.borderColor = "#f39c12";
                   e.currentTarget.style.boxShadow =
                     "0 0 0 3px rgba(243, 156, 18, 0.1)";
                   e.currentTarget.style.background = "white";
                 }}
                 onBlur={(e) => {
+                  const text = e.currentTarget.value;
+                  
+                  // Log when user finishes writing (clicks away from textarea)
+                  logger.log({
+                    type: "journal.input",
+                    action: "answer_committed",
+                    details: {
+                      round: currentRound,
+                      questionIndex: index + 1,
+                      length: text.length,
+                    },
+                  });
+
                   e.currentTarget.style.borderColor = "#fdebd0";
                   e.currentTarget.style.boxShadow = "none";
                   e.currentTarget.style.background = "#fef9f3";
@@ -221,44 +286,6 @@ function JournalPanel() {
         ))}
       </div>
 
-      {/* Helpful Tips Section */}
-      <div
-        style={{
-          maxWidth: "700px",
-          margin: "2rem auto 0",
-          background: "rgba(243, 156, 18, 0.1)",
-          borderRadius: "12px",
-          padding: "1.25rem",
-          border: "2px solid rgba(243, 156, 18, 0.2)",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "0.5rem",
-            marginBottom: "0.5rem",
-          }}
-        >
-          <span style={{ fontSize: "1.2rem" }}>💡</span>
-          <strong style={{ color: "#2d3748", fontSize: "0.95rem" }}>
-            Writing Tips
-          </strong>
-        </div>
-        <ul
-          style={{
-            margin: "0.5rem 0 0 1.5rem",
-            padding: 0,
-            color: "#4a5568",
-            fontSize: "0.9rem",
-            lineHeight: "1.6",
-          }}
-        >
-          <li>Use evidence from the data plots to support your answers</li>
-          <li>Explain your reasoning clearly</li>
-          <li>Think like a scientist - what patterns do you notice?</li>
-        </ul>
-      </div>
     </div>
   );
 }

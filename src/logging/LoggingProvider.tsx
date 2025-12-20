@@ -1,20 +1,19 @@
 /**
  * LoggingProvider
  * ---------------
- * Supplies a single InteractionLogger instance
- * to the entire React app.
+ * Supplies a logger instance to the component tree.
  */
 
 import { createContext, useContext } from "react";
-import type { InteractionLogger } from "./logger";
+import type { Logger } from "./logger";
 
-const LoggingContext = createContext<InteractionLogger | null>(null);
+const LoggingContext = createContext<Logger | null>(null);
 
 export function LoggingProvider({
   logger,
   children,
 }: {
-  logger: InteractionLogger;
+  logger: Logger;
   children: React.ReactNode;
 }) {
   return (
@@ -24,10 +23,10 @@ export function LoggingProvider({
   );
 }
 
-export function useLogger(): InteractionLogger {
-  const ctx = useContext(LoggingContext);
-  if (!ctx) {
-    throw new Error("useLogger must be used inside LoggingProvider");
+export function useLogger(): Logger {
+  const logger = useContext(LoggingContext);
+  if (!logger) {
+    throw new Error("useLogger must be used within LoggingProvider");
   }
-  return ctx;
+  return logger;
 }

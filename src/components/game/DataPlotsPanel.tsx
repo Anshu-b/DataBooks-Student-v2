@@ -31,6 +31,7 @@ import HistogramChart from "../charts/HistogramChart";
 import { buildScatterPlotData } from "../../utils/buildScatterPlotData";
 import { buildHistogramPlotData } from "../../utils/buildHistogramPlotData";
 import { loadRawSession } from "../../analytics/loadRawSession";
+import { useLogger } from "../../logging/LoggingProvider";
 
 const telemetry = aggregateTelemetry(
   loadRawSession(rawSession)
@@ -55,6 +56,8 @@ function DataPlotsPanel() {
   const validXVars = getValidVariables(plotType, "x");
   const validYVars = getValidVariables(plotType, "y");
   const validValueVars = getValidVariables(plotType, "value");
+  const logger = useLogger();
+
 
   /* -----------------------------
    * Auto-correct invalid selections
@@ -155,7 +158,23 @@ function DataPlotsPanel() {
           </label>
           <select
             value={plotType}
-            onChange={(e) => setPlotType(e.target.value as PlotTypeId)}
+            onChange={(e) => {
+              const next = e.target.value as PlotTypeId;
+            
+              if (next !== plotType) {
+                logger.log({
+                  type: "plot.type_changed",
+                  action: `${plotType}_to_${next}`,
+                  details: {
+                    from: plotType,
+                    to: next,
+                  },
+                });
+              }
+            
+              setPlotType(next);
+            }}
+            
             style={{
               width: "100%",
               padding: "0.75rem 1rem",
@@ -211,7 +230,25 @@ function DataPlotsPanel() {
               </label>
               <select
                 value={xVar}
-                onChange={(e) => setXVar(e.target.value)}
+                onChange={(e) => {
+                  const next = e.target.value;
+                
+                  if (next !== xVar) {
+                    logger.log({
+                      type: "plot.change_variable",
+                      action: "x_variable_changed",
+                      plotType,
+                      details: {
+                        axis: "x",
+                        from: xVar,
+                        to: next,
+                      },
+                    });
+                  }
+                
+                  setXVar(next);
+                }}
+                
                 style={{
                   width: "100%",
                   padding: "0.75rem 1rem",
@@ -258,7 +295,25 @@ function DataPlotsPanel() {
               </label>
               <select
                 value={yVar}
-                onChange={(e) => setYVar(e.target.value)}
+                onChange={(e) => {
+                  const next = e.target.value;
+                
+                  if (next !== yVar) {
+                    logger.log({
+                      type: "plot.change_variable",
+                      action: "y_variable_changed",
+                      plotType,
+                      details: {
+                        axis: "y",
+                        from: yVar,
+                        to: next,
+                      },
+                    });
+                  }
+                
+                  setYVar(next);
+                }}
+                
                 style={{
                   width: "100%",
                   padding: "0.75rem 1rem",
@@ -309,7 +364,25 @@ function DataPlotsPanel() {
             </label>
             <select
               value={valueVar}
-              onChange={(e) => setValueVar(e.target.value)}
+              onChange={(e) => {
+                const next = e.target.value;
+              
+                if (next !== valueVar) {
+                  logger.log({
+                    type: "plot.change_variable",
+                    action: "value_variable_changed",
+                    plotType,
+                    details: {
+                      axis: "value",
+                      from: valueVar,
+                      to: next,
+                    },
+                  });
+                }
+              
+                setValueVar(next);
+              }}
+              
               style={{
                 width: "100%",
                 padding: "0.75rem 1rem",

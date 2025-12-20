@@ -22,9 +22,7 @@
  *   - Never logs user actions directly
  */
 
-import { useEffect } from "react";
 import type { ScreenMode } from "../../types/layout";
-import { useLogger } from "../../logging/LoggingProvider";
 import JournalPanel from "./JournalPanel";
 import DataPlotsPanel from "./DataPlotsPanel";
 
@@ -34,33 +32,6 @@ type Props = {
 };
 
 function GameLayout({ screenMode, activePanel }: Props) {
-  const logger = useLogger();
-
-  /**
-   * Log screen mode transitions (single ↔ dual).
-   * This records layout state changes, not user intent.
-   */
-  useEffect(() => {
-    logger.log({
-      type: "layout.screen_mode_changed",
-      payload: {
-        screenMode,
-      },
-    });
-  }, [screenMode, logger]);
-
-  /**
-   * Log active panel visibility changes.
-   * Useful for reconstructing what the user saw.
-   */
-  useEffect(() => {
-    logger.log({
-      type: "layout.active_panel_changed",
-      payload: {
-        panel: activePanel,
-      },
-    });
-  }, [activePanel, logger]);
 
   // Dual screen layout
   if (screenMode === "dual") {

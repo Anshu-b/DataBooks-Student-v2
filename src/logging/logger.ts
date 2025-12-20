@@ -12,6 +12,7 @@
 
 import type { UserInteractionEvent } from "./events";
 
-export interface InteractionLogger {
+export interface Logger {
   log(event: UserInteractionEvent): void;
 }
+
