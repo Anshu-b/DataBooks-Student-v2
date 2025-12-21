@@ -10,5 +10,17 @@
 import { useGameStateContext } from "../state/GameStateContext";
 
 export function useGameState() {
-  return useGameStateContext();
+  const {
+    gameState,
+    setJournalAnswer,
+    nextRound,
+    getJournalAnswersForRound, // 👈 NEW
+  } = useGameStateContext();
+
+  return {
+    gameState,
+    setJournalAnswer,
+    nextRound,
+    getJournalAnswersForRound, // 👈 EXPOSED
+  };
 }

@@ -16,17 +16,25 @@
  * single-screen and dual-screen layouts.
  */
 
+import { useState } from "react";
 import { JOURNAL_ROUNDS } from "../../config/journal";
 import { useGameState } from "../../hooks/useGameState";
 import { useLogger } from "../../logging/LoggingProvider";
 
+
 function JournalPanel() {
-  const { gameState, setJournalAnswer } = useGameState();
+  const { gameState, setJournalAnswer, getJournalAnswersForRound } = useGameState();
   const logger = useLogger();
+
   const currentRound = gameState.currentRound;
 
+  /* -----------------------------------------
+   * NEW: viewed round (allows jumping around)
+   * ----------------------------------------- */
+  const [viewedRound, setViewedRound] = useState(currentRound);
+
   const roundConfig = JOURNAL_ROUNDS.find(
-    (r) => r.roundNumber === currentRound
+    (r) => r.roundNumber === viewedRound
   );
 
   if (!roundConfig) {
@@ -53,6 +61,51 @@ function JournalPanel() {
         minHeight: "100vh",
       }}
     >
+      {/* -----------------------------------------
+       * NEW: Round Navigation Tabs
+       * ----------------------------------------- */}
+      <div
+        style={{
+          display: "flex",
+          gap: "0.5rem",
+          marginBottom: "1.5rem",
+        }}
+      >
+        {JOURNAL_ROUNDS.map((r) => (
+          <button
+            key={r.roundNumber}
+            onClick={() => {
+              if (viewedRound !== r.roundNumber) {
+                logger.log({
+                  type: "journal.round_navigation",
+                  action: "round_viewed",
+                  details: {
+                    fromRound: viewedRound,
+                    toRound: r.roundNumber,
+                  },
+                });
+                setViewedRound(r.roundNumber);
+              }
+            }}
+            style={{
+              padding: "0.5rem 1rem",
+              borderRadius: "8px",
+              border: "none",
+              fontWeight: 600,
+              cursor: "pointer",
+              background:
+                viewedRound === r.roundNumber
+                  ? "#f39c12"
+                  : "rgba(243, 156, 18, 0.2)",
+              color:
+                viewedRound === r.roundNumber ? "white" : "#2d3748",
+            }}
+          >
+            Round {r.roundNumber}
+          </button>
+        ))}
+      </div>
+
       {/* Header */}
       <div
         style={{
@@ -96,7 +149,7 @@ function JournalPanel() {
               marginTop: "0.25rem",
             }}
           >
-            Round {currentRound} Questions
+            Round {viewedRound} Questions
           </div>
         </div>
       </div>
@@ -138,7 +191,6 @@ function JournalPanel() {
           <li>Explain your reasoning clearly</li>
           <li>Think like a scientist - what patterns do you notice?</li>
         </ul>
-
       </div>
 
       {/* Questions */}
@@ -214,78 +266,71 @@ function JournalPanel() {
                 }}
                 placeholder="Share your thoughts here..."
                 onChange={(e) =>
-                  setJournalAnswer(currentRound, {
+                  setJournalAnswer(viewedRound, {
                     questionId: q.id,
                     answer: e.target.value,
                   })
                 }
-                onFocus={(e) => {
-                  // Log when user clicks into the textarea
-                  // logger.log({
-                  //   type: "journal.input",
-                  //   action: "answer_focused",
-                  //   details: {
-                  //     round: currentRound,
-                  //     questionIndex: index + 1,
-                  //   },
-                  // });
-
-                  e.currentTarget.style.borderColor = "#f39c12";
-                  e.currentTarget.style.boxShadow =
-                    "0 0 0 3px rgba(243, 156, 18, 0.1)";
-                  e.currentTarget.style.background = "white";
-                }}
                 onBlur={(e) => {
-                  const text = e.currentTarget.value;
-                  
-                  // Log when user finishes writing (clicks away from textarea)
                   logger.log({
                     type: "journal.input",
                     action: "answer_committed",
                     details: {
-                      round: currentRound,
+                      round: viewedRound,
                       questionIndex: index + 1,
-                      length: text.length,
+                      length: e.currentTarget.value.length,
                     },
                   });
-
-                  e.currentTarget.style.borderColor = "#fdebd0";
-                  e.currentTarget.style.boxShadow = "none";
-                  e.currentTarget.style.background = "#fef9f3";
                 }}
               />
-            )}
-
-            {/* Plot Required Notice */}
-            {q.type === "plot-required" && (
-              <div
-                style={{
-                  background: "rgba(102, 126, 234, 0.1)",
-                  border: "2px solid rgba(102, 126, 234, 0.2)",
-                  borderRadius: "12px",
-                  padding: "1rem",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.75rem",
-                }}
-              >
-                <span style={{ fontSize: "1.5rem" }}>📊</span>
-                <em
-                  style={{
-                    color: "#4a5568",
-                    fontSize: "0.95rem",
-                    fontWeight: 500,
-                  }}
-                >
-                  Explore the DataPlots tab first, then come back to answer this
-                  question!
-                </em>
-              </div>
             )}
           </div>
         ))}
       </div>
 
+      {/* -----------------------------------------
+       * NEW: Save / Submit Button
+       * ----------------------------------------- */}
+      <div
+        style={{
+          maxWidth: "950px",
+          margin: "2rem auto",
+          textAlign: "right",
+        }}
+      >
+        <button
+          onClick={() => {
+            const answers = getJournalAnswersForRound(viewedRound);
+
+            logger.log({
+              type: "journal.round_submission",
+              action: "round_saved",
+              details: {
+                round: viewedRound,
+                answers: answers.map((a) => ({
+                  questionId: a.questionId,
+                  answer: a.answer,
+                  length: a.answer.length,
+                })),
+                answerCount: answers.length,
+              },
+            });
+          }}
+          style={{
+            padding: "0.75rem 1.5rem",
+            background: "#f39c12",
+            color: "white",
+            border: "none",
+            borderRadius: "10px",
+            fontWeight: 700,
+            cursor: "pointer",
+            fontSize: "1rem",
+          }}
+        >
+          Save Round {viewedRound} Answers
+        </button>
+
+      </div>
     </div>
   );
 }

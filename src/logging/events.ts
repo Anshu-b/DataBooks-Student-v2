@@ -13,7 +13,9 @@ export type UserInteractionEvent =
   | PlotVariableChanged
   | JournalResponseEdited
   | JournalInputFocused
-  | JournalInputCommitted;
+  | JournalInputCommitted
+  | JournalRoundNavigation
+  | JournalRoundSubmission;
 
 type Panel = "journal" | "plots";
 
@@ -84,5 +86,28 @@ export type JournalInputCommitted = {
     round: number;
     questionIndex: number;
     length: number;
+  };
+};
+
+export type JournalRoundNavigation = {
+  type: "journal.round_navigation";
+  action: "round_viewed";
+  details: {
+    fromRound: number;
+    toRound: number;
+  };
+};
+
+export type JournalRoundSubmission = {
+  type: "journal.round_submission";
+  action: "round_saved";
+  details: {
+    round: number;
+    answers: Array<{
+      questionId: string;
+      answer: string;
+      length: number;
+    }>;
+    answerCount: number;
   };
 };

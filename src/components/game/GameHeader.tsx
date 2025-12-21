@@ -17,6 +17,7 @@
  */
 
 import type { ScreenMode } from "../../types/layout";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   gameName: string;
@@ -36,6 +37,9 @@ function GameHeader({
   onSelectPanel,
 }: Props) {
 
+  const navigate = useNavigate();
+
+
   return (
     <header
       style={{
@@ -51,6 +55,7 @@ function GameHeader({
     >
       {/* Left section - Back button */}
       <button
+      onClick={() => navigate("/")}
         style={{
           padding: "0.6rem 1.2rem",
           background: "rgba(255, 255, 255, 0.2)",

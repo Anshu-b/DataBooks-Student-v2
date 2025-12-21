@@ -14,6 +14,11 @@ type GameStateContextValue = {
   gameState: GameState;
   setJournalAnswer: (round: number, answer: JournalAnswer) => void;
   nextRound: () => void;
+
+  /* -----------------------------------------
+   * NEW: selectors
+   * ----------------------------------------- */
+  getJournalAnswersForRound: (round: number) => JournalAnswer[];
 };
 
 const GameStateContext = createContext<GameStateContextValue | null>(null);
@@ -64,9 +69,22 @@ export function GameStateProvider({ gameId, playerName, children }: Props) {
     });
   }
 
+  /* -----------------------------------------
+   * NEW: selector implementation
+   * ----------------------------------------- */
+  function getJournalAnswersForRound(round: number): JournalAnswer[] {
+    const answersById = gameState.rounds[round]?.journalAnswers ?? {};
+    return Object.values(answersById);
+  }
+
   return (
     <GameStateContext.Provider
-      value={{ gameState, setJournalAnswer, nextRound }}
+      value={{
+        gameState,
+        setJournalAnswer,
+        nextRound,
+        getJournalAnswersForRound, // 👈 exposed here
+      }}
     >
       {children}
     </GameStateContext.Provider>
