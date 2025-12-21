@@ -4,24 +4,13 @@ import { BrowserRouter } from "react-router-dom";
 
 import App from "./App";
 import { LoggingProvider } from "./logging/LoggingProvider";
-import { FirebaseLogger } from "./logging/FirebaseLogger";
-import { createBatchTimestamp } from "./logging/createBatchTimestamp";
 
-const logger = new FirebaseLogger({
-  userId: "Eli",              // later: dynamic
-  gameId: "alien-invasion",
-  batchTimestamp: createBatchTimestamp(),
-});
-
-
-ReactDOM.createRoot(
-  document.getElementById("root")!
-).render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <LoggingProvider logger={logger}>
-      <BrowserRouter>
+    <BrowserRouter>
+      <LoggingProvider>
         <App />
-      </BrowserRouter>
-    </LoggingProvider>
+      </LoggingProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );

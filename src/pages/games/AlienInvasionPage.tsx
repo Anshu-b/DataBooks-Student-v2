@@ -18,13 +18,14 @@
 
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
+import { useEffect } from "react";
 import type { ScreenMode } from "../../types/layout";
 import GameHeader from "../../components/game/GameHeader";
 import GameLayout from "../../components/game/GameLayout";
 import { GameStateProvider } from "../../state/GameStateContext";
 import { GAMES } from "../../config/games";
 import { useLogger } from "../../logging/LoggingProvider";
-
+import { createBatchTimestamp } from "../../logging/createBatchTimestamp";
 
 
 function AlienInvasionPage() {
@@ -37,7 +38,16 @@ function AlienInvasionPage() {
   const [activePanel, setActivePanel] =
     useState<"journal" | "plots">("journal");
 
-  if (!game) return <p>Game not found.</p>;
+    if (!game) return <p>Game not found.</p>;
+
+    useEffect(() => {
+      logger.initializeLogger({
+        userId: playerName,
+        gameId: game.id,
+        batchTimestamp: createBatchTimestamp(),
+      });
+    }, [playerName, game.id]);
+    
 
   function handleSelectPanel(panel: "journal" | "plots") {
     if (activePanel !== panel) {
