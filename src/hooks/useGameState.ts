@@ -14,13 +14,13 @@ export function useGameState() {
     gameState,
     setJournalAnswer,
     nextRound,
-    getJournalAnswersForRound, // 👈 NEW
+    getJournalAnswersForRound,
   } = useGameStateContext();
 
   return {
     gameState,
     setJournalAnswer,
     nextRound,
-    getJournalAnswersForRound, // 👈 EXPOSED
+    getJournalAnswersForRound,
   };
 }

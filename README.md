@@ -18,15 +18,30 @@ Version 2 focuses on **clean architecture**, **explicit data boundaries**, and *
 
 ```
 src/
-├── pages/ # Route-level pages
-├── components/ # Reusable UI components
-├── game/ # Game-specific layout & panels
-├── analytics/ # ESP telemetry aggregation & analysis
-├── logging/ # User interaction logging (non-ESP)
-├── config/ # Declarative configuration (plots, questions)
-├── data/ # Example / mock datasets
-├── hooks/ # Shared React hooks
-├── types/ # Shared domain types
+├── pages/              # Route-level pages (Landing, Entry/Log-In)
+│   └── games/          # Game-specific pages (Ex: Alien Invasion)
+|
+├── components/         # Reusable UI components
+│   └── game/           # Game-specific layout & panels
+│   └── charts/         # Bare-bones plot objects with Nivo (Ex: Line plot, Histogram, etc)
+|
+├── analytics/          # ESP telemetry aggregation & analysis for plots (ex: meetings held, total cadets)
+|
+├── logging/            # User interaction logging of button interaction, journal answers, etc. (non-ESP)
+|
+├── config/             # Declarative configurations (plots, journal questions, cadet names)
+|
+├── data/               # Example / mock datasets (CAN BE REMOVED LATER)
+|
+├── hooks/              # Shared React hooks (changes in game state)
+|
+├── state/              # Game state ownership (Context, owning and mutating GameState)
+|
+├── types/              # Shared domain types
+|
+├── firebase/           # Firebase initialization
+|
+└── utils/              # Plot helpers & validation
 ```
 
 
