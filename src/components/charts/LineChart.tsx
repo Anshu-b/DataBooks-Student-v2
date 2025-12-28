@@ -10,54 +10,6 @@
  *  - Only renders what it is given
  */
 
-// import { ResponsiveLine } from "@nivo/line";
-
-// type LineChartProps = {
-//   data: {
-//     id: string;
-//     data: { x: number | string | Date; y: number }[];
-//   }[];
-
-//   xScaleType?: "point" | "time";
-//   xFormat?: string;
-//   xLegend?: string;
-//   yLegend?: string;
-// };
-
-// function LineChart({ data, xScaleType = "point", xFormat, xLegend = "X", yLegend = "Y", }: LineChartProps) {
-//   return (
-//     <div style={{ height: 400 }}>
-//       <ResponsiveLine
-//         data={data}
-//         margin={{ top: 40, right: 40, bottom: 50, left: 60 }}
-
-//         xScale={
-//           xScaleType === "time"
-//             ? { type: "time", format: "native", precision: "second" }
-//             : { type: "point" }
-//         }
-//         xFormat={xScaleType === "time" ? xFormat : undefined}
-
-//         yScale={{ type: "linear", min: 0, max: "auto" }}
-
-//         axisBottom={{
-//           format: xScaleType === "time" ? xFormat : undefined,
-//           legend: xLegend,
-//           legendOffset: 36,
-//           legendPosition: "middle",
-//         }}
-        
-//         axisLeft={{ legend: "Y", legendOffset: -50 }}
-//         colors={{ scheme: "category10" }}
-//         pointSize={6}
-//         useMesh
-//       />
-//     </div>
-//   );
-// }
-
-// export default LineChart;
-
 import { ResponsiveLine } from "@nivo/line";
 
 type LineChartProps = {
@@ -78,11 +30,15 @@ function LineChart({
   xLegend = "X", 
   yLegend = "Y" 
 }: LineChartProps) {
+
+  console.log("xScaleType:", xScaleType);
+  console.log("First x value:", data[0]?.data[0]?.x, typeof data[0]?.data[0]?.x);
+
   return (
-    <div style={{ height: 400 }}>
+    <div style={{ height: 550 }}>
       <ResponsiveLine
         data={data}
-        margin={{ top: 40, right: 40, bottom: 50, left: 60 }}
+        margin={{ top: 40, right: 40, bottom: 100, left: 70 }}
 
         xScale={
           xScaleType === "time"
@@ -90,23 +46,28 @@ function LineChart({
             : { type: "point" }
         }
 
+        xFormat={xScaleType === "time" ? "time:%H:%M:%S" : undefined}
+
         yScale={{ type: "linear", min: 0, max: "auto" }}
 
         axisBottom={{
           format: xScaleType === "time" ? "%H:%M:%S" : undefined,
+          tickRotation: -45,
+          tickPadding: 10,
+          tickSize: 5,
           legend: xLegend,
-          legendOffset: 36,
+          legendOffset: 70,
           legendPosition: "middle",
         }}
         
         axisLeft={{ 
           legend: yLegend, 
-          legendOffset: -50,
+          legendOffset: -55,
           legendPosition: "middle"
         }}
         
         colors={{ scheme: "category10" }}
-        pointSize={15}
+        pointSize={8}
         useMesh
         enableSlices="x"
       />

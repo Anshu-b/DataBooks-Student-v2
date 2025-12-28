@@ -18,27 +18,27 @@
 
 import { useEffect, useState } from "react";
 import { PLOT_TYPES } from "../../config/plots";
-import {
-  getValidVariables,
-  isValidPlotSelection,
-} from "../../utils/plotValidation";
+import {getValidVariables, isValidPlotSelection} from "../../utils/plotValidation";
 import LineChart from "../charts/LineChart";
 import { buildLinePlotData } from "../../utils/buildLinePlotData";
 import { aggregateTelemetry } from "../../analytics/aggregateTelemetry";
 import rawSession from "../../data/exampleRawSession.json";
+// import bishopsSession from "../../data/bishopsP2Session.json";
 import ScatterChart from "../charts/ScatterChart";
 import HistogramChart from "../charts/HistogramChart";
 import { buildScatterPlotData } from "../../utils/buildScatterPlotData";
 import { buildHistogramPlotData } from "../../utils/buildHistogramPlotData";
-import { loadRawSession } from "../../analytics/loadRawSession";
+// import { loadRawSession } from "../../analytics/loadRawSession";
 import { useLogger } from "../../logging/LoggingProvider";
 
-const telemetry = aggregateTelemetry(
-  loadRawSession(rawSession)
-);
+const sessionId = "20250715_period3";
+const activeSession = rawSession.sessions[sessionId];
+const telemetry = aggregateTelemetry(activeSession);
 
+// const telemetry = aggregateTelemetry(
+//   loadRawSession(bishopsSession)
+// );
 
-  
 type PlotTypeId = "line" | "scatter" | "histogram";
 
 function DataPlotsPanel() {
@@ -93,7 +93,7 @@ function DataPlotsPanel() {
   const valueLabel = valueVarConfig?.label ?? valueVar;
 
   // Convention: time-like variables
-  const isTimeAxis = xVar === "timestamp";
+  const isTimeAxis = xVar === "time";
 
 
   /* -----------------------------

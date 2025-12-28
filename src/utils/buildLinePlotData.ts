@@ -6,43 +6,28 @@
 
 import type { AggregatedTelemetryPoint } from "../analytics/aggregateTelemetry";
 
-// export function buildLinePlotData(
-//   telemetry: AggregatedTelemetryPoint[],
-//   xKey: keyof AggregatedTelemetryPoint,
-//   yKey: keyof AggregatedTelemetryPoint
-// ) {
-//   return [
-//     {
-//       id: `${String(yKey)} vs ${String(xKey)}`,
-//       data: telemetry.map((d) => ({
-//         x: d[xKey],
-//         y: d[yKey] as number,
-//       })),
-//     },
-//   ];
-// }
+type LineXValue = string | number | Date;
+
+type NonBooleanKeys<T> = {
+  [K in keyof T]: T[K] extends boolean ? never : K
+}[keyof T];
+
 
 export function buildLinePlotData(
   telemetry: AggregatedTelemetryPoint[],
-  xKey: keyof AggregatedTelemetryPoint,
+  xKey: NonBooleanKeys<AggregatedTelemetryPoint>,
   yKey: keyof AggregatedTelemetryPoint
-) {
+): {
+  id: string;
+  data: { x: LineXValue; y: number }[];
+}[] {
   return [
     {
       id: `${String(yKey)} vs ${String(xKey)}`,
-      data: telemetry.map((d) => {
-        let xValue = d[xKey];
-        
-        // Ensure timestamp is a Date object for Nivo
-        if (xKey === "timestamp" && xValue instanceof Date) {
-          xValue = xValue;
-        }
-        
-        return {
-          x: xValue,
-          y: d[yKey] as number,
-        };
-      }),
+      data: telemetry.map((d) => ({
+        x: d[xKey] as LineXValue,
+        y: Number(d[yKey]),
+      })),
     },
   ];
 }

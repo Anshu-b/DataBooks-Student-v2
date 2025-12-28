@@ -1,42 +1,98 @@
 {
-    "activeSessionId": "20250711period2",
-    "readings": {
-      "r1": {
-        "device_id": "T1",
-        "infection_status": 0,
-        "proximity_mask": "[0,1,0,0,0]",
-        "timestamp": "2025-07-11T19:46:00Z"
+  "sessions": {
+    "20250715_period3": {
+      "metadata": {
+        "start": {
+          "action": "start",
+          "timestamp": "2025-07-15T10:00:00-07:00",
+          "cadets": 6,
+          "sectors": 2,
+          "teacher": "Ms. Alvarez",
+          "class": "Period 3 Biology"
+        },
+        "stop": {
+          "action": "stop",
+          "timestamp": "2025-07-15T10:45:00-07:00"
+        }
       },
-      "r2": {
-        "device_id": "T2",
-        "infection_status": 0,
-        "proximity_mask": "[1,0,0,0,0]",
-        "timestamp": "2025-07-11T19:46:10Z"
+
+      "readings": {
+        "r1": {
+          "device_id": "S1",
+          "infection_status": 0,
+          "proximity_mask": "[0,1,0,0,0,0, 1,0, 0]",
+          "timestamp": "2025-07-15T10:03:00Z"
+        },
+        "r2": {
+          "device_id": "S2",
+          "infection_status": 0,
+          "proximity_mask": "[1,0,0,0,0,0, 0,1, 0]",
+          "timestamp": "2025-07-15T10:04:30Z"
+        },
+        "r3": {
+          "device_id": "T1",
+          "infection_status": 0,
+          "proximity_mask": "[0,0,1,0,0,0, 0,0, 0]",
+          "timestamp": "2025-07-15T10:05:10Z"
+        },
+        "r4": {
+          "device_id": "S3",
+          "infection_status": 1,
+          "proximity_mask": "[0,0,0,1,0,0, 1,0, 0]",
+          "timestamp": "2025-07-15T10:10:30Z"
+        },
+        "r5": {
+          "device_id": "S4",
+          "infection_status": 0,
+          "proximity_mask": "[0,0,0,0,1,0, 0,1, 0]",
+          "timestamp": "2025-07-15T10:12:45Z"
+        },
+        "r6": {
+          "device_id": "T2",
+          "infection_status": 0,
+          "proximity_mask": "[0,0,0,0,0,1, 0,0, 0]",
+          "timestamp": "2025-07-15T10:18:00Z"
+        },
+        "r7": {
+          "device_id": "S5",
+          "infection_status": 0,
+          "proximity_mask": "[0,0,0,0,0,1, 1,0, 0]",
+          "timestamp": "2025-07-15T10:22:20Z"
+        },
+        "r8": {
+          "device_id": "S6",
+          "infection_status": 0,
+          "proximity_mask": "[0,0,1,0,0,0, 0,1, 0]",
+          "timestamp": "2025-07-15T10:30:10Z"
+        },
+        "r9": {
+          "device_id": "S1",
+          "infection_status": 0,
+          "proximity_mask": "[0,0,0,1,0,0, 1,0, 0]",
+          "timestamp": "2025-07-15T10:33:00Z"
+        },
+        "r10": {
+          "device_id": "T1",
+          "infection_status": 0,
+          "proximity_mask": "[0,1,0,0,0,0, 0,0, 0]",
+          "timestamp": "2025-07-15T10:40:00Z"
+        }
       },
-      "r3": {
-        "device_id": "T3",
-        "infection_status": 1,
-        "proximity_mask": "[0,0,0,1,0]",
-        "timestamp": "2025-07-11T19:46:30Z"
-      },
-      "r4": {
-        "device_id": "T1",
-        "infection_status": 0,
-        "proximity_mask": "[0,1,0,0,0]",
-        "timestamp": "2025-07-11T19:47:05Z"
-      },
-      "r5": {
-        "device_id": "T2",
-        "infection_status": 1,
-        "proximity_mask": "[1,0,0,0,0]",
-        "timestamp": "2025-07-11T19:47:15Z"
-      },
-      "r6": {
-        "device_id": "T3",
-        "infection_status": 1,
-        "proximity_mask": "[0,0,0,1,0]",
-        "timestamp": "2025-07-11T19:47:40Z"
+
+      "meetings": {
+        "meeting_1": {
+          "startTime": "2025-07-15T10:10:00-07:00",
+          "endTime": "2025-07-15T10:15:00-07:00",
+          "startedBy": "teacher",
+          "endedBy": "teacher"
+        },
+        "meeting_2": {
+          "startTime": "2025-07-15T10:30:00-07:00",
+          "endTime": "2025-07-15T10:35:00-07:00",
+          "startedBy": "teacher",
+          "endedBy": "teacher"
+        }
       }
     }
   }
-  
+}

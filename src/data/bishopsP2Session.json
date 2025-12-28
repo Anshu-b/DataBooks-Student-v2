@@ -1,0 +1,4655 @@
+{
+    "activeSessionId": "20250711period2",
+    "readings": {
+      "-OUv0_SjaCoUDx5Hu3t7": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:46:25Z"
+      },
+      "-OUv0g3WFO74-KfjgZ6b": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T19:46:52Z"
+      },
+      "-OUv0gd_S24L81HiPl5Z": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:46:55Z"
+      },
+      "-OUv0nySvOKjJE5iRzmp": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:47:25Z"
+      },
+      "-OUv0uca6KSM9QleZZFw": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T19:47:52Z"
+      },
+      "-OUv0vI2IdyyQ9EfXZ4s": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:47:55Z"
+      },
+      "-OUv11bluYDFbpTgp1ml": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:48:25Z"
+      },
+      "-OUv18H1V9Ws5Nuy1HhZ": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T19:48:52Z"
+      },
+      "-OUv18w_FUqxjDP9o-Ob": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:48:55Z"
+      },
+      "-OUv1GGGtn7VQ6x4dmVQ": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:49:25Z"
+      },
+      "-OUv1MvV9a4z-_LXZwgT": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T19:49:52Z"
+      },
+      "-OUv1NhdrFwpF_jCITpt": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:49:55Z"
+      },
+      "-OUv1Tt7PN9nKgbVgVBX": {
+        "device_id": "T6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T19:50:21Z"
+      },
+      "-OUv1UujnsS-CfBMrPXU": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:50:25Z"
+      },
+      "-OUv1aeAenutlnjEj1ya": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T19:50:52Z"
+      },
+      "-OUv1bES-_0gQZmHUWJn": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:50:55Z"
+      },
+      "-OUv1hSO6C3yU727LQ8Q": {
+        "device_id": "T6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T19:51:21Z"
+      },
+      "-OUv1iZFhw0lckTqHY-v": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:51:25Z"
+      },
+      "-OUv1pDQ7g-Vh7W_3wvI": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T19:51:52Z"
+      },
+      "-OUv1pszmoRd_cUnZcL4": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:51:55Z"
+      },
+      "-OUv1w5pT0s8jX2ZheVt": {
+        "device_id": "T6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T19:52:21Z"
+      },
+      "-OUv1xCioJ3BSluLNrRW": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:52:25Z"
+      },
+      "-OUv22ruAViEBb6P3DAf": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T19:52:52Z"
+      },
+      "-OUv23XSeU1ydLkAM8nt": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:52:55Z"
+      },
+      "-OUv29kHA9XLlYHmDvzU": {
+        "device_id": "T6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T19:53:21Z"
+      },
+      "-OUv2B-nvSH_8Fk3lB-2": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:53:25Z"
+      },
+      "-OUv2HWRvJ3wzfRaN5yc": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T19:53:52Z"
+      },
+      "-OUv2IAvloPtuRDg90pT": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:53:55Z"
+      },
+      "-OUv2OU-Nj0pzFvLuFRg": {
+        "device_id": "T6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T19:54:21Z"
+      },
+      "-OUv2PVd1yU-dbNQb7v5": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:54:25Z"
+      },
+      "-OUv2WF8j-hjzesmiK80": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T19:54:52Z"
+      },
+      "-OUv2WpWlVzMcs0bBR7R": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:54:55Z"
+      },
+      "-OUv2c2I4vPx5dEC6qcO": {
+        "device_id": "T6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T19:55:21Z"
+      },
+      "-OUv2d9BJ6jhS17auDhV": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:55:25Z"
+      },
+      "-OUv2joHxznGTvlR9JHn": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T19:55:52Z"
+      },
+      "-OUv2kTrj65LB4l4PmPc": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:55:55Z"
+      },
+      "-OUv2qgm37l7qP--xax4": {
+        "device_id": "T6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T19:56:21Z"
+      },
+      "-OUv2rn_r50y8WxCQ1Gd": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:56:25Z"
+      },
+      "-OUv2ySiTNw7QeAmYG4i": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T19:56:52Z"
+      },
+      "-OUv2zCSoIiEv_sNKuFS": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:56:55Z"
+      },
+      "-OUv34LDqBlHM6mFwnEM": {
+        "device_id": "T6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T19:57:21Z"
+      },
+      "-OUv35S3qXgrBQQzFUMl": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:57:25Z"
+      },
+      "-OUv3CCfRauSu-k4i4PQ": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T19:57:52Z"
+      },
+      "-OUv3ClnnPbzkyCGBzDU": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:57:55Z"
+      },
+      "-OUv3J3otFMjm85zBeR4": {
+        "device_id": "T6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T19:58:21Z"
+      },
+      "-OUv3K5X5RAqvwiZZTrj": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:58:25Z"
+      },
+      "-OUv3Q7nn3l1wfOugZXm": {
+        "device_id": "T1",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T19:58:49Z"
+      },
+      "-OUv3QkjiEbOXHlVBXfN": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T19:58:52Z"
+      },
+      "-OUv3RQKoxbFsq07dpEq": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:58:55Z"
+      },
+      "-OUv3XdPOFodn30TNDXD": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T19:59:21Z"
+      },
+      "-OUv3Yk3bHo2tWJw56f2": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:59:25Z"
+      },
+      "-OUv3dbWNU8jHw4oo_wO": {
+        "device_id": "T1",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T19:59:49Z"
+      },
+      "-OUv3eP7G6eYZeQ4YMS0": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T19:59:52Z"
+      },
+      "-OUv3f46UAo-eVQdQ_c2": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T19:59:55Z"
+      },
+      "-OUv3lHePhswWtvDwmVc": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:00:21Z"
+      },
+      "-OUv3mVGccoFbGX-R_VO": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:00:25Z"
+      },
+      "-OUv3qxVdQSmE3WFC6UZ": {
+        "device_id": "S1",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:00:43Z"
+      },
+      "-OUv3sFxp0etCVz5Tk3I": {
+        "device_id": "T1",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:00:49Z"
+      },
+      "-OUv3t2bPzDVyT7-kf_J": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:00:52Z"
+      },
+      "-OUv3tiUbEar4K9w40JC": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:00:55Z"
+      },
+      "-OUv3upot7ACOfUqzsrx": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:00:59Z"
+      },
+      "-OUv3v2votjdt56dS_Sw": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:01:00Z"
+      },
+      "-OUv4-3TNDsJs_KmawXW": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:01:21Z"
+      },
+      "-OUv402NFYkTe8n4VBrb": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:01:25Z"
+      },
+      "-OUv44VVzrbYIag2FeBl": {
+        "device_id": "S1",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:01:43Z"
+      },
+      "-OUv45uUkdOiK6gaoGj-": {
+        "device_id": "T1",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:01:49Z"
+      },
+      "-OUv46m8nYRXdjxqrObA": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:01:52Z"
+      },
+      "-OUv47N4rD7rgsfYd0fb": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:01:55Z"
+      },
+      "-OUv48OcjZYbjF1BoNhP": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:01:59Z"
+      },
+      "-OUv48WuLYa9ons02X3S": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:01:59Z"
+      },
+      "-OUv48bkaVpdgoDeoLKa": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:02:00Z"
+      },
+      "-OUv4AUpHTn8k_roUh9c": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:02:08Z"
+      },
+      "-OUv4D_bdDsJproB5sq2": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:02:21Z"
+      },
+      "-OUv4EhLvx5wZjtX6cwF": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:02:25Z"
+      },
+      "-OUv4J9-Yp2aI8DaJRwi": {
+        "device_id": "S1",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,0,0,1,1,1,1,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:02:43Z"
+      },
+      "-OUv4KebDlzZTL4hVPSp": {
+        "device_id": "T1",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:02:49Z"
+      },
+      "-OUv4LLUT5mb27bPmVzO": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:02:52Z"
+      },
+      "-OUv4M0SdNuODDiq8mln": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:02:55Z"
+      },
+      "-OUv4MEJmxWs0EJxX8xJ": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,0,0,1,1,1,1,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:02:56Z"
+      },
+      "-OUv4N260apUpcGKXgGt": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,0,0,1,1,1,1,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:02:59Z"
+      },
+      "-OUv4N3gsse47hVnoEkP": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,0,0,1,1,1,1,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:02:59Z"
+      },
+      "-OUv4NYxgeuCFt8Uf66F": {
+        "device_id": "S11",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,0,0,0,1,1,1,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:03:01Z"
+      },
+      "-OUv4P3-xfT24LNryHW0": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,0,0,1,1,1,1,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:03:08Z"
+      },
+      "-OUv4SE8AA4M2lSS9eg7": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:03:21Z"
+      },
+      "-OUv4TLCXsGSUfkeEkBa": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:03:25Z"
+      },
+      "-OUv4WEBcjiB46DUhKlX": {
+        "device_id": "S3",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,1,0,1,0,0,1,0,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:03:36Z"
+      },
+      "-OUv4XnQxFtOpgyqxG21": {
+        "device_id": "S1",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,1,0,1,1,0,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:03:43Z"
+      },
+      "-OUv4ZCQdKAXKzbHUqZu": {
+        "device_id": "T1",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:03:49Z"
+      },
+      "-OUv4ZeM34h0MykqPVfd": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,1,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:03:51Z"
+      },
+      "-OUv4Zzw9A87XszTe4q6": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:03:52Z"
+      },
+      "-OUv4_ktR7nreBYQDLrk": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:03:55Z"
+      },
+      "-OUv4_kzx4UROhKWQ6Dj": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,1,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:03:55Z"
+      },
+      "-OUv4_mXY-ljc9_lyJUp": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,1,0,1,1,1,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:03:56Z"
+      },
+      "-OUv4agb1KFzyTl8pcFO": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,1,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:03:59Z"
+      },
+      "-OUv4ai7mqW_3N7F8Vge": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,1,0,1,1,0,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:03:59Z"
+      },
+      "-OUv4b49Qs0qkIewnbqd": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,1,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:04:00Z"
+      },
+      "-OUv4b7Eo2ACDSzMopT_": {
+        "device_id": "S11",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,1,0,1,0,0,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:04:01Z"
+      },
+      "-OUv4chYkoHz55Kxw-QG": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:04:08Z"
+      },
+      "-OUv4fsnk_9SyWExUWua": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:04:21Z"
+      },
+      "-OUv4gzVzF8V2toW5Eyz": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:04:25Z"
+      },
+      "-OUv4jiSof5YHo7sKLip": {
+        "device_id": "S3",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,1,1,1,0,0,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:04:36Z"
+      },
+      "-OUv4lXILvdEqnBOrFlA": {
+        "device_id": "S1",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,1,1,1,0,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:04:43Z"
+      },
+      "-OUv4mqwwHZeoo8r9u8N": {
+        "device_id": "T1",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:04:49Z"
+      },
+      "-OUv4nDMFuWQZ8kVKNlX": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,1,0,1,1,1,0,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:04:51Z"
+      },
+      "-OUv4ndP5blA3-jO1dAM": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:04:52Z"
+      },
+      "-OUv4oIyx3ytfwBSRFbK": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:04:55Z"
+      },
+      "-OUv4oJNYMRH6Oni74MK": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:04:55Z"
+      },
+      "-OUv4oR-aLcejyJho8eX": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:04:56Z"
+      },
+      "-OUv4pMa5PguGTmYKjga": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,1,1,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:04:59Z"
+      },
+      "-OUv4pRAQF5x9M72KY8B": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,0,1,1,1,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:04:59Z"
+      },
+      "-OUv4pZZsuHiA0qoXapy": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:05:00Z"
+      },
+      "-OUv4phY1MUPpThCkjTD": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,1,1,1,0,0,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:05:00Z"
+      },
+      "-OUv4plaTVm2kOEFRS7R": {
+        "device_id": "S11",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,1,1,1,1,0,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:05:01Z"
+      },
+      "-OUv4rLxEZyRXHkJl2Ei": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,1,1,1,1,0,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:05:08Z"
+      },
+      "-OUv4ub7xFmJ2Q3jc35s": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:05:21Z"
+      },
+      "-OUv4vdRMGuY_y6VEWD-": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:05:25Z"
+      },
+      "-OUv4yMwKUz64YDwYB5_": {
+        "device_id": "S3",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:05:36Z"
+      },
+      "-OUv5-5Tbla73WLhoLnQ": {
+        "device_id": "S1",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,1,1,1,0,1,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:05:43Z"
+      },
+      "-OUv50VJj92iI1sOmDQY": {
+        "device_id": "T1",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:05:49Z"
+      },
+      "-OUv50rnbfS0aZkRDIiI": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,1,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:05:51Z"
+      },
+      "-OUv51N6IzFZ-8-qlfad": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:05:52Z"
+      },
+      "-OUv51xJWsD1-srap_1P": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:05:55Z"
+      },
+      "-OUv51xp0yJu7SkEco50": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:05:55Z"
+      },
+      "-OUv524czcOI858HZ4-Y": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:05:56Z"
+      },
+      "-OUv52zWgfffZ_hmF85M": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:05:59Z"
+      },
+      "-OUv535KQeSqfIQsFegR": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:05:59Z"
+      },
+      "-OUv53CkLtesP9pepACc": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,1,1,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:06:00Z"
+      },
+      "-OUv53CzrNwc0H9L9YmZ": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:06:00Z"
+      },
+      "-OUv53Q5aS01PxiyF2YT": {
+        "device_id": "S11",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,1,1,1,1,0,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:06:01Z"
+      },
+      "-OUv554ZjV_1z0_Yrl1O": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,1,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:06:08Z"
+      },
+      "-OUv58B-pOagrRn4H0db": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:06:21Z"
+      },
+      "-OUv59HVTzZR78qZQ30G": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:06:25Z"
+      },
+      "-OUv5DjtLeFsmxRPfOKg": {
+        "device_id": "S1",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:06:43Z"
+      },
+      "-OUv5FIwYNNLxRKWx3ZS": {
+        "device_id": "T1",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:06:49Z"
+      },
+      "-OUv5FX00EswudbJ-xTX": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:06:51Z"
+      },
+      "-OUv5FwRDl24mxI3m6-W": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:06:52Z"
+      },
+      "-OUv5Gb9eAnMD_bpZvB4": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,1,1,1,0,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:06:55Z"
+      },
+      "-OUv5GbZIiYhsm3ee4k_": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:06:55Z"
+      },
+      "-OUv5Gs_84bD8ut08mX3": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:06:56Z"
+      },
+      "-OUv5Hd-hgz4_V_NaVvO": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:06:59Z"
+      },
+      "-OUv5HeXD7OZFXNGYxrk": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:06:59Z"
+      },
+      "-OUv5HrAfF-_jgQ6YLD0": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,1,1,1,1,0,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:07:00Z"
+      },
+      "-OUv5HrU8b7_v6ObGg9y": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:07:00Z"
+      },
+      "-OUv5I8sBtLwHx0QyKcT": {
+        "device_id": "S11",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,1,0,0,1,1,1,1,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:07:01Z"
+      },
+      "-OUv5Mp-Tn9Ju82Vl_ie": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:07:21Z"
+      },
+      "-OUv5O0Nq_g2SZVUjUAB": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:07:25Z"
+      },
+      "-OUv5SOQ-auDs4f-Udnq": {
+        "device_id": "S1",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:07:43Z"
+      },
+      "-OUv5TnHWhy9BHLmwIBM": {
+        "device_id": "T1",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:07:49Z"
+      },
+      "-OUv5UF5CmbMqrM8rq-C": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:07:51Z"
+      },
+      "-OUv5U_nQF__rSbyreSA": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:07:52Z"
+      },
+      "-OUv5VFzq6uuPiB30FMt": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:07:55Z"
+      },
+      "-OUv5VKLKWtKNeuYbNDg": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:07:55Z"
+      },
+      "-OUv5VNOiu4-Q8bvIxYe": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:07:56Z"
+      },
+      "-OUv5WHSAKoK4CtqI0-0": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:07:59Z"
+      },
+      "-OUv5WJFhZQeRCfibW5q": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:07:59Z"
+      },
+      "-OUv5WajjrvzLJwlIFs4": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:08:00Z"
+      },
+      "-OUv5aTUWztR3sPSfxo-": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:08:21Z"
+      },
+      "-OUv5b_bwv_RINHxyfXw": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:08:25Z"
+      },
+      "-OUv5g6xvKwbV4EAfVMG": {
+        "device_id": "S1",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:08:43Z"
+      },
+      "-OUv5hRldeni_zmVEFZK": {
+        "device_id": "T1",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:08:49Z"
+      },
+      "-OUv5i6q73UtRYop0jef": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:08:51Z"
+      },
+      "-OUv5iEEyOQGxSkBzcPL": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:08:52Z"
+      },
+      "-OUv5itipsfwpPahH5x8": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:08:55Z"
+      },
+      "-OUv5iuDgRk6a4EUnDuD": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:08:55Z"
+      },
+      "-OUv5j0obxrUkhF2XAqj": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:08:56Z"
+      },
+      "-OUv5jxfCnIETJ10P4Le": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:08:59Z"
+      },
+      "-OUv5k0HkVOSYOjnqqNi": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:08:59Z"
+      },
+      "-OUv5k9NyEV3E5qiV36Q": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:09:00Z"
+      },
+      "-OUv5kEmMO4TNwfuN8k4": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:09:00Z"
+      },
+      "-OUv5kS-jNOFcHVkQYUA": {
+        "device_id": "S11",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:09:01Z"
+      },
+      "-OUv5pCA2z7eKNwLhlD0": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:09:21Z"
+      },
+      "-OUv5pUDB3NJ1sfWts-N": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:09:22Z"
+      },
+      "-OUv5qDq2oTHQjXXFtTo": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:09:25Z"
+      },
+      "-OUv5ugNK-eC77P9BxEg": {
+        "device_id": "S1",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:09:43Z"
+      },
+      "-OUv5w58xVKGhGCHbitC": {
+        "device_id": "T1",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:09:49Z"
+      },
+      "-OUv5wSn0QO4FSfWrsPx": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:09:51Z"
+      },
+      "-OUv5wxqq2R4M9lLhHWY": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:09:52Z"
+      },
+      "-OUv5xYCdOfqbxsS3ztM": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:09:55Z"
+      },
+      "-OUv5xYfOlqjcoCOKO41": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:09:55Z"
+      },
+      "-OUv5xfHta3PCvhRylv-": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:09:56Z"
+      },
+      "-OUv5y_P9mbj5WqLIpJL": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:09:59Z"
+      },
+      "-OUv5ygRl6wk_b7ir4dx": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:09:59Z"
+      },
+      "-OUv5yo-waYARxqfz2dp": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:10:00Z"
+      },
+      "-OUv5yo2jpxPsaFkFcky": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:10:00Z"
+      },
+      "-OUv5z5Y6UvDrc8TKtdo": {
+        "device_id": "S11",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:10:01Z"
+      },
+      "-OUv62lOZH-VLemjphgP": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:10:21Z"
+      },
+      "-OUv632T7qkEs4NLIJxF": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:10:22Z"
+      },
+      "-OUv63yeoHYG829Cs1Fs": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:10:25Z"
+      },
+      "-OUv68KrkMy-Zg86uqFl": {
+        "device_id": "S1",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:10:43Z"
+      },
+      "-OUv69sdkoLkdX_xRB4b": {
+        "device_id": "T1",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:10:49Z"
+      },
+      "-OUv6AXEju8oaCOdznZG": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:10:52Z"
+      },
+      "-OUv6BBcD6TF-RzHQ1xN": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:10:55Z"
+      },
+      "-OUv6BHU3ktYK_WR7UYZ": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:10:55Z"
+      },
+      "-OUv6BU5yASQHL1acy7l": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:10:56Z"
+      },
+      "-OUv6CDnJYB4pgs7rTdj": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:10:59Z"
+      },
+      "-OUv6CFU2V2b9pTeyFhN": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:10:59Z"
+      },
+      "-OUv6CSNgsqnM2FKWkl4": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:11:00Z"
+      },
+      "-OUv6CSTOKaHvxuPyxc4": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:11:00Z"
+      },
+      "-OUv6CeqGK02dMUpU7Xw": {
+        "device_id": "S11",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:11:01Z"
+      },
+      "-OUv6HPrLOSImWw2KWuE": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:11:21Z"
+      },
+      "-OUv6HgsQY1bpsSJycL_": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:11:22Z"
+      },
+      "-OUv6IX4-BkPgOInVT9-": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:11:25Z"
+      },
+      "-OUv6MzJeyLvseYFcfoF": {
+        "device_id": "S1",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:11:43Z"
+      },
+      "-OUv6OO9lanheOlK0HXj": {
+        "device_id": "T1",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:11:49Z"
+      },
+      "-OUv6Oqrg0IqmpyXfRNj": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:11:51Z"
+      },
+      "-OUv6PAgzjX81qRuRP-S": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:11:52Z"
+      },
+      "-OUv6PqeIrwXFl_IjNVq": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:11:55Z"
+      },
+      "-OUv6Pv6v9xIfaM5bAlW": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:11:55Z"
+      },
+      "-OUv6PyH-C7J8a34mI00": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:11:56Z"
+      },
+      "-OUv6QsJC1Fsa2vFRSXF": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:11:59Z"
+      },
+      "-OUv6QtzX1FZ8IzkPWm5": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:11:59Z"
+      },
+      "-OUv6R5luwT4OdKdya96": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:12:00Z"
+      },
+      "-OUv6RB2NsIyyX5VgvXT": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:12:00Z"
+      },
+      "-OUv6RJEwWyTMzZ2XD4f": {
+        "device_id": "S11",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:12:01Z"
+      },
+      "-OUv6W3Q-q0iU407kmK5": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:12:21Z"
+      },
+      "-OUv6WLPZnCIFq3I6oMt": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:12:22Z"
+      },
+      "-OUv6XAJPLXFz3YIvt9K": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:12:25Z"
+      },
+      "-OUv6ahzrtBBG7zfj5-5": {
+        "device_id": "S1",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:12:43Z"
+      },
+      "-OUv6c1aRRAFEjCjMOBM": {
+        "device_id": "T1",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:12:49Z"
+      },
+      "-OUv6cPWGwL8c9_cxyAg": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:12:51Z"
+      },
+      "-OUv6cp3AT1xX0ARYhUd": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:12:52Z"
+      },
+      "-OUv6dU_4B4fBI0ZTJ3u": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:12:55Z"
+      },
+      "-OUv6dV3gi9p-7ofqJ-Z": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:12:55Z"
+      },
+      "-OUv6dbdlAArBmHysthc": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:12:56Z"
+      },
+      "-OUv6eYUkos0vM5wWMSt": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:12:59Z"
+      },
+      "-OUv6earzVqr_2kUvKkg": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:12:59Z"
+      },
+      "-OUv6ekHIRqo1FxH8gCM": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:13:00Z"
+      },
+      "-OUv6epRJ0STFVBKS2kJ": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:13:00Z"
+      },
+      "-OUv6f1jWtVLbWZ_eYAi": {
+        "device_id": "S11",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:13:01Z"
+      },
+      "-OUv6jmtzhnztRWn7L5y": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:13:21Z"
+      },
+      "-OUv6k3te_zxREs1sM17": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:13:22Z"
+      },
+      "-OUv6komeQw4v6xwxzfn": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:13:25Z"
+      },
+      "-OUv6pHShBQ_pODXi6qq": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:13:43Z"
+      },
+      "-OUv6r2qkY-DcD9Vo3mx": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:13:51Z"
+      },
+      "-OUv6rYcAjytIPpTnawa": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:13:52Z"
+      },
+      "-OUv6s80139tfiVj_7JC": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:13:55Z"
+      },
+      "-OUv6s8YwIyzRsV7y7GZ": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:13:55Z"
+      },
+      "-OUv6sGBscXyTAXtrMSt": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:13:56Z"
+      },
+      "-OUv6tADvnDCQ6EsqsFN": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:13:59Z"
+      },
+      "-OUv6tH2RrRFdKvjAe2m": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:13:59Z"
+      },
+      "-OUv6tOjNUh6kn6F8AoW": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:14:00Z"
+      },
+      "-OUv6tOl9DavcfuACu0B": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:14:00Z"
+      },
+      "-OUv6tbELL9_jVwmx8AC": {
+        "device_id": "S11",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:14:01Z"
+      },
+      "-OUv6yMNr6L9r2W1xNta": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:14:21Z"
+      },
+      "-OUv6ydGzWTso1a4XhWf": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:14:22Z"
+      },
+      "-OUv6zYL-aC09da0WG7_": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:14:25Z"
+      },
+      "-OUv72vo0CK2_l5atPSK": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:14:43Z"
+      },
+      "-OUv74QGlkFy7U80nZpo": {
+        "device_id": "T1",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:14:49Z"
+      },
+      "-OUv74hSz3dES5x248jk": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:14:51Z"
+      },
+      "-OUv7570k30JiBUmVqNJ": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:14:52Z"
+      },
+      "-OUv75mW5kp4twwxn8P2": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:14:55Z"
+      },
+      "-OUv75n-gm5jp5-I8VhB": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:14:55Z"
+      },
+      "-OUv75zk__C8mQvzeIIT": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:14:56Z"
+      },
+      "-OUv76oho9-E0psCY8hW": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:14:59Z"
+      },
+      "-OUv76qT-znpFFLIU3lD": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:14:59Z"
+      },
+      "-OUv772DxJ6vTURGLgY0": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:15:00Z"
+      },
+      "-OUv772FJKl7rzysFKxq": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:15:00Z"
+      },
+      "-OUv77FgkQEMarJIL4jd": {
+        "device_id": "S11",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:15:01Z"
+      },
+      "-OUv7CHkzZH-W5IhRB2F": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:15:22Z"
+      },
+      "-OUv7D6kbWysJMou4rKl": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:15:25Z"
+      },
+      "-OUv7HeVvYG66SaNPR_E": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:15:43Z"
+      },
+      "-OUv7J-lUZzUCp6kgABw": {
+        "device_id": "T1",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:15:49Z"
+      },
+      "-OUv7JQvA9uy0TR3zBoL": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:15:51Z"
+      },
+      "-OUv7JlXUvQHLPjR3wsO": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:15:52Z"
+      },
+      "-OUv7KRVL83Xdh38OfZD": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:15:55Z"
+      },
+      "-OUv7KW0w1ZSJ5rl11DX": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:15:55Z"
+      },
+      "-OUv7KZ7o3mPmGSrA-7_": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:15:56Z"
+      },
+      "-OUv7LTBdRsoxoFoo7xt": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:15:59Z"
+      },
+      "-OUv7LUrocB5y9XN5A6N": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:15:59Z"
+      },
+      "-OUv7LggvNaV5Zdtwm7O": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:16:00Z"
+      },
+      "-OUv7LlgGvBvbTa4MLxI": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:16:00Z"
+      },
+      "-OUv7Lu884m3FS-FkTYu": {
+        "device_id": "S11",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:16:01Z"
+      },
+      "-OUv7QjmnxErp6QACHOH": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:16:21Z"
+      },
+      "-OUv7QwG4Qsr2rIMZ2tP": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:16:22Z"
+      },
+      "-OUv7RlEf4ePxpptoAbg": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:16:25Z"
+      },
+      "-OUv7WDp8HRCxFPt34Wo": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:16:43Z"
+      },
+      "-OUv7XcrrbRalW_uLgaa": {
+        "device_id": "T1",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:16:49Z"
+      },
+      "-OUv7Y-O7Kz41WAm1N9k": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:16:51Z"
+      },
+      "-OUv7YPx_bxQKvGWxRqe": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:16:52Z"
+      },
+      "-OUv7Z4Qp4aWC0ZBYl6C": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:16:55Z"
+      },
+      "-OUv7Z4wN3TYFVPN2r6C": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:16:55Z"
+      },
+      "-OUv7ZCcd9vS75-fNAbr": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:16:56Z"
+      },
+      "-OUv7_8MdYa6OkbRbYrG": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,1,1,1,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:16:59Z"
+      },
+      "-OUv7_CcLoJL7jJ-7UlF": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:16:59Z"
+      },
+      "-OUv7_L5JP_12FS4SnUY": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:17:00Z"
+      },
+      "-OUv7_VqxN4iN8kpQI7D": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:17:00Z"
+      },
+      "-OUv7_cs20wfz6ArNeSi": {
+        "device_id": "S11",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:17:01Z"
+      },
+      "-OUv7eKHSJT4Y3Lb1on7": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:17:21Z"
+      },
+      "-OUv7efr9BUutaPkCchf": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:17:22Z"
+      },
+      "-OUv7fPiTg5sOVurbDeb": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:17:25Z"
+      },
+      "-OUv7jsHrIWJ_1e09Vk6": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:17:43Z"
+      },
+      "-OUv7lHLtaT0dv-HNdhT": {
+        "device_id": "T1",
+        "infection_status": 0.5,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:17:49Z"
+      },
+      "-OUv7ldlEibTpaRNztQ1": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:17:51Z"
+      },
+      "-OUv7m8Qmt9rArk8Sn-c": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:17:52Z"
+      },
+      "-OUv7mitTaQICfTRhpwt": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:17:55Z"
+      },
+      "-OUv7modn4vS_AVWtvrf": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:17:55Z"
+      },
+      "-OUv7mr-WfxCxnkI7Una": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:17:56Z"
+      },
+      "-OUv7nl8ZgUjWp0ddJxC": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:17:59Z"
+      },
+      "-OUv7nrxlNf3wsfbkQEd": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:17:59Z"
+      },
+      "-OUv7nzY2nXgEOIbSwlJ": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:18:00Z"
+      },
+      "-OUv7nz_YJAwnxcJztsl": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:18:00Z"
+      },
+      "-OUv7oC-bg6s6HJ7zrxJ": {
+        "device_id": "S11",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:18:01Z"
+      },
+      "-OUv7sxfgNfP-c3Bxv92": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:18:21Z"
+      },
+      "-OUv7tE8OsxogY7VHwEF": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:18:22Z"
+      },
+      "-OUv7u3BQnCfMYu_7kK2": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:18:25Z"
+      },
+      "-OUv7yWhwMjKAwIqoL7f": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:18:43Z"
+      },
+      "-OUv8-66WCNbRGKC2eO7": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:18:49Z"
+      },
+      "-OUv8-IZW-Z6b2JXdg0R": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:18:51Z"
+      },
+      "-OUv8-hqL7V0qFlpI9Fx": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:18:52Z"
+      },
+      "-OUv80NGHWnPzs0zQ9ZG": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:18:55Z"
+      },
+      "-OUv80NuI2Lh3ENnY_se": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:18:55Z"
+      },
+      "-OUv80eK4yHVWBBBkhVB": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:18:56Z"
+      },
+      "-OUv81PcdS6c8bkYxXmj": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:18:59Z"
+      },
+      "-OUv81RN_E9YT-BEET_B": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:18:59Z"
+      },
+      "-OUv81d1PBTAV5MabWex": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:19:00Z"
+      },
+      "-OUv81rBV52I3dHFpq9R": {
+        "device_id": "S11",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,1,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:19:01Z"
+      },
+      "-OUv86b8sNzcKh7vknLx": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:19:21Z"
+      },
+      "-OUv86sbnG1xP1f_D1LD": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:19:22Z"
+      },
+      "-OUv87hj1OzaRhpuQmCK": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:19:25Z"
+      },
+      "-OUv8CFLwzYPUydWec2d": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:19:43Z"
+      },
+      "-OUv8D_HbdxfgtUHAAJ4": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:19:49Z"
+      },
+      "-OUv8E6YOIftkM6Bz_3h": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:19:51Z"
+      },
+      "-OUv8EMOVsxvtZL6nQiO": {
+        "device_id": "T5",
+        "infection_status": 0.5,
+        "proximity_mask": "[0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:19:52Z"
+      },
+      "-OUv8F1ZWlGZZa5SUAud": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:19:55Z"
+      },
+      "-OUv8F5umESc0xNwXA1h": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:19:55Z"
+      },
+      "-OUv8F8uYlm69gimTIhj": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:19:56Z"
+      },
+      "-OUv8G394qJBB49nYuBV": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:19:59Z"
+      },
+      "-OUv8G4slhW-BjXS3JzJ": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,1,0,1,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:19:59Z"
+      },
+      "-OUv8GMefDnqI30sofRV": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:20:00Z"
+      },
+      "-OUv8GSSr615rEQGUC7a": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:20:00Z"
+      },
+      "-OUv8GV2j8SZ_Vb5BZAG": {
+        "device_id": "S11",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:20:01Z"
+      },
+      "-OUv8LKjjJ4jJf_P6Eme": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:20:21Z"
+      },
+      "-OUv8LX1hhd2Lmu56kIE": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:20:22Z"
+      },
+      "-OUv8MM8ZH_FuouGBc1A": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:20:25Z"
+      },
+      "-OUv8QofH_ihDFpZAghX": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:20:43Z"
+      },
+      "-OUv8SDjbgZ6HkOaozLI": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:20:49Z"
+      },
+      "-OUv8SaGgCzQnYSM6iu7": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:20:51Z"
+      },
+      "-OUv8T4yKEveT7-zFA0K": {
+        "device_id": "T5",
+        "infection_status": 0.5,
+        "proximity_mask": "[0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:20:52Z"
+      },
+      "-OUv8TfIB0iuGdr-uHXu": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:20:55Z"
+      },
+      "-OUv8TfvPnmtpFUVswOD": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:20:55Z"
+      },
+      "-OUv8UjPG-8FlUvhxYbG": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:20:59Z"
+      },
+      "-OUv8UoLRMXieXWM-FdW": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:20:59Z"
+      },
+      "-OUv8UvtnW5-uT0ZztnX": {
+        "device_id": "S9",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:21:00Z"
+      },
+      "-OUv8UwP-gD98HbUafdg": {
+        "device_id": "S4",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:21:00Z"
+      },
+      "-OUv8VDVdrzyi0DfmJq_": {
+        "device_id": "S11",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:21:01Z"
+      },
+      "-OUv8Zu8vVp5_0s0PEp7": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:21:21Z"
+      },
+      "-OUv8_FZHNYN1qOOfPnH": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:21:22Z"
+      },
+      "-OUv8a6USbU9ogv2LoZ-": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:21:25Z"
+      },
+      "-OUv8eT8dv0uLjkrtjno": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:21:43Z"
+      },
+      "-OUv8fsDGkXD62hQxrkZ": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:21:49Z"
+      },
+      "-OUv8gFNRCv-nISV7IpI": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:21:51Z"
+      },
+      "-OUv8geNyCZzcLMl8uOH": {
+        "device_id": "T5",
+        "infection_status": 0.5,
+        "proximity_mask": "[0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:21:52Z"
+      },
+      "-OUv8hK5aYypnnGIKtJP": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:21:55Z"
+      },
+      "-OUv8hKNyHBUsH08bYNa": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:21:55Z"
+      },
+      "-OUv8hZHD4XnTgOV6lmp": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:21:56Z"
+      },
+      "-OUv8iLxwMoqpsJ1yWfV": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:21:59Z"
+      },
+      "-OUv8iTLuYez8DflA-9W": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:21:59Z"
+      },
+      "-OUv8i_vVeZ5FEo3uvh1": {
+        "device_id": "S4",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:22:00Z"
+      },
+      "-OUv8imvjTWpBUWzgyMf": {
+        "device_id": "S11",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:22:01Z"
+      },
+      "-OUv8nYXuJhUYSNx40um": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:22:21Z"
+      },
+      "-OUv8np0BR97qv122TVz": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:22:22Z"
+      },
+      "-OUv8oe7hQSST6G4BvW0": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:22:25Z"
+      },
+      "-OUv8t6gg-lwrgCMVmX3": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:22:43Z"
+      },
+      "-OUv8ug4CgxdhhyGlItu": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:22:49Z"
+      },
+      "-OUv8uyGGBuP6X0s0NCw": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:22:51Z"
+      },
+      "-OUv8vIhyZ-OvwfJQdMQ": {
+        "device_id": "T5",
+        "infection_status": 0.5,
+        "proximity_mask": "[0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:22:52Z"
+      },
+      "-OUv8vyEfliU4s9dFCi5": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:22:55Z"
+      },
+      "-OUv8vyq3JKuszZFiUjc": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:22:55Z"
+      },
+      "-OUv8w5jj5pRn4kdWHUp": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:22:56Z"
+      },
+      "-OUv8x-TzclQ1TbSUA1-": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:22:59Z"
+      },
+      "-OUv8x1I6GSYyFGWTLfU": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:22:59Z"
+      },
+      "-OUv8xENh6hnhXfh_vof": {
+        "device_id": "S4",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:23:00Z"
+      },
+      "-OUv8xJTWFxD7NXLBGnm": {
+        "device_id": "S9",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:23:00Z"
+      },
+      "-OUv91EmCC1FwkYyM-Wn": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:23:21Z"
+      },
+      "-OUv91TYELnntPw9O5tX": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:23:22Z"
+      },
+      "-OUv92IfaORQe6XSiYa_": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:23:25Z"
+      },
+      "-OUv96qAhHTIDPFFJeu4": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:23:43Z"
+      },
+      "-OUv98A6Z_NppAZrbHm0": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:23:49Z"
+      },
+      "-OUv98XaQ7kuDOWYaQAF": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:23:51Z"
+      },
+      "-OUv98xLPwhAS0IB-Uxg": {
+        "device_id": "T5",
+        "infection_status": 0.5,
+        "proximity_mask": "[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:23:52Z"
+      },
+      "-OUv99cOTjbn7m7ACkuI": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:23:55Z"
+      },
+      "-OUv99gm_9grKz-qEsBH": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:23:55Z"
+      },
+      "-OUv9AdvLhNFXdoiKYrj": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:23:59Z"
+      },
+      "-OUv9AfjSZfzsP6vXpJQ": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:23:59Z"
+      },
+      "-OUv9AsmgSme0ETminpZ": {
+        "device_id": "S9",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:24:00Z"
+      },
+      "-OUv9Ay29m2j_d-moFx8": {
+        "device_id": "S4",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:24:00Z"
+      },
+      "-OUv9BBM26JGtkcBsGXb": {
+        "device_id": "S11",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:24:01Z"
+      },
+      "-OUv9FvdpKivsrL0qXqN": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:24:21Z"
+      },
+      "-OUv9G6tTrucJAoGzA0p": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:24:22Z"
+      },
+      "-OUv9Gx4aMgyyNJ8fnMm": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:24:25Z"
+      },
+      "-OUv9LPgRDP3DO20D3NZ": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:24:43Z"
+      },
+      "-OUv9Moa1kafgQkNktqc": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:24:49Z"
+      },
+      "-OUv9NB8HMZGmlQ04P0B": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:24:51Z"
+      },
+      "-OUv9NfoCntysIZ75ACL": {
+        "device_id": "T5",
+        "infection_status": 0.5,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:24:52Z"
+      },
+      "-OUv9OG9Hng_cyxfWfP7": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:24:55Z"
+      },
+      "-OUv9OM5nluOcoDZ5sLp": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:24:55Z"
+      },
+      "-OUv9OZ6M_cNFxR4D-FA": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:24:56Z"
+      },
+      "-OUv9PNoDj34kTM5slcr": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:24:59Z"
+      },
+      "-OUv9PPW_c7M3mEKmvrv": {
+        "device_id": "S8",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:24:59Z"
+      },
+      "-OUv9PXI9ZzAEbPxQeSP": {
+        "device_id": "S9",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:25:00Z"
+      },
+      "-OUv9PXJSIyv5VNKhmtx": {
+        "device_id": "S4",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:25:00Z"
+      },
+      "-OUv9Pjw1SY6YEgEl9r6": {
+        "device_id": "S11",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:25:01Z"
+      },
+      "-OUv9UV3gpVLjxhs2hVg": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:25:21Z"
+      },
+      "-OUv9UqPV3ADpZqqAQZi": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:25:22Z"
+      },
+      "-OUv9Vae1bAGipPxhPff": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:25:25Z"
+      },
+      "-OUv9_3ATMqq1v7DXBjr": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:25:43Z"
+      },
+      "-OUv9aTZB6TjARiuzDHt": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:25:49Z"
+      },
+      "-OUv9aqZ5JvrlYp4sz3H": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:25:51Z"
+      },
+      "-OUv9bFCwkD_t8GqwQ63": {
+        "device_id": "T5",
+        "infection_status": 0.5,
+        "proximity_mask": "[0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:25:52Z"
+      },
+      "-OUv9buc4VmU-WENpSWn": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:25:55Z"
+      },
+      "-OUv9bvJCKys5uOOYJ7t": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:25:55Z"
+      },
+      "-OUv9c2Xufk5AQGCSoEh": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:25:56Z"
+      },
+      "-OUv9cwpHkYIrH7L1hSs": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:25:59Z"
+      },
+      "-OUv9cylBUI66dHJUDWD": {
+        "device_id": "S8",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:25:59Z"
+      },
+      "-OUv9dAcmOBMnvBnkMUY": {
+        "device_id": "S9",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:26:00Z"
+      },
+      "-OUv9dAeDs2eugMWc4er": {
+        "device_id": "S4",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:26:00Z"
+      },
+      "-OUv9dOFPODtHT3eWiuW": {
+        "device_id": "S11",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:26:01Z"
+      },
+      "-OUv9i8UUWdl7oSQvhoj": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:26:21Z"
+      },
+      "-OUv9iPx5gwaPnvjuDcc": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,0,1,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:26:22Z"
+      },
+      "-OUv9jG7am7dxZAQGWkv": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:26:25Z"
+      },
+      "-OUv9nhb2TN9SgRJws_V": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:26:43Z"
+      },
+      "-OUv9pD2u0aqi7tSDR0T": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:26:49Z"
+      },
+      "-OUv9pZBhq6XbasNZaHG": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:26:51Z"
+      },
+      "-OUv9ptX4PNA8qO6Xrg1": {
+        "device_id": "T5",
+        "infection_status": 0.5,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:26:52Z"
+      },
+      "-OUv9qZ241b_0fvSOzrZ": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:26:55Z"
+      },
+      "-OUv9qZir-kg3VsnnL-D": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:26:55Z"
+      },
+      "-OUv9qhJe-Pyo9UQCdL6": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:26:56Z"
+      },
+      "-OUv9raJsaslijtW_T67": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:26:59Z"
+      },
+      "-OUv9rcCkQx8IwMqaRcn": {
+        "device_id": "S8",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:26:59Z"
+      },
+      "-OUv9rq_q0mt60MBoK8D": {
+        "device_id": "S4",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:27:00Z"
+      },
+      "-OUv9ruOcozjPg_ip_l5": {
+        "device_id": "S9",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:27:00Z"
+      },
+      "-OUv9s1hVJFRlwqe9C0G": {
+        "device_id": "S11",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:27:01Z"
+      },
+      "-OUv9vAwPBepCIdGMSEh": {
+        "device_id": "QR",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,1,1,1,1,1,1,1,1,0,1,0,0,1,0,0,1]",
+        "timestamp": "2025-07-11T20:27:14Z"
+      },
+      "-OUv9wmv_Os8sTohTLoE": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:27:21Z"
+      },
+      "-OUv9x3Iu4lpW7y_zPEx": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:27:22Z"
+      },
+      "-OUv9xtUGIX29EH7gr3O": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:27:25Z"
+      },
+      "-OUvA1Sw8W-bMgF14RPO": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:27:43Z"
+      },
+      "-OUvA2l7p4a6GEexsEFw": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:27:49Z"
+      },
+      "-OUvA37MtZ6-epxKTNlx": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:27:51Z"
+      },
+      "-OUvA3Y49rs61HVlvqXC": {
+        "device_id": "T5",
+        "infection_status": 0.5,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:27:52Z"
+      },
+      "-OUvA4DEri1tDSkry_YH": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:27:55Z"
+      },
+      "-OUvA4HbOikBMZnYXnPJ": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:27:55Z"
+      },
+      "-OUvA4LS6TXWd2F0F3rn": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:27:56Z"
+      },
+      "-OUvA5EkNeFvvGXk96li": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:27:59Z"
+      },
+      "-OUvA5Gg6rmfqxYNvM9i": {
+        "device_id": "S8",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:27:59Z"
+      },
+      "-OUvA5TfJNKgwUYr3J53": {
+        "device_id": "S9",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:28:00Z"
+      },
+      "-OUvA5Yv3pUVbW7VkL7z": {
+        "device_id": "S4",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:28:00Z"
+      },
+      "-OUvA5lB0U4ywZYvit5E": {
+        "device_id": "S11",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,1,0,1,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:28:01Z"
+      },
+      "-OUvA8k8Km0ID6_yT0az": {
+        "device_id": "QR",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,0,1,1,1,0,0,0,1,0,0,0,0,0,0,0,1]",
+        "timestamp": "2025-07-11T20:28:14Z"
+      },
+      "-OUvAAWirbLbbYFEWsbD": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:28:21Z"
+      },
+      "-OUvAAoOv-_ou2aiNm76": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:28:22Z"
+      },
+      "-OUvABc0-cI2bpHF_P11": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:28:25Z"
+      },
+      "-OUvAG-sduw2IukM66xW": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:28:43Z"
+      },
+      "-OUvAHPVsx_Z0Fl2Tenm": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:28:49Z"
+      },
+      "-OUvAHlqFi7S1YblLjrx": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:28:51Z"
+      },
+      "-OUvAIJxRDR4x-xFirlU": {
+        "device_id": "T5",
+        "infection_status": 0.5,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:28:52Z"
+      },
+      "-OUvAIqz7Sfa_oOBzuqi": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:28:55Z"
+      },
+      "-OUvAIriURQLkg0eSG3C": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:28:55Z"
+      },
+      "-OUvAJ9NsiCgIQWwMT7J": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:28:56Z"
+      },
+      "-OUvAJzZ343eiUcsdcJm": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:28:59Z"
+      },
+      "-OUvAK-9lbZq9WJYtNLY": {
+        "device_id": "S8",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:28:59Z"
+      },
+      "-OUvAK74jbvJ0aD6yfOF": {
+        "device_id": "S9",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:29:00Z"
+      },
+      "-OUvAK7M1UUgA2NknlZ-": {
+        "device_id": "S4",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:29:00Z"
+      },
+      "-OUvAKKWvGGpZFm-A2bV": {
+        "device_id": "S11",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:29:01Z"
+      },
+      "-OUvANONk77Fs3WqhsQ5": {
+        "device_id": "QR",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,1,1,1,0,1,1,0,1,0,0,0,0,0,1]",
+        "timestamp": "2025-07-11T20:29:14Z"
+      },
+      "-OUvAP4rGmJY7Om8vlWD": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:29:21Z"
+      },
+      "-OUvAPMFTLIcES6Il1FI": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:29:22Z"
+      },
+      "-OUvAQBRceL7SBQro050": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:29:25Z"
+      },
+      "-OUvAUe1Gmr5dr1-ffSc": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:29:43Z"
+      },
+      "-OUvAW2yTgzQm4AOBLGJ": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:29:49Z"
+      },
+      "-OUvAWQIK_foXNSYhDky": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:29:51Z"
+      },
+      "-OUvAWpw7-FaI1N2tldE": {
+        "device_id": "T5",
+        "infection_status": 0.5,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:29:52Z"
+      },
+      "-OUvAXVSzvPyxrJOISXF": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:29:55Z"
+      },
+      "-OUvAXW9ATTJeBaDa796": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:29:55Z"
+      },
+      "-OUvAXdNXtCMAgknmNCi": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,1,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:29:56Z"
+      },
+      "-OUvAYXicDOGKblFQsg_": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:29:59Z"
+      },
+      "-OUvAYZfgi2YD489AE5c": {
+        "device_id": "S8",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:29:59Z"
+      },
+      "-OUvAYlaH64i3w7zy9rg": {
+        "device_id": "S9",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,1,0,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:30:00Z"
+      },
+      "-OUvAYlc0Z-6YoCiR39H": {
+        "device_id": "S4",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:30:00Z"
+      },
+      "-OUvAYyyqPwKnFHpEpP-": {
+        "device_id": "S11",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:30:01Z"
+      },
+      "-OUvAb1xAWXDVF5dN7KR": {
+        "device_id": "QR",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,1,0,1,0,0,0,0,1,0,0,0,0,0,0,0,1]",
+        "timestamp": "2025-07-11T20:30:14Z"
+      },
+      "-OUvAcjSqC05QzPTEzkp": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:30:21Z"
+      },
+      "-OUvAd-fkcfNePTkCdWr": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:30:22Z"
+      },
+      "-OUvAdpwHRsKyTZoEHqM": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:30:25Z"
+      },
+      "-OUvAiIZq70byAwIMbG6": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:30:43Z"
+      },
+      "-OUvAjrOojHDvk9n-K4z": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:30:49Z"
+      },
+      "-OUvAk8zdN9JlOjRd1wJ": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:30:51Z"
+      },
+      "-OUvAkU_Gx9oZccx40dq": {
+        "device_id": "T5",
+        "infection_status": 0.5,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:30:52Z"
+      },
+      "-OUvAl8vIEnqgVcYxxGD": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:30:55Z"
+      },
+      "-OUvAl9eZubBJYcOaCU7": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:30:55Z"
+      },
+      "-OUvAlHnJcoo1Ur3nWhr": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:30:56Z"
+      },
+      "-OUvAmBEOTiE3QTSacUa": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:30:59Z"
+      },
+      "-OUvAmDAO5IWHjCsPARz": {
+        "device_id": "S8",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:30:59Z"
+      },
+      "-OUvAmQB7hrqJ9ajIdgY": {
+        "device_id": "S4",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:31:00Z"
+      },
+      "-OUvAmV39MgYB5kd97a9": {
+        "device_id": "S9",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:31:00Z"
+      },
+      "-OUvAmcPi2I_h5jpLgjG": {
+        "device_id": "S11",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:31:01Z"
+      },
+      "-OUvApmuR_XTrFzOlN93": {
+        "device_id": "QR",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,1,1,1,1,1,0,1,1,0,0,0,0,0,0,0,1]",
+        "timestamp": "2025-07-11T20:31:14Z"
+      },
+      "-OUvArNooyLDbRstFrCt": {
+        "device_id": "T6",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:31:21Z"
+      },
+      "-OUvAre9v4ckW6uKC5BC": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:31:22Z"
+      },
+      "-OUvAsUSdv_sWGfcEBCs": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:31:25Z"
+      },
+      "-OUvAx16A89nsb5lu6j2": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:31:43Z"
+      },
+      "-OUvAyMTLp6WR1gQwlWX": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:31:49Z"
+      },
+      "-OUvAyiDH_oGs10EtQ8W": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:31:51Z"
+      },
+      "-OUvAz83RMyfrnpUmH9s": {
+        "device_id": "T5",
+        "infection_status": 0.5,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:31:52Z"
+      },
+      "-OUvAztHmsdtbu-uFSKV": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:31:55Z"
+      },
+      "-OUvAztewBay8ms6krmQ": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:31:55Z"
+      },
+      "-OUvAzwKzReyNzOkFIjN": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:31:56Z"
+      },
+      "-OUvB-pd0QrXHsiyVBjY": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:31:59Z"
+      },
+      "-OUvB-s-xph5tnJdyfmX": {
+        "device_id": "S8",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:31:59Z"
+      },
+      "-OUvB03OBaB4kCMU4TD_": {
+        "device_id": "S9",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:32:00Z"
+      },
+      "-OUvB08pUvdJyrLX8r2Z": {
+        "device_id": "S4",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:32:00Z"
+      },
+      "-OUvB0M6vQ6GEiL42hho": {
+        "device_id": "S11",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:32:01Z"
+      },
+      "-OUvB56ZRVMRvDaXN_eG": {
+        "device_id": "T6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:32:21Z"
+      },
+      "-OUvB5Nel4Ut6Bq4v_v3": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:32:22Z"
+      },
+      "-OUvB68-XL2yuIrFylTq": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:32:25Z"
+      },
+      "-OUvB6loEUhia400FJch": {
+        "device_id": "T2",
+        "infection_status": 0.5,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:32:27Z"
+      },
+      "-OUvBAaYYMC5c5FBknxF": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:32:43Z"
+      },
+      "-OUvBC-K84xfftlEVHAK": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:32:49Z"
+      },
+      "-OUvBCMfknKINaaSCTkD": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:32:51Z"
+      },
+      "-OUvBCrRlu2SgOBSRGaQ": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:32:52Z"
+      },
+      "-OUvBDRpkozdSF37NV7k": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:32:55Z"
+      },
+      "-OUvBDSffRAuFkfCCed4": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:32:55Z"
+      },
+      "-OUvBDjH41KCEivQqZaL": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:32:56Z"
+      },
+      "-OUvBEZMNFHiuuJOx6sQ": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:32:59Z"
+      },
+      "-OUvBEbfSLYKwhmBomoa": {
+        "device_id": "S8",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,1,1,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:32:59Z"
+      },
+      "-OUvBEhr4FiM_NWDknAE": {
+        "device_id": "S9",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:33:00Z"
+      },
+      "-OUvBEi-2EK49WOy9GqY": {
+        "device_id": "S4",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:33:00Z"
+      },
+      "-OUvBEvQZAatPacgUwGs": {
+        "device_id": "S11",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:33:01Z"
+      },
+      "-OUvBI41KNr9GnzgntQ9": {
+        "device_id": "QR",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,1,0,1,1,1,1,1,1,0,0,0,0,0,0,0,1]",
+        "timestamp": "2025-07-11T20:33:14Z"
+      },
+      "-OUvBJfoo0YVpKI3bVfw": {
+        "device_id": "T6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:33:21Z"
+      },
+      "-OUvBJx6ix7HFDpTC8Yt": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:33:22Z"
+      },
+      "-OUvBKmMT8VEpWSIGwqG": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:33:25Z"
+      },
+      "-OUvBLL1dFUCvyiLfNdp": {
+        "device_id": "T2",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:33:27Z"
+      },
+      "-OUvBPF0xMpDyeyklu5F": {
+        "device_id": "S1",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:33:43Z"
+      },
+      "-OUvBQdp1CWICN-gHBu7": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:33:49Z"
+      },
+      "-OUvBR5D7mFo7TaISdYt": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:33:51Z"
+      },
+      "-OUvBRQmVku3ZNpGlaz3": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:33:52Z"
+      },
+      "-OUvBS5LhhoAbTdI35Tc": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:33:55Z"
+      },
+      "-OUvBS6B5m1FIKOdwo0u": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:33:55Z"
+      },
+      "-OUvBSEY-uMXeAWxTXb8": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,1,1,0,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:33:56Z"
+      },
+      "-OUvBT7a8nmk0SOAVP6_": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:33:59Z"
+      },
+      "-OUvBT9gyyYNOUOn03WZ": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,1,1,0,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:33:59Z"
+      },
+      "-OUvBTM_vqrF_cEFRae9": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:34:00Z"
+      },
+      "-OUvBTMcP9va-81prCOj": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:34:00Z"
+      },
+      "-OUvBTZpNXHGy_pHOPi4": {
+        "device_id": "S11",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:34:01Z"
+      },
+      "-OUvBWitC78u6HFnQXz1": {
+        "device_id": "QR",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,1,0,1,0,0,1,0,0,0,0,0,0,0,1]",
+        "timestamp": "2025-07-11T20:34:14Z"
+      },
+      "-OUvBYKNYCHz7L17bXpX": {
+        "device_id": "T6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:34:21Z"
+      },
+      "-OUvBYaaLEFd4aLzm8Gf": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:34:22Z"
+      },
+      "-OUvBZR-EN_Iok-vKio9": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:34:25Z"
+      },
+      "-OUvBZzSAhhIT_DISNzd": {
+        "device_id": "T2",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:34:27Z"
+      },
+      "-OUvBctUSlEh6LLPoMq8": {
+        "device_id": "S1",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:34:43Z"
+      },
+      "-OUvBeSrcehb4nDjWhzz": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:34:49Z"
+      },
+      "-OUvBeeeVSLdhumUUAQp": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:34:51Z"
+      },
+      "-OUvBf4IxHk3x_xXShJO": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:34:52Z"
+      },
+      "-OUvBfjj-CmaTNASUlkx": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:34:55Z"
+      },
+      "-OUvBfkZvbH3Plo1WMXk": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:34:55Z"
+      },
+      "-OUvBfsdWZaGO-MScBHF": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:34:56Z"
+      },
+      "-OUvBgo9U1VueaKJ-Zsg": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:34:59Z"
+      },
+      "-OUvBh0KD43HE9DNgX3O": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:35:00Z"
+      },
+      "-OUvBh5-0ZXxUl2H_WHp": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:35:00Z"
+      },
+      "-OUvBhDHjcKpByI8jL-Y": {
+        "device_id": "S11",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:35:01Z"
+      },
+      "-OUvBkHeXXtQeuEUnqJ_": {
+        "device_id": "QR",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,1,1,1,1,1,0,1,1,0,1,0,0,0,0,0,1]",
+        "timestamp": "2025-07-11T20:35:14Z"
+      },
+      "-OUvBlyn3z0kbZETzwJT": {
+        "device_id": "T6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:35:21Z"
+      },
+      "-OUvBmF-OzAQbRSKNRG5": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:35:22Z"
+      },
+      "-OUvBn9NPAb2J6k_NrgD": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:35:25Z"
+      },
+      "-OUvBncyLmYU46YTqEna": {
+        "device_id": "T2",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:35:27Z"
+      },
+      "-OUvBrbxRoeoUTZ-YBB8": {
+        "device_id": "S1",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:35:43Z"
+      },
+      "-OUvBswlsc5oXqYtrbIL": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:35:49Z"
+      },
+      "-OUvBtJWcWef6eZlkXJ9": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:35:51Z"
+      },
+      "-OUvBtiiPmFRExfXQ2wu": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:35:52Z"
+      },
+      "-OUvBuP1t9QYXdi2LBNI": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:35:55Z"
+      },
+      "-OUvBuTHekJkt82BxRcy": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:35:55Z"
+      },
+      "-OUvBuXC6kp5tztsyqO_": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:35:56Z"
+      },
+      "-OUvBvSf_K_qfVx8V-hD": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:35:59Z"
+      },
+      "-OUvBvWLPOVG6mUZs7ul": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:35:59Z"
+      },
+      "-OUvBveHlvUAIkcaaWP3": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:36:00Z"
+      },
+      "-OUvBvkQQRrsPhXnfOfr": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:36:00Z"
+      },
+      "-OUvBwXjUqu9s6cLwCPl": {
+        "device_id": "S11",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:36:01Z"
+      },
+      "-OUvBywBHYuvCi1kFjXq": {
+        "device_id": "QR",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,1,1,1,0,0,1,0,1,0,1,0,0,0,0,0,1]",
+        "timestamp": "2025-07-11T20:36:14Z"
+      },
+      "-OUvC-hMgEBSuxyNo0Y4": {
+        "device_id": "T6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:36:21Z"
+      },
+      "-OUvC-yTjSAubKyYlXrA": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:36:22Z"
+      },
+      "-OUvC0ioEROnam49afil": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:36:25Z"
+      },
+      "-OUvC1N09YE7EjKUI5AY": {
+        "device_id": "T2",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:36:27Z"
+      },
+      "-OUvC5BSikImlWFHWzna": {
+        "device_id": "S1",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:36:43Z"
+      },
+      "-OUvC6aBQkxgT-NdAOym": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:36:49Z"
+      },
+      "-OUvC6xex5tsX4JP_wXa": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:36:51Z"
+      },
+      "-OUvC7SMU5fkU7WFDuLY": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:36:52Z"
+      },
+      "-OUvC81jOcbtop0Hdm6N": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:36:55Z"
+      },
+      "-OUvC82YdO2qQ_x-mxAY": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:36:55Z"
+      },
+      "-OUvC8G_UExVHrJCfP2J": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,1,0,0,0,1,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:36:56Z"
+      },
+      "-OUvC9BIQSb0lGXoVO8D": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:36:59Z"
+      },
+      "-OUvC9Im6dLgfDyBOHZl": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:37:00Z"
+      },
+      "-OUvC9Iz41_PBJDyMVU2": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:37:00Z"
+      },
+      "-OUvC9WEAbh0rAEXTq8Z": {
+        "device_id": "S11",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:37:01Z"
+      },
+      "-OUvCC_dt0X7H-Gxvl-2": {
+        "device_id": "QR",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,1,1,0,0,1,0,0,1,0,1,0,0,0,0,0,1]",
+        "timestamp": "2025-07-11T20:37:14Z"
+      },
+      "-OUvCEGgE4WQaUNcJgme": {
+        "device_id": "T6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:37:21Z"
+      },
+      "-OUvCEXy0FPpIbkap9zg": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:37:22Z"
+      },
+      "-OUvCFNJgCjU6Ytoxd8S": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:37:25Z"
+      },
+      "-OUvCFvsxLD8sVjjr903": {
+        "device_id": "T2",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:37:27Z"
+      },
+      "-OUvCJptt0jtleEqp5zQ": {
+        "device_id": "S1",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:37:43Z"
+      },
+      "-OUvCLEhaAUtNw9qIxxW": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:37:49Z"
+      },
+      "-OUvCLgFkpuP0BQzzLaW": {
+        "device_id": "S5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:37:51Z"
+      },
+      "-OUvCM0g1Ho_myLPNAwk": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:37:52Z"
+      },
+      "-OUvCMgHGefoEsYvyjc-": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:37:55Z"
+      },
+      "-OUvCMh0oN2f_68zVq2Y": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:37:55Z"
+      },
+      "-OUvCMp69S5MyhJ-nPXD": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:37:56Z"
+      },
+      "-OUvCNkapyLXiIbQDkaW": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:37:59Z"
+      },
+      "-OUvCNoJYqU9ixfQqHWi": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:37:59Z"
+      },
+      "-OUvCNxHUOpt6iClOvd5": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:38:00Z"
+      },
+      "-OUvCNxMI3diVpRwl9ls": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,1,0,1,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:38:00Z"
+      },
+      "-OUvCO9kpUGs9VPoYS2k": {
+        "device_id": "S11",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:38:01Z"
+      },
+      "-OUvCRJpVREqdfE1Ueob": {
+        "device_id": "QR",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,1,1,0,1,1,1,0,1,0,1,0,0,0,0,0,1]",
+        "timestamp": "2025-07-11T20:38:14Z"
+      },
+      "-OUvCSvKq_8qwBR7PbPP": {
+        "device_id": "T6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:38:21Z"
+      },
+      "-OUvCTBRs5psM3d_Fhe1": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:38:22Z"
+      },
+      "-OUvCU0kb2kHMNpVY7RD": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:38:25Z"
+      },
+      "-OUvCU_KfQuWf-H8ZVy2": {
+        "device_id": "T2",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:38:27Z"
+      },
+      "-OUvCYUTm_Zzbsm471Xg": {
+        "device_id": "S1",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:38:43Z"
+      },
+      "-OUvC_3X2VjPI0tNERWX": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:38:49Z"
+      },
+      "-OUvC_f96kyHLqXvs2gE": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:38:52Z"
+      },
+      "-OUvCaKbjOoCrzL9IK3P": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:38:55Z"
+      },
+      "-OUvCaQbZT-2bOEgQmyB": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:38:55Z"
+      },
+      "-OUvCaTW0T62D1HbgQ2f": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:38:56Z"
+      },
+      "-OUvCbUiakkm8yECacwO": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:38:59Z"
+      },
+      "-OUvCbamVYtckmp4s9DS": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:39:00Z"
+      },
+      "-OUvCbfiYEIwKtX4AS3V": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:39:00Z"
+      },
+      "-OUvCbo9J7dVi7R_T1pg": {
+        "device_id": "S11",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:39:01Z"
+      },
+      "-OUvCesVeZEeArhwfOAv": {
+        "device_id": "QR",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,0,1,0,1,1,0,0,1,0,1,0,0,0,0,0,1]",
+        "timestamp": "2025-07-11T20:39:14Z"
+      },
+      "-OUvCgZfj0nfQTT_G0aM": {
+        "device_id": "T6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:39:21Z"
+      },
+      "-OUvCgpwNRNfgRhH0lQM": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:39:22Z"
+      },
+      "-OUvChfFxPyvU0dpd_NE": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:39:25Z"
+      },
+      "-OUvCiDoPhX78Oldr3gZ": {
+        "device_id": "T2",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:39:27Z"
+      },
+      "-OUvCmD-GBBhGMp-DGor": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:39:43Z"
+      },
+      "-OUvCnXk6d6Do4PHcDye": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:39:49Z"
+      },
+      "-OUvCnzOmGcCSj7Lm7iK": {
+        "device_id": "S5",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:39:51Z"
+      },
+      "-OUvCoJ_ZQxwQHLLPhTt": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:39:52Z"
+      },
+      "-OUvCp-9Zust-pvETuaa": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:39:55Z"
+      },
+      "-OUvCp3Ai_Rkwr6Mvduc": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:39:55Z"
+      },
+      "-OUvCp6zJODRT2utml5M": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:39:56Z"
+      },
+      "-OUvCq1Ch0B275xj9qei": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:39:59Z"
+      },
+      "-OUvCq87JFvHS2vgMZHC": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:39:59Z"
+      },
+      "-OUvCqFBnebKoLRs-UlN": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:40:00Z"
+      },
+      "-OUvCqPXKL_GsVaTaH_C": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:40:00Z"
+      },
+      "-OUvCqYM5aMVVpbLVXj9": {
+        "device_id": "S11",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:40:01Z"
+      },
+      "-OUvCtXnVkSppiJWy28w": {
+        "device_id": "QR",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,0,1,0,1,0,0,0,1,0,0,0,0,0,0,0,1]",
+        "timestamp": "2025-07-11T20:40:14Z"
+      },
+      "-OUvCvIKy-9Kw9yag6ow": {
+        "device_id": "T6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:40:21Z"
+      },
+      "-OUvCva2diZPAx7GXJt7": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:40:22Z"
+      },
+      "-OUvCwJxy5_H17uRkFos": {
+        "device_id": "T4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]",
+        "timestamp": "2025-07-11T20:40:25Z"
+      },
+      "-OUvCwxIOAyhXnQsUgi-": {
+        "device_id": "T2",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:40:27Z"
+      },
+      "-OUvD-mLjPgdhG1GeehK": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:40:43Z"
+      },
+      "-OUvD1B3WeXz8Kie14Ks": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:40:49Z"
+      },
+      "-OUvD1ct4OXnsRr1Zub3": {
+        "device_id": "S5",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:40:51Z"
+      },
+      "-OUvD23bS5syw_WbyCe7": {
+        "device_id": "T5",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:40:52Z"
+      },
+      "-OUvD2cb6hsfaPOJYwQ1": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:40:55Z"
+      },
+      "-OUvD2qa5IDo8ZO0o2k-": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:40:56Z"
+      },
+      "-OUvD3faBrtMUNWn0vv7": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1,0,0]",
+        "timestamp": "2025-07-11T20:40:59Z"
+      },
+      "-OUvD3hLNChxYIr_bqCF": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:40:59Z"
+      },
+      "-OUvD3tcdVP0n3xDL2PW": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:41:00Z"
+      },
+      "-OUvD3tgeWjZgSnodhAD": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:41:00Z"
+      },
+      "-OUvD46JCXNz96bfa-Py": {
+        "device_id": "S11",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:41:01Z"
+      },
+      "-OUvD7AdyXi3XtQgIclh": {
+        "device_id": "QR",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,1,1,1,1,1,0,0,0,0,1,0,0,0,0,0,1]",
+        "timestamp": "2025-07-11T20:41:14Z"
+      },
+      "-OUvD8rczNao3QlftyHq": {
+        "device_id": "T6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:41:21Z"
+      },
+      "-OUvD97oEcfia9KUviex": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:41:22Z"
+      },
+      "-OUvDAWmWyAe9lxpW0fk": {
+        "device_id": "T2",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:41:27Z"
+      },
+      "-OUvDEQnO5AG-lh1iOJC": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:41:43Z"
+      },
+      "-OUvDFpZ8ZMkMtnp-c-m": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:41:49Z"
+      },
+      "-OUvDGCF9gEl_PlV3OF9": {
+        "device_id": "S5",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:41:51Z"
+      },
+      "-OUvDHH419Y8-FKK3pYQ": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:41:55Z"
+      },
+      "-OUvDHPrni6BHys1_P_s": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:41:56Z"
+      },
+      "-OUvDIK2ctRIQ9uyO0L8": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:41:59Z"
+      },
+      "-OUvDILuI7SpDuMEIurq": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:41:59Z"
+      },
+      "-OUvDIY4byXxnz5-tUuU": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:42:00Z"
+      },
+      "-OUvDIY9WS9A2BmEZXlx": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:42:00Z"
+      },
+      "-OUvDIknm2DgWT3NAHOg": {
+        "device_id": "S11",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:42:01Z"
+      },
+      "-OUvDLv70MSt3htcekJ0": {
+        "device_id": "QR",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,1,1,1,0,1,0,1,0,0,1,0,0,0,0,0,1]",
+        "timestamp": "2025-07-11T20:42:14Z"
+      },
+      "-OUvDNW733gEwGXnBmVd": {
+        "device_id": "T6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:42:21Z"
+      },
+      "-OUvDNmHOlhQOAgFv7Nw": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:42:22Z"
+      },
+      "-OUvDPA95-6XGtlnICor": {
+        "device_id": "T2",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:42:27Z"
+      },
+      "-OUvDT4LqAS2CwyZqEwk": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:42:43Z"
+      },
+      "-OUvDUd-TkZtIL6X2LbJ": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:42:49Z"
+      },
+      "-OUvDUroIMnYhCNt5oqa": {
+        "device_id": "S5",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:42:51Z"
+      },
+      "-OUvDVvpKBPIzTaKYj8C": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:42:55Z"
+      },
+      "-OUvDW3LzhgqMJ0jPg_u": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:42:56Z"
+      },
+      "-OUvDX-LMmPArV5B9PQw": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:42:59Z"
+      },
+      "-OUvDX2ZoD2gosd8X1k2": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:42:59Z"
+      },
+      "-OUvDXB_HA-6r26GAVoL": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:43:00Z"
+      },
+      "-OUvDXGtj8id2I6NJkVk": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:43:00Z"
+      },
+      "-OUvDXP2T1Ep9HH5FsCb": {
+        "device_id": "S11",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:43:01Z"
+      },
+      "-OUvD_TLAOiY7TmHJ8Xc": {
+        "device_id": "QR",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,1,1,0,1,0,0,0,1,0,1,0,0,0,0,0,1]",
+        "timestamp": "2025-07-11T20:43:14Z"
+      },
+      "-OUvDb9YyUOigF8ce4T8": {
+        "device_id": "T6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:43:21Z"
+      },
+      "-OUvDbQi7QhrNcfq4EfF": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:43:22Z"
+      },
+      "-OUvDcof6bxDcjL7rqTS": {
+        "device_id": "T2",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:43:27Z"
+      },
+      "-OUvDgnkQ1rqEq4DBvil": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:43:43Z"
+      },
+      "-OUvDiV9RY_Wo4l5Ef-v": {
+        "device_id": "S5",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:43:51Z"
+      },
+      "-OUvDjdwSXB9ZTx1yGb1": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:43:55Z"
+      },
+      "-OUvDjhvcJ4WAmTp8wvc": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:43:56Z"
+      },
+      "-OUvDkbyj2yom1oAocMU": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:43:59Z"
+      },
+      "-OUvDkipF705mMKSRRDI": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:43:59Z"
+      },
+      "-OUvDkq2NK8gbDafXP9q": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:44:00Z"
+      },
+      "-OUvDksJSxB3uB6BlPNE": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:44:00Z"
+      },
+      "-OUvDl7W_nDigu1f-0tZ": {
+        "device_id": "S11",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:44:01Z"
+      },
+      "-OUvDo6lLrA0ifzHCJ-8": {
+        "device_id": "QR",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,1,0,1,1,1,0,1,1,0,1,0,0,0,0,0,1]",
+        "timestamp": "2025-07-11T20:44:14Z"
+      },
+      "-OUvDptFQLH1ZWYXGolk": {
+        "device_id": "T6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]",
+        "timestamp": "2025-07-11T20:44:21Z"
+      },
+      "-OUvDq9G7hjgxpDxwLrn": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,1,1,0,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:44:22Z"
+      },
+      "-OUvDrYB5lcNyBHySdmS": {
+        "device_id": "T2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:44:27Z"
+      },
+      "-OUvDwwG6vH1_d1--aKA": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:44:49Z"
+      },
+      "-OUvDxDhnQ6fagvxF5HK": {
+        "device_id": "S5",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:44:51Z"
+      },
+      "-OUvDyDT-TZfrUnnW4M2": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:44:55Z"
+      },
+      "-OUvDyRapuHh9AjXN48W": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:44:56Z"
+      },
+      "-OUvDzGU1GLy-7E1pMbr": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:44:59Z"
+      },
+      "-OUvDzIJrdQ1dPFhRELv": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:44:59Z"
+      },
+      "-OUvDzUU5L0LJx8k1zpk": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:45:00Z"
+      },
+      "-OUvDzUYuCagWEiMTYGs": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:45:00Z"
+      },
+      "-OUvDzgw8zT8T2XBRDch": {
+        "device_id": "S11",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:45:01Z"
+      },
+      "-OUvE1lgQDuRNx9NIxXu": {
+        "device_id": "QR",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,1,1,1,1,1,0,1,1,0,1,0,0,0,0,0,1]",
+        "timestamp": "2025-07-11T20:45:14Z"
+      },
+      "-OUvE3idTg-_3aXZEFG_": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:45:22Z"
+      },
+      "-OUvE571GuXn3-mxG0fo": {
+        "device_id": "T2",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:45:27Z"
+      },
+      "-OUvE96HxRGvmCVPfhv9": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:45:43Z"
+      },
+      "-OUvEA_rT82w0E9DB9_y": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:45:49Z"
+      },
+      "-OUvEAn7LUk8wWBTsxUo": {
+        "device_id": "S5",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:45:51Z"
+      },
+      "-OUvEBrvOfKjl6CbSXI6": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,0,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:45:55Z"
+      },
+      "-OUvEC-pvtPC8naiq991": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:45:56Z"
+      },
+      "-OUvECuxzUtWnjzWGkI8": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:45:59Z"
+      },
+      "-OUvECwp8SlYWyVA6TS1": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:45:59Z"
+      },
+      "-OUvED7xt9Ui3X1nbd7o": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:46:00Z"
+      },
+      "-OUvED7xt9Ui3X1nbd7p": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:46:00Z"
+      },
+      "-OUvEDLP7TXcuX89Fj5l": {
+        "device_id": "S11",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:46:01Z"
+      },
+      "-OUvEGWRj5V_V2rQ5Gx9": {
+        "device_id": "QR",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,1,1,1,1,1,1,0,1,0,0,0,0,0,0,0,1]",
+        "timestamp": "2025-07-11T20:46:14Z"
+      },
+      "-OUvEIN8AZHJtsvs890Q": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:46:22Z"
+      },
+      "-OUvEJlE1ubEG_TX6siQ": {
+        "device_id": "T2",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:46:27Z"
+      },
+      "-OUvENkrcjj9xhhs19Qd": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:46:43Z"
+      },
+      "-OUvEP4EjJhLdlecCNz_": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:46:49Z"
+      },
+      "-OUvEPRcAPX8TqmGtjoA": {
+        "device_id": "S5",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:46:51Z"
+      },
+      "-OUvEQWP2tflek7WdmV-": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:46:55Z"
+      },
+      "-OUvEQeDa1ao9qHlZvre": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:46:56Z"
+      },
+      "-OUvERaFFvZAlajGcEUr": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:46:59Z"
+      },
+      "-OUvERddGGZaqWNd-BRW": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:46:59Z"
+      },
+      "-OUvERmW9S4UriJBpJp9": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:47:00Z"
+      },
+      "-OUvERrUZgxDUx8l6vYo": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:47:00Z"
+      },
+      "-OUvES-63uO_CqnHFkHX": {
+        "device_id": "S11",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:47:01Z"
+      },
+      "-OUvEV3FpmUGokYTVoNf": {
+        "device_id": "QR",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,1,1,1,1,0,1,0,1,0,1,0,0,0,0,0,1]",
+        "timestamp": "2025-07-11T20:47:14Z"
+      },
+      "-OUvEX0bIH6SmCTDer2L": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:47:22Z"
+      },
+      "-OUvEYPWPK5XZx5AhEyn": {
+        "device_id": "T2",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:47:27Z"
+      },
+      "-OUvEbK8jWRVsbzMVsrd": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:47:43Z"
+      },
+      "-OUvEcij1As68nAPFSeK": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:47:49Z"
+      },
+      "-OUvEd58-xKmtYXYIZFA": {
+        "device_id": "S5",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:47:51Z"
+      },
+      "-OUvEeGFOrQ7vsuq5M_v": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:47:55Z"
+      },
+      "-OUvEeIlkKlcawqCFGAU": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:47:56Z"
+      },
+      "-OUvEfCsawnxU4cqp214": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:47:59Z"
+      },
+      "-OUvEfJp3KeahKC9BSYR": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:47:59Z"
+      },
+      "-OUvEfQsUb4kvNb5dXR4": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:48:00Z"
+      },
+      "-OUvEfVzmphqQjkkRM8i": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:48:00Z"
+      },
+      "-OUvEfiLbxqHoaDDQ0Jm": {
+        "device_id": "S11",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,1,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:48:01Z"
+      },
+      "-OUvEihsQ1NlP_sJboc9": {
+        "device_id": "QR",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,1,0,1,1,1,0,1,1,0,1,0,0,0,0,0,1]",
+        "timestamp": "2025-07-11T20:48:14Z"
+      },
+      "-OUvEkjyyDbTCKJLJzUN": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:48:22Z"
+      },
+      "-OUvEm8HB1Wzf2IjfPA8": {
+        "device_id": "T2",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:48:27Z"
+      },
+      "-OUvEpyeMQLvL-9i0fhE": {
+        "device_id": "S1",
+        "infection_status": 1,
+        "proximity_mask": "[1,0,0,0,0,1,0,0,0,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:48:43Z"
+      },
+      "-OUvErNC3i-u5tU1LpI-": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:48:49Z"
+      },
+      "-OUvErrtJzKDSu20zps5": {
+        "device_id": "S5",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:48:51Z"
+      },
+      "-OUvEsoPpRJI9Oqq-e6A": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,0,0,1,1,0,0,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:48:55Z"
+      },
+      "-OUvEt6eK4I2M6_bQ55I": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:48:56Z"
+      },
+      "-OUvEtrKN9DQ9gUMWeUW": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:48:59Z"
+      },
+      "-OUvEttGwYEyY-pHSlzb": {
+        "device_id": "S8",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:48:59Z"
+      },
+      "-OUvEu4L3rsdow8cy9JJ": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:49:00Z"
+      },
+      "-OUvEu4POoO-92YZVEXj": {
+        "device_id": "S4",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:49:00Z"
+      },
+      "-OUvEuHqfKoBXDn3bTQn": {
+        "device_id": "S11",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:49:01Z"
+      },
+      "-OUvExM7Tba7p8N_oNxU": {
+        "device_id": "QR",
+        "infection_status": 0,
+        "proximity_mask": "[1,0,0,1,1,1,1,1,0,1,1,0,1,0,0,0,0,0,1]",
+        "timestamp": "2025-07-11T20:49:14Z"
+      },
+      "-OUvEzJWqKAHQFvyftFZ": {
+        "device_id": "S7",
+        "infection_status": 0,
+        "proximity_mask": "[0,1,0,0,0,1,1,0,0,1,1,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:49:22Z"
+      },
+      "-OUvF-hNJjBXX2GQGpW_": {
+        "device_id": "T2",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:49:27Z"
+      },
+      "-OUvF5BED8onivAwnVSK": {
+        "device_id": "T1",
+        "infection_status": 1,
+        "proximity_mask": "[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:49:49Z"
+      },
+      "-OUvF5O0ONMShsP__IGf": {
+        "device_id": "S5",
+        "infection_status": 1,
+        "proximity_mask": "[1,1,0,0,1,1,1,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:49:51Z"
+      },
+      "-OUvF6TZAqrNw1ik1tk1": {
+        "device_id": "S10",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,0,1,1,1,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:49:55Z"
+      },
+      "-OUvF6a_Np-PSasTZNsl": {
+        "device_id": "S6",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:49:56Z"
+      },
+      "-OUvF7Vp7CN0nam8NuQC": {
+        "device_id": "S2",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,0,1,1,1,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:49:59Z"
+      },
+      "-OUvF7j9UVSJDwmulKDQ": {
+        "device_id": "S9",
+        "infection_status": 0,
+        "proximity_mask": "[1,1,0,0,1,1,1,0,1,1,0,0,0,0,0,0,0,0,0]",
+        "timestamp": "2025-07-11T20:50:00Z"
+      },
+      "-OUvFB4iwWLYNeGpPuwn": {
+        "device_id": "QR",
+        "infection_status": 0,
+        "proximity_mask": "[0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,1]",
+        "timestamp": "2025-07-11T20:50:14Z"
+      }
+    }
+}
