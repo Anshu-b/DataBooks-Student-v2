@@ -84,6 +84,18 @@ function DataPlotsPanel() {
     }
   }, [plotType, xVar, yVar, valueVar, validXVars, validYVars, validValueVars]);
 
+  const xVarConfig = validXVars.find(v => v.id === xVar);
+  const yVarConfig = validYVars.find(v => v.id === yVar);
+  const valueVarConfig = validValueVars.find(v => v.id === valueVar);
+
+  const xLabel = xVarConfig?.label ?? xVar;
+  const yLabel = yVarConfig?.label ?? yVar;
+  const valueLabel = valueVarConfig?.label ?? valueVar;
+
+  // Convention: time-like variables
+  const isTimeAxis = xVar === "timestamp";
+
+
   /* -----------------------------
    * Render
    * ----------------------------- */
@@ -417,13 +429,12 @@ function DataPlotsPanel() {
 
       {plotType === "line" && xVar && yVar && (
         <LineChart
-            data={buildLinePlotData(
-            telemetry,
-            xVar as any,
-            yVar as any
-            )}
+          data={buildLinePlotData(telemetry, xVar as any, yVar as any)}
+          xScaleType={isTimeAxis ? "time" : "point"}
+          xLegend={xLabel}
+          yLegend={yLabel}
         />
-        )}
+      )}
 
         {plotType === "scatter" && xVar && yVar && (
         <ScatterChart
@@ -432,6 +443,8 @@ function DataPlotsPanel() {
             xVar as any,
             yVar as any
             )}
+            xLegend={xLabel}
+            yLegend={yLabel}
         />
         )}
 
@@ -441,6 +454,7 @@ function DataPlotsPanel() {
             telemetry,
             valueVar as any
             )}
+            xLegend={valueLabel}
         />
         )}
 

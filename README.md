@@ -195,17 +195,17 @@ Capture **every meaningful user interaction** for research analysis.
 - Active panel changes
 - Plot type changes
 - Plot variable changes
-- Journal input activity
+- Journal input activity & submitted answers
 
 ### Design Characteristics:
 - Strongly typed event schema
 - Centralized event registry
 - Pluggable logger backends
 
-### Current Logger:
+### Previous Logger:
 - `ConsoleLogger` (development)
 
-### Future Logger:
+### Current Logger:
 - `FirebaseLogger` (production)
 
 ---

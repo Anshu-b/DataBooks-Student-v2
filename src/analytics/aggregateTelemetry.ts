@@ -17,6 +17,7 @@
 
 export type AggregatedTelemetryPoint = {
   time: number;
+  timestamp: Date; 
 
   // Cadet-level state
   totalCadets: number;
@@ -107,6 +108,7 @@ export function aggregateTelemetry(
 
     const totalCadets = cadetState.size;
     const infectedCadets = [...cadetState.values()].filter(v => v === 1).length;
+    const bucketStartMs = bucketKey * bucketSizeSeconds * 1000;
 
     const totalSectors =
       bucketReadings.length > 0
@@ -115,6 +117,7 @@ export function aggregateTelemetry(
 
     aggregated.push({
       time: index,
+      timestamp: new Date(bucketStartMs),
 
       totalCadets,
       infectedCadets,

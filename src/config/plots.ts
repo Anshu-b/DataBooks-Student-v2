@@ -26,7 +26,7 @@ import type { PlotType, Variable } from "../types/plots";
  */
 export const VARIABLES: Variable[] = [
   // Temporal
-  { id: "time", label: "Time", class: "temporal" },
+  { id: "timestamp", label: "Time", class: "temporal"},
 
   // Ordinal / interaction
   { id: "meetingsHeld", label: "Meetings Held", class: "ordinal" },

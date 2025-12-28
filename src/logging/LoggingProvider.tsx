@@ -8,7 +8,6 @@
 import { createContext, useContext, useState } from "react";
 import type { Logger } from "./logger";
 import { FirebaseLogger } from "./FirebaseLogger";
-import { createBatchTimestamp } from "./createBatchTimestamp";
 
 type LoggerInitArgs = {
   userId: string;
