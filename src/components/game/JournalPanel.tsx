@@ -155,46 +155,6 @@ function JournalPanel() {
         </div>
       </div>
 
-      {/* Saving Answers Warning Section */}
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "0.5rem",
-          marginBottom: "1rem",
-          padding: "1rem",
-          backgroundColor: "#fff5f5", // Light red background
-          border: "1px solid #feb2b2", // Subtle red border
-          borderRadius: "0.5rem",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "0.5rem",
-          }}
-        >
-          <span style={{ fontSize: "1.2rem" }}>⚠️</span>
-          <strong style={{ color: "#c53030", fontSize: "1.25rem" }}>
-            Important: Save Your Progress
-          </strong>
-        </div>
-        
-        <p
-          style={{
-            margin: 0,
-            color: "#9b2c2c", // Darker red for readability
-            fontSize: "1.1rem",
-            fontWeight: "bold", // Bold as requested
-            lineHeight: "1.6",
-          }}
-        >
-          Please remember to save or submit your answers regularly. Any unsaved 
-          progress will be lost once you log out, switch between rounds, or close the session.
-        </p>
-      </div>
-
       {/* Helpful Tips Section */}
       <div
         style={{
@@ -235,6 +195,47 @@ function JournalPanel() {
         </ul>
       </div>
 
+        {/* Saving Answers Warning Section */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "0.5rem",
+          marginBottom: "1rem",
+          padding: "1rem",
+          backgroundColor: "#fff5f5", // Light red background
+          border: "1px solid #feb2b2", // Subtle red border
+          borderRadius: "0.5rem",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
+          }}
+        >
+          <span style={{ fontSize: "1.2rem" }}>⚠️</span>
+          <strong style={{ color: "#c53030", fontSize: "1.25rem" }}>
+            Important: Save Your Progress
+          </strong>
+        </div>
+        
+        <p
+          style={{
+            margin: 0,
+            color: "#9b2c2c", // Darker red for readability
+            fontSize: "1.1rem",
+            fontWeight: "bold", // Bold as requested
+            lineHeight: "1.6",
+          }}
+        >
+          Please remember to save or submit your answers regularly. Any unsaved 
+          progress will be lost once you log out, switch between rounds, or close the session.
+        </p>
+      </div>
+      
+      
       {/* Questions */}
       {roundConfig.questions.map((q, index) => {
         const existingAnswer =
