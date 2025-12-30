@@ -13,7 +13,7 @@ type LoggerInitArgs = {
   userId: string;
   gameId: string;
   batchTimestamp: string;
-  //sessionId: string;
+  sessionId: string;
 };
 
 type LoggingContextValue = {

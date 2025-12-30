@@ -13,6 +13,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { GAMES } from "../config/games";
 import { PLAYER_NAMES } from "../config/playerNames";
+import { getDatabase, ref, get, set, update } from "firebase/database";
+
 
 function GameEntryPage() {
   const { gameId } = useParams<{ gameId: string }>();
@@ -20,12 +22,82 @@ function GameEntryPage() {
   const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null);
   const [hoveredPlayer, setHoveredPlayer] = useState<string | null>(null);
 
+  const [sessionId, setSessionId] = useState("");
+
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
   const game = GAMES.find((g) => g.id === gameId);
+
+  const [sessionValidated, setSessionValidated] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const passwordsMatch = password.length > 0 && password === confirmPassword;  
+
 
   if (!game) {
     return <p style={{ padding: "2rem" }}>Game not found.</p>;
   }
 
+  const initialGameState = {
+    gameId: game.id,
+    sessionId,
+    player: { name: selectedPlayer },
+    currentRound: 1,
+    rounds: {
+      1: { roundNumber: 1, journalAnswers: {} },
+    },
+  };
+
+  // Check if session exists in Firebase Realtime Database
+  async function sessionExists(sessionId: string): Promise<boolean> {
+    const db = getDatabase();
+    const sessionRef = ref(db, `sessions/${sessionId}`);
+    const snapshot = await get(sessionRef);
+    return snapshot.exists();
+  }
+
+  // Resolve player identity and password
+  async function resolvePlayer(
+    sessionId: string,
+    username: string,
+    password: string
+  ): Promise<{ ok: true } | { ok: false; error: string }> {
+    const db = getDatabase();
+    const playerRef = ref(db, `sessions/${sessionId}/players/${username}`);
+    const snapshot = await get(playerRef);
+    const now = new Date().toISOString();
+  
+    // Case A: first-time player → create record
+    if (!snapshot.exists()) {
+      await set(playerRef, {
+        password,
+        createdAt: now,
+        lastLoginAt: now,
+      });
+      return { ok: true };
+    }
+  
+    // Case B: returning player → check password
+    const player = snapshot.val();
+    if (player.password !== password) {
+      return {
+        ok: false,
+        error: "Incorrect password for this username. Please check with your teacher if you forgot it.",
+      };
+    }
+  
+    // Password matches → update last login
+    await update(playerRef, {
+      lastLoginAt: now,
+    });
+  
+    return { ok: true };
+  }
+  
+
+  
   return (
     <main
       style={{
@@ -130,6 +202,109 @@ function GameEntryPage() {
         >
           {game.name}
         </h2>
+        
+        {/* Session ID input */}
+        <div style={{ marginBottom: "1.5rem", textAlign: "left" }}>
+          <label
+            style={{
+              display: "block",
+              fontSize: "0.9rem",
+              fontWeight: 600,
+              color: "#4a5568",
+              marginBottom: "0.5rem",
+              textTransform: "uppercase",
+              letterSpacing: "0.5px",
+            }}
+          >
+          Session ID
+          </label>
+          <input
+            type="text"
+            value={sessionId}
+            onChange={(e) => setSessionId(e.target.value)}
+            placeholder="e.g. 20250715_period3"
+            disabled={sessionValidated}
+            style={{
+              width: "100%",
+              padding: "1rem",
+              fontSize: "1rem",
+              fontWeight: 500,
+              color: "#2d3748",
+              background: sessionValidated ? "#f7fafc" : "#ffffff",
+              border: "2px solid #e2e8f0",
+              borderRadius: "10px",
+              outline: "none",
+              transition: "all 0.3s ease",
+              cursor: sessionValidated ? "not-allowed" : "text",
+              boxSizing: "border-box",
+            }}
+            onFocus={(e) => {
+              if (!sessionValidated) {
+                e.currentTarget.style.borderColor = "#667eea";
+                e.currentTarget.style.boxShadow = "0 0 0 3px rgba(102, 126, 234, 0.1)";
+              }
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.borderColor = "#e2e8f0";
+              e.currentTarget.style.boxShadow = "none";
+            }}
+          />
+        </div>
+
+        <button
+          disabled={!sessionId || loading || sessionValidated}
+          onClick={async () => {
+            setLoading(true);
+            setError(null);
+
+            try {
+              const exists = await sessionExists(sessionId);
+              if (!exists) {
+                setError("Session ID not found. Please check with your teacher.");
+                setLoading(false);
+                return;
+              }
+
+              setSessionValidated(true);
+              setLoading(false);
+            } catch {
+              setError("Error validating session.");
+              setLoading(false);
+            }
+          }}
+          style={{
+            padding: "1rem 2rem",
+            fontSize: "1.1rem",
+            fontWeight: 700,
+            color: "white",
+            background: (!sessionId || loading || sessionValidated)
+              ? "#cbd5e0"
+              : "linear-gradient(135deg, #667eea, #764ba2)",
+            border: "none",
+            borderRadius: "12px",
+            cursor: (!sessionId || loading || sessionValidated) ? "not-allowed" : "pointer",
+            boxShadow: (!sessionId || loading || sessionValidated)
+              ? "none"
+              : "0 4px 15px rgba(102, 126, 234, 0.4)",
+            transition: "all 0.3s ease",
+          }}
+          onMouseEnter={(e) => {
+            if (!sessionId || loading || sessionValidated) return;
+            e.currentTarget.style.transform = "translateY(-2px)";
+            e.currentTarget.style.boxShadow = "0 6px 20px rgba(102, 126, 234, 0.5)";
+          }}
+          onMouseLeave={(e) => {
+            if (!sessionId || loading || sessionValidated) return;
+            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow = "0 4px 15px rgba(102, 126, 234, 0.4)";
+          }}
+        >
+          {loading ? "Validating..." : "Validate Session"}
+        </button>
+
+    {sessionValidated && (
+    <>
+    {/* identity selection + password UI */}
         <p
           style={{
             fontSize: "1.1rem",
@@ -209,6 +384,178 @@ function GameEntryPage() {
           ))}
         </div>
 
+        {/* Password */}
+<div style={{ marginBottom: "1.5rem", textAlign: "left" }}>
+  <label
+    style={{
+      display: "block",
+      fontSize: "0.9rem",
+      fontWeight: 600,
+      color: "#4a5568",
+      marginBottom: "0.5rem",
+      textTransform: "uppercase",
+      letterSpacing: "0.5px",
+    }}
+  >
+    🔐 Password
+  </label>
+  <p
+    style={{
+      fontSize: "0.9rem",
+      color: "#718096",
+      marginBottom: "0.5rem",
+      marginTop: "0.25rem",
+    }}
+  >
+    This protects your work from other students in this class.
+  </p>
+  <input
+    type={showPassword ? "text" : "password"}
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    placeholder="Enter password"
+    style={{
+      width: "100%",
+      padding: "1rem",
+      fontSize: "1rem",
+      fontWeight: 500,
+      color: "#2d3748",
+      background: "#ffffff",
+      border: "2px solid #e2e8f0",
+      borderRadius: "10px",
+      outline: "none",
+      transition: "all 0.3s ease",
+      boxSizing: "border-box",
+    }}
+    onFocus={(e) => {
+      e.currentTarget.style.borderColor = "#667eea";
+      e.currentTarget.style.boxShadow = "0 0 0 3px rgba(102, 126, 234, 0.1)";
+    }}
+    onBlur={(e) => {
+      e.currentTarget.style.borderColor = "#e2e8f0";
+      e.currentTarget.style.boxShadow = "none";
+    }}
+  />
+</div>
+
+    {/* Confirm Password */}
+    <div style={{ marginBottom: "1rem", textAlign: "left" }}>
+      <label
+        style={{
+          display: "block",
+          fontSize: "0.9rem",
+          fontWeight: 600,
+          color: "#4a5568",
+          marginBottom: "0.5rem",
+          textTransform: "uppercase",
+          letterSpacing: "0.5px",
+        }}
+      >
+        🔁 Re-enter Password
+      </label>
+      <input
+        type={showPassword ? "text" : "password"}
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+        placeholder="Re-enter password"
+        style={{
+          width: "100%",
+          padding: "1rem",
+          fontSize: "1rem",
+          fontWeight: 500,
+          color: "#2d3748",
+          background: "#ffffff",
+          border: confirmPassword && !passwordsMatch 
+            ? "2px solid #e53e3e" 
+            : "2px solid #e2e8f0",
+          borderRadius: "10px",
+          outline: "none",
+          transition: "all 0.3s ease",
+          boxSizing: "border-box",
+        }}
+        onFocus={(e) => {
+          if (confirmPassword && !passwordsMatch) {
+            e.currentTarget.style.borderColor = "#e53e3e";
+            e.currentTarget.style.boxShadow = "0 0 0 3px rgba(229, 62, 62, 0.1)";
+          } else {
+            e.currentTarget.style.borderColor = "#667eea";
+            e.currentTarget.style.boxShadow = "0 0 0 3px rgba(102, 126, 234, 0.1)";
+          }
+        }}
+        onBlur={(e) => {
+          if (confirmPassword && !passwordsMatch) {
+            e.currentTarget.style.borderColor = "#e53e3e";
+            e.currentTarget.style.boxShadow = "none";
+          } else {
+            e.currentTarget.style.borderColor = "#e2e8f0";
+            e.currentTarget.style.boxShadow = "none";
+          }
+        }}
+      />
+    </div>
+
+    {/* Show password toggle */}
+    <label
+      style={{
+        display: "flex",
+        alignItems: "center",
+        fontSize: "0.9rem",
+        color: "#4a5568",
+        fontWeight: 500,
+        cursor: "pointer",
+        marginBottom: "1rem",
+      }}
+    >
+      <input
+        type="checkbox"
+        checked={showPassword}
+        onChange={(e) => setShowPassword(e.target.checked)}
+        style={{
+          marginRight: "0.5rem",
+          width: "18px",
+          height: "18px",
+          cursor: "pointer",
+        }}
+      />
+      👁️ Show password
+    </label>
+
+    {/* Password mismatch warning */}
+    {confirmPassword && !passwordsMatch && (
+      <div
+        style={{
+          color: "#c53030",
+          fontSize: "0.9rem",
+          marginTop: "0.5rem",
+          marginBottom: "0.8rem",
+          background: "rgba(229, 62, 62, 0.1)",
+          padding: "0.75rem",
+          borderRadius: "8px",
+          border: "1px solid rgba(229, 62, 62, 0.2)",
+          fontWeight: 500,
+        }}
+      >
+        ⚠️ Passwords do not match.
+      </div>
+    )}
+
+        {error && (
+            <div
+              style={{
+                marginBottom: "1rem",
+                padding: "0.75rem",
+                borderRadius: "10px",
+                background: "#fed7d7",
+                color: "#9b2c2c",
+                fontWeight: 600,
+                fontSize: "0.9rem",
+              }}
+            >
+              {error}
+            </div>
+          )}
+
+
         <div
           style={{
             display: "flex",
@@ -216,6 +563,7 @@ function GameEntryPage() {
             gap: "1rem",
           }}
         >
+
           <button
             onClick={() => navigate("/")}
             style={{
@@ -247,12 +595,48 @@ function GameEntryPage() {
           </button>
 
           <button
-            disabled={!selectedPlayer}
-            onClick={() =>
-              navigate(`/games/${game.id}/play`, {
-                state: { playerName: selectedPlayer },
-              })
-            }
+            disabled={!selectedPlayer || !sessionValidated || !passwordsMatch || loading}
+            onClick={async () => {
+              if (!selectedPlayer || !sessionId || !password) return;
+            
+              setLoading(true);
+              setError(null);
+            
+              try {
+                // Step 2: validate session exists
+                const exists = await sessionExists(sessionId);
+                if (!exists) {
+                  setError("Session ID not found. Please check with your teacher.");
+                  setLoading(false);
+                  return;
+                }
+            
+                // Step 3: resolve player + password
+                const result = await resolvePlayer(
+                  sessionId,
+                  selectedPlayer,
+                  password
+                );
+            
+                if (!result.ok) {
+                  setError(result.error);
+                  setLoading(false);
+                  return;
+                }
+            
+                // Success → proceed (GameState comes next step)
+                navigate(`/games/${game.id}/play`, {
+                  state: { initialGameState },
+                });
+                
+              } catch (err) {
+                console.error(err);
+                setError("Error joining session. Please try again.");
+                setLoading(false);
+              }
+            }}
+            
+                      
             style={{
               flex: 1,
               padding: "1rem",
@@ -285,10 +669,14 @@ function GameEntryPage() {
               }
             }}
           >
-            Start Adventure! 🚀
+            {loading ? "Checking session..." : "Start Adventure! 🚀"}
           </button>
         </div>
+
+        </>
+      )}
       </div>
+      
     </main>
   );
 }

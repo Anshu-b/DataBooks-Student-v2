@@ -24,6 +24,7 @@ export type Player = {
   
   export type GameState = {
     gameId: string;
+    sessionId: string;
     player: Player;
     currentRound: number;
     rounds: Record<number, RoundState>;

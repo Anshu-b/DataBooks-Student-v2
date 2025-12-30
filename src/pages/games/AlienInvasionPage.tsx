@@ -30,8 +30,14 @@ import { createBatchTimestamp } from "../../logging/createBatchTimestamp";
 
 function AlienInvasionPage() {
   const { state } = useLocation();
-  const playerName = state?.playerName ?? "Unknown";
-  const game = GAMES.find((g) => g.id === "alien-invasion");
+  const initialGameState = state?.initialGameState;
+
+  if (!initialGameState) {
+    return <p style={{ padding: "2rem" }}>Invalid or expired session.</p>;
+  }
+
+  const playerName: string = initialGameState.player.name;
+  const game = GAMES.find((g) => g.id === initialGameState.gameId);
   const logger = useLogger();
 
   const [screenMode, setScreenMode] = useState<ScreenMode>("single");
@@ -42,11 +48,13 @@ function AlienInvasionPage() {
 
     useEffect(() => {
       logger.initializeLogger({
-        userId: playerName,
-        gameId: game.id,
+        userId: initialGameState.player.name,
+        gameId: initialGameState.gameId,
+        sessionId: initialGameState.sessionId,
         batchTimestamp: createBatchTimestamp(),
       });
-    }, [playerName, game.id]);
+    }, [initialGameState]);
+    
     
 
   function handleSelectPanel(panel: "journal" | "plots") {
@@ -79,7 +87,7 @@ function AlienInvasionPage() {
   }
 
   return (
-    <GameStateProvider gameId={game.id} playerName={playerName}>
+    <GameStateProvider initialGameState={initialGameState}>
       <GameHeader
         gameName={game.name}
         playerName={playerName}

@@ -20,20 +20,14 @@ type GameStateContextValue = {
 const GameStateContext = createContext<GameStateContextValue | null>(null);
 
 type Props = {
-  gameId: string;
-  playerName: string;
+  initialGameState: GameState;
   children: React.ReactNode;
 };
 
-export function GameStateProvider({ gameId, playerName, children }: Props) {
-  const [gameState, setGameState] = useState<GameState>({
-    gameId,
-    player: { name: playerName },
-    currentRound: 1,
-    rounds: {
-      1: { roundNumber: 1, journalAnswers: {} },
-    },
-  });
+
+export function GameStateProvider({ initialGameState, children }: Props) {
+  const [gameState, setGameState] = useState<GameState>(initialGameState);
+
 
   function setJournalAnswer(round: number, answer: JournalAnswer) {
     setGameState((prev) => ({
