@@ -5,13 +5,14 @@
  *
  * This file:
  * - Initializes the Firebase app
- * - Exposes Firestore for use elsewhere
+ * - Exposes Firestore AND Realtime Database
  *
  * NO business logic belongs here.
  */
 
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { getDatabase } from "firebase/database";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -24,3 +25,4 @@ const firebaseConfig = {
 
 export const firebaseApp = initializeApp(firebaseConfig);
 export const db = getFirestore(firebaseApp);
+export const realtimeDb = getDatabase(firebaseApp);

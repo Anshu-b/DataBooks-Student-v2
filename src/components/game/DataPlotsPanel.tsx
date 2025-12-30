@@ -22,18 +22,26 @@ import {getValidVariables, isValidPlotSelection} from "../../utils/plotValidatio
 import LineChart from "../charts/LineChart";
 import { buildLinePlotData } from "../../utils/buildLinePlotData";
 import { aggregateTelemetry } from "../../analytics/aggregateTelemetry";
-import rawSession from "../../data/exampleRawSession.json";
-// import bishopsSession from "../../data/bishopsP2Session.json";
 import ScatterChart from "../charts/ScatterChart";
 import HistogramChart from "../charts/HistogramChart";
 import { buildScatterPlotData } from "../../utils/buildScatterPlotData";
 import { buildHistogramPlotData } from "../../utils/buildHistogramPlotData";
-// import { loadRawSession } from "../../analytics/loadRawSession";
 import { useLogger } from "../../logging/LoggingProvider";
+import { useGameStateContext } from "../../state/GameStateContext";
+import { onValue, off } from "firebase/database";
+import { getSessionRef } from "../../firebase/getSessionRef";
+// import rawSession from "../../data/exampleRawSession.json";
+// import bishopsSession from "../../data/bishopsP2Session.json";
+// import { loadRawSession } from "../../analytics/loadRawSession";
 
-const sessionId = "20250715_period3";
-const activeSession = rawSession.sessions[sessionId];
-const telemetry = aggregateTelemetry(activeSession);
+
+// testing on local sample generated data
+// const { gameState } = useGameStateContext();
+// const sessionId = gameState.sessionId;
+// const rawSessionTyped = rawSession as {sessions: Record<string, any>;};
+// const activeSession = rawSessionTyped.sessions[sessionId];
+// const telemetry = activeSession ? aggregateTelemetry(activeSession): [];
+
 
 // const telemetry = aggregateTelemetry(
 //   loadRawSession(bishopsSession)
@@ -58,6 +66,35 @@ function DataPlotsPanel() {
   const validValueVars = getValidVariables(plotType, "value");
   const logger = useLogger();
 
+  const { gameState } = useGameStateContext();
+  const sessionId = gameState.sessionId;
+
+  const [telemetry, setTelemetry] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!sessionId) return;
+  
+    setLoading(true);
+    const sessionRef = getSessionRef(sessionId);
+  
+    const unsubscribe = onValue(sessionRef, (snapshot) => {
+      if (!snapshot.exists()) {
+        setTelemetry([]);
+        setLoading(false);
+        return;
+      }
+  
+      const sessionData = snapshot.val();
+      setTelemetry(aggregateTelemetry(sessionData));
+      setLoading(false);
+    });
+  
+    return () => {
+      unsubscribe();
+    };
+  }, [sessionId]);
+  
 
   /* -----------------------------
    * Auto-correct invalid selections
@@ -95,7 +132,7 @@ function DataPlotsPanel() {
   // Convention: time-like variables
   const isTimeAxis = xVar === "time";
 
-
+  
   /* -----------------------------
    * Render
    * ----------------------------- */
