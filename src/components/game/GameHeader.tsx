@@ -24,7 +24,7 @@ type Props = {
   playerName: string;
 
   sessionId: string;
-  sessionActive: boolean;
+  sessionStatus: "active" | "paused" | "inactive";
 
   screenMode: ScreenMode;
   onToggleMode: () => void;
@@ -36,7 +36,7 @@ function GameHeader({
   gameName,
   playerName,
   sessionId,
-  sessionActive,
+  sessionStatus,
   screenMode,
   onToggleMode,
   activePanel,
@@ -44,7 +44,6 @@ function GameHeader({
 }: Props) {
 
   const navigate = useNavigate();
-
 
   return (
     <header
@@ -113,7 +112,12 @@ function GameHeader({
               width: "8px",
               height: "8px",
               borderRadius: "50%",
-              background: sessionActive ? "#48bb78" : "#f56565",
+              background:
+                sessionStatus === "active"
+                  ? "#48bb78"
+                  : sessionStatus === "paused"
+                  ? "#ecc94b"
+                  : "#f56565",
               boxShadow: "0 0 6px rgba(0,0,0,0.3)",
             }}
           />

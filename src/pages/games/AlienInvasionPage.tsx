@@ -26,6 +26,7 @@ import { GameStateProvider } from "../../state/GameStateContext";
 import { GAMES } from "../../config/games";
 import { useLogger } from "../../logging/LoggingProvider";
 import { createBatchTimestamp } from "../../logging/createBatchTimestamp";
+import { deriveSessionStatus } from "../../utils/deriveSessionStatus";
 
 
 function AlienInvasionPage() {
@@ -37,6 +38,7 @@ function AlienInvasionPage() {
   }
 
   const playerName: string = initialGameState.player.name;
+  const sessionStatus = deriveSessionStatus(initialGameState);
   const game = GAMES.find((g) => g.id === initialGameState.gameId);
   const logger = useLogger();
 
@@ -92,7 +94,7 @@ function AlienInvasionPage() {
         gameName={game.name}
         playerName={playerName}
         sessionId={initialGameState.sessionId}
-        sessionActive={initialGameState.sessionActive}
+        sessionStatus={sessionStatus}
         screenMode={screenMode}
         onToggleMode={handleToggleMode}
         activePanel={activePanel}
