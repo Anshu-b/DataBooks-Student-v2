@@ -59,7 +59,7 @@ function JournalPanel() {
         padding: "2rem",
         overflowY: "auto",
         background: "linear-gradient(135deg, #fef5e7 0%, #fdebd0 100%)",
-        minHeight: "100vh",
+        //minHeight: "100vh",
       }}
     >
       {/* -----------------------------------------
@@ -235,7 +235,7 @@ function JournalPanel() {
         </p>
       </div>
       
-      
+
       {/* Questions */}
       {roundConfig.questions.map((q, index) => {
         const existingAnswer =

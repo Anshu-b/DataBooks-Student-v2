@@ -36,14 +36,22 @@ function GameLayout({ screenMode, activePanel }: Props) {
   // Dual screen layout
   if (screenMode === "dual") {
     return (
-      <div style={{ display: "flex", height: "calc(100vh - 64px)" }}>
-        <div style={{ flex: 1, borderRight: "2px solid #eee" }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "stretch",
+          height: "calc(100vh - 64px)",
+        }}
+      >
+        <div style={{ flex: 1, borderRight: "2px solid #eee", overflowY: "auto" }}>
           <JournalPanel />
         </div>
-        <div style={{ flex: 1 }}>
+
+        <div style={{ flex: 1, overflowY: "auto" }}>
           <DataPlotsPanel />
         </div>
       </div>
+
     );
   }
 
