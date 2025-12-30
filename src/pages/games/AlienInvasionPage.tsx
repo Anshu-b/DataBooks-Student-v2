@@ -91,6 +91,8 @@ function AlienInvasionPage() {
       <GameHeader
         gameName={game.name}
         playerName={playerName}
+        sessionId={initialGameState.sessionId}
+        sessionActive={initialGameState.sessionActive}
         screenMode={screenMode}
         onToggleMode={handleToggleMode}
         activePanel={activePanel}
