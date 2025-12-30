@@ -91,7 +91,7 @@ function GameHeader({
             e.currentTarget.style.boxShadow = "none";
           }}
         >
-          ← Back to Games
+          ← Log Out
         </button>
   
         {/* Session badge */}

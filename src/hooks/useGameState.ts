@@ -15,6 +15,7 @@ export function useGameState() {
     setJournalAnswer,
     nextRound,
     getJournalAnswersForRound,
+    saveJournalRoundAnswers,
   } = useGameStateContext();
 
   return {
@@ -22,5 +23,6 @@ export function useGameState() {
     setJournalAnswer,
     nextRound,
     getJournalAnswersForRound,
+    saveJournalRoundAnswers,
   };
 }

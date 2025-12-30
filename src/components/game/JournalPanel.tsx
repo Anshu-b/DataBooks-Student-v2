@@ -23,19 +23,20 @@ import { useLogger } from "../../logging/LoggingProvider";
 
 
 function JournalPanel() {
-  const { gameState, setJournalAnswer, getJournalAnswersForRound } = useGameState();
+  const { gameState, setJournalAnswer, getJournalAnswersForRound, saveJournalRoundAnswers} = useGameState();
   const logger = useLogger();
 
   const currentRound = gameState.currentRound;
+
 
   /* -----------------------------------------
    * NEW: viewed round (allows jumping around)
    * ----------------------------------------- */
   const [viewedRound, setViewedRound] = useState(currentRound);
-
   const roundConfig = JOURNAL_ROUNDS.find(
     (r) => r.roundNumber === viewedRound
   );
+
 
   if (!roundConfig) {
     return (
@@ -154,6 +155,46 @@ function JournalPanel() {
         </div>
       </div>
 
+      {/* Saving Answers Warning Section */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "0.5rem",
+          marginBottom: "1rem",
+          padding: "1rem",
+          backgroundColor: "#fff5f5", // Light red background
+          border: "1px solid #feb2b2", // Subtle red border
+          borderRadius: "0.5rem",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
+          }}
+        >
+          <span style={{ fontSize: "1.2rem" }}>⚠️</span>
+          <strong style={{ color: "#c53030", fontSize: "1.25rem" }}>
+            Important: Save Your Progress
+          </strong>
+        </div>
+        
+        <p
+          style={{
+            margin: 0,
+            color: "#9b2c2c", // Darker red for readability
+            fontSize: "1.1rem",
+            fontWeight: "bold", // Bold as requested
+            lineHeight: "1.6",
+          }}
+        >
+          Please remember to save or submit your answers regularly. Any unsaved 
+          progress will be lost once you log out, switch between rounds, or close the session.
+        </p>
+      </div>
+
       {/* Helpful Tips Section */}
       <div
         style={{
@@ -165,6 +206,7 @@ function JournalPanel() {
           border: "2px solid rgba(243, 156, 18, 0.2)",
         }}
       >
+        
         <div
           style={{
             display: "flex",
@@ -194,8 +236,11 @@ function JournalPanel() {
       </div>
 
       {/* Questions */}
-      <div style={{ maxWidth: "950px", margin: "0 auto" }}>
-        {roundConfig.questions.map((q, index) => (
+      {roundConfig.questions.map((q, index) => {
+        const existingAnswer =
+          gameState.rounds[viewedRound]?.journalAnswers[q.id]?.answer ?? "";
+
+        return (
           <div
             key={q.id}
             style={{
@@ -248,49 +293,41 @@ function JournalPanel() {
             {/* Text Input */}
             {q.type === "text" && (
               <textarea
-                style={{
-                  width: "100%",
-                  padding: "1rem",
-                  fontSize: "1rem",
-                  color: "#2d3748",
-                  background: "#fef9f3",
-                  border: "2px solid #fdebd0",
-                  borderRadius: "12px",
-                  fontFamily: "inherit",
-                  resize: "vertical",
-                  minHeight: "120px",
-                  transition: "all 0.3s ease",
-                  outline: "none",
-                  lineHeight: "1.6",
-                  boxSizing: "border-box",
-                }}
-                placeholder="Share your thoughts here..."
-                onChange={(e) =>
-                  setJournalAnswer(viewedRound, {
-                    questionId: q.id,
-                    answer: e.target.value,
-                  })
-                }
-                onBlur={(e) => {
-                  logger.log({
-                    type: "journal.input",
-                    action: "answer_committed",
-                    details: {
-                      round: viewedRound,
-                      questionIndex: index + 1,
-                      length: e.currentTarget.value.length,
-                    },
-                  });
-                }}
-              />
+              value={existingAnswer}
+              placeholder="Share your thoughts here..."
+              style={{
+                width: "100%",
+                padding: "0.75rem 0.9rem",
+                fontSize: "1rem",
+                color: "#2d3748",
+                background: "#fffdf9",
+                border: "2px solid #fde2c4",
+                borderRadius: "10px",
+                fontFamily: "inherit",
+                resize: "vertical",
+            
+                /* 🔧 FIXES */
+                minHeight: "72px",
+                maxHeight: "260px",
+                lineHeight: "1.5",
+                boxSizing: "border-box",
+                display: "block",
+              }}
+              onChange={(e) =>
+                setJournalAnswer(viewedRound, {
+                  questionId: q.id,
+                  answer: e.target.value,
+                })
+              }
+            />
+            
             )}
           </div>
-        ))}
-      </div>
+        );
+      })}
 
-      {/* -----------------------------------------
-       * NEW: Save / Submit Button
-       * ----------------------------------------- */}
+
+      {/*  Save / Submit Button*/}
       <div
         style={{
           maxWidth: "950px",
@@ -299,8 +336,10 @@ function JournalPanel() {
         }}
       >
         <button
-          onClick={() => {
+          onClick={async () => {
             const answers = getJournalAnswersForRound(viewedRound);
+
+            await saveJournalRoundAnswers(viewedRound);
 
             logger.log({
               type: "journal.round_submission",

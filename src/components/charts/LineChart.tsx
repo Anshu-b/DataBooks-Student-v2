@@ -31,9 +31,6 @@ function LineChart({
   yLegend = "Y" 
 }: LineChartProps) {
 
-  console.log("xScaleType:", xScaleType);
-  console.log("First x value:", data[0]?.data[0]?.x, typeof data[0]?.data[0]?.x);
-
   return (
     <div style={{ height: 550 }}>
       <ResponsiveLine
