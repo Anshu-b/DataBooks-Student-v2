@@ -59,7 +59,6 @@ function JournalPanel() {
         padding: "2rem",
         overflowY: "auto",
         background: "linear-gradient(135deg, #fef5e7 0%, #fdebd0 100%)",
-        //minHeight: "100vh",
       }}
     >
       {/* -----------------------------------------
@@ -327,11 +326,9 @@ function JournalPanel() {
         );
       })}
 
-
-      {/*  Save / Submit Button*/}
+    {/*  Save / Submit Button*/}
       <div
         style={{
-          maxWidth: "950px",
           margin: "2rem auto",
           textAlign: "right",
         }}

@@ -24,6 +24,8 @@ import { buildLinePlotData } from "../../utils/buildLinePlotData";
 import { aggregateTelemetry } from "../../analytics/aggregateTelemetry";
 import ScatterChart from "../charts/ScatterChart";
 import HistogramChart from "../charts/HistogramChart";
+import PieChart from "../charts/PieChart";
+import { buildPiePlotData } from "../../utils/buildPiePlotData";
 import { buildScatterPlotData } from "../../utils/buildScatterPlotData";
 import { buildHistogramPlotData } from "../../utils/buildHistogramPlotData";
 import { useLogger } from "../../logging/LoggingProvider";
@@ -47,7 +49,41 @@ import { getSessionRef } from "../../firebase/getSessionRef";
 //   loadRawSession(bishopsSession)
 // );
 
-type PlotTypeId = "line" | "scatter" | "histogram";
+type PlotTypeId = "line" | "scatter" | "histogram" | "pie";
+
+function getPlotTitle({
+  plotType,
+  xLabel,
+  yLabel,
+  valueLabel,
+  piePopulation,
+}: {
+  plotType: PlotTypeId;
+  xLabel?: string;
+  yLabel?: string;
+  valueLabel?: string;
+  piePopulation?: "cadets" | "sectors";
+}) {
+  switch (plotType) {
+    case "line":
+      return `${yLabel} over ${xLabel}`;
+
+    case "scatter":
+      return `${yLabel} vs ${xLabel}`;
+
+    case "histogram":
+      return `Distribution of ${valueLabel}`;
+
+    case "pie":
+      return piePopulation === "cadets"
+        ? "Cadet Health Distribution"
+        : "Sector Health Distribution";
+
+    default:
+      return "";
+  }
+}
+
 
 function DataPlotsPanel() {
   /* -----------------------------
@@ -71,6 +107,7 @@ function DataPlotsPanel() {
 
   const [telemetry, setTelemetry] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
     if (!sessionId) return;
@@ -129,9 +166,19 @@ function DataPlotsPanel() {
   const yLabel = yVarConfig?.label ?? yVar;
   const valueLabel = valueVarConfig?.label ?? valueVar;
 
+  type PiePopulation = "cadets" | "sectors";
+  const [piePopulation, setPiePopulation] = useState<PiePopulation>("cadets");
+
   // Convention: time-like variables
   const isTimeAxis = xVar === "time";
 
+  const plotTitle = getPlotTitle({
+    plotType,
+    xLabel,
+    yLabel,
+    valueLabel,
+    piePopulation,
+  });
   
   /* -----------------------------
    * Render
@@ -255,7 +302,7 @@ function DataPlotsPanel() {
         </div>
 
         {/* Line / Scatter Controls */}
-        {plotType !== "histogram" && (
+        {(plotType == "scatter" || plotType == "line") && (
           <div
             style={{
               display: "grid",
@@ -462,8 +509,86 @@ function DataPlotsPanel() {
             </select>
           </div>
         )}
+
+      {/* Pie Controls */}
+      {plotType === "pie" && (
+        <div>
+          <label
+            style={{
+              display: "block",
+              fontSize: "0.9rem",
+              fontWeight: 600,
+              color: "#4a5568",
+              marginBottom: "0.5rem",
+              textTransform: "uppercase",
+              letterSpacing: "0.5px",
+            }}
+          >
+            🧩 Population
+          </label>
+
+        <select
+          value={piePopulation}
+          onChange={(e) => {
+            const next = e.target.value as PiePopulation;
+
+            if (next !== piePopulation) {
+              logger.log({
+                type: "plot.pie_population_changed",
+                action: "population_changed",
+                details: {
+                  from: piePopulation,
+                  to: next,
+                },
+              });
+            }
+
+            setPiePopulation(next);
+          }}
+          style={{
+            width: "100%",
+            padding: "0.75rem 1rem",
+            fontSize: "1rem",
+            fontWeight: 500,
+            color: "#2d3748",
+            background: "#f7fafc",
+            border: "2px solid #e2e8f0",
+            borderRadius: "10px",
+            cursor: "pointer",
+            transition: "all 0.3s ease",
+            outline: "none",
+          }}
+        >
+          <option value="cadets">Cadets</option>
+          <option value="sectors">Sectors</option>
+        </select>
+      </div>
+    )}
       </div>
 
+      {/* Plot Title */}
+      {plotTitle && (
+        <div
+          style={{
+            marginBottom: "1rem",
+            textAlign: "center",
+          }}
+        >
+          <h3
+            style={{
+              margin: 0,
+              fontSize: "1.25rem",
+              fontWeight: 700,
+              color: "#2d3748",
+            }}
+          >
+            {plotTitle}
+          </h3>
+        </div>
+      )}
+
+
+      {/* Plot Area */}
       {plotType === "line" && xVar && yVar && (
         <LineChart
           data={buildLinePlotData(telemetry, xVar as any, yVar as any)}
@@ -494,6 +619,13 @@ function DataPlotsPanel() {
             xLegend={valueLabel}
         />
         )}
+
+        {plotType === "pie" && (
+          <PieChart
+            data={buildPiePlotData(telemetry, piePopulation)}
+          />
+        )}
+
 
 
       {/* Current Selection Display */}

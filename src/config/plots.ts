@@ -75,4 +75,11 @@ export const PLOT_TYPES: PlotType[] = [
       value: ["quantitative", "ordinal"],
     },
   },
+  {
+    id: "pie",
+    label: "Pie Chart",
+    roles: {
+      value: ["quantitative"],
+    },
+  },
 ];

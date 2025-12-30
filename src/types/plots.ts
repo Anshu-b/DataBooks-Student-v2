@@ -18,7 +18,7 @@ export type Variable = {
 export type PlotRole = "x" | "y" | "value";
 
 export type PlotType = {
-  id: "line" | "scatter" | "histogram";
+  id: "line" | "scatter" | "histogram" | "pie";
   label: string;
   roles: Partial<Record<PlotRole, VariableClass[]>>;
 };

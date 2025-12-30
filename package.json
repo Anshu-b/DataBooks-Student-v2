@@ -12,6 +12,7 @@
   "dependencies": {
     "@nivo/bar": "^0.99.0",
     "@nivo/line": "^0.99.0",
+    "@nivo/pie": "^0.99.0",
     "@nivo/scatterplot": "^0.99.0",
     "firebase": "^12.7.0",
     "react": "^19.2.0",
