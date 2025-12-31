@@ -30,7 +30,7 @@ import { buildScatterPlotData } from "../../utils/buildScatterPlotData";
 import { buildHistogramPlotData } from "../../utils/buildHistogramPlotData";
 import { useLogger } from "../../logging/LoggingProvider";
 import { useGameStateContext } from "../../state/GameStateContext";
-import { onValue, off } from "firebase/database";
+import { onValue} from "firebase/database";
 import { getSessionRef } from "../../firebase/getSessionRef";
 // import rawSession from "../../data/exampleRawSession.json";
 // import bishopsSession from "../../data/bishopsP2Session.json";

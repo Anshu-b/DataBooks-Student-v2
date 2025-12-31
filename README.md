@@ -2,15 +2,16 @@
 
 ## Overview
 
-**DataBooks Student** is an interactive, research-driven educational platform designed to study how users reason about data in collaborative environments.
+**DataBooks Student** is an interactive, research-driven educational platform designed to study how users reason about data in collaborative, sensor-augmented environments.
 
-The platform combines:
-- **Real-world telemetry** from ESP devices
-- **User interaction logs** from the web interface
-- **Interactive visualizations**
+The platform integrates:
+
+- **Real-world telemetry** from ESP devices  
+- **User interaction logs** from the web interface  
+- **Interactive, configurable data visualizations**  
 - **Reflective journaling**
 
-Version 2 focuses on **clean architecture**, **explicit data boundaries**, and **research-grade logging**.
+Version 2 emphasizes **clean architecture**, **explicit data boundaries**, **reproducible research logging**, and **session-aware persistence**.
 
 ---
 
@@ -18,69 +19,86 @@ Version 2 focuses on **clean architecture**, **explicit data boundaries**, and *
 
 ```
 src/
-├── pages/              # Route-level pages (Landing, Entry/Log-In)
-│   └── games/          # Game-specific pages (Ex: Alien Invasion)
+├── pages/              # Route-level pages (Landing, Entry / Login)
+│   └── games/          # Game-specific pages (e.g., Alien Invasion)
 |
 ├── components/         # Reusable UI components
-│   └── game/           # Game-specific layout & panels
-│   └── charts/         # Bare-bones plot objects with Nivo (Ex: Line plot, Histogram, etc)
+│   ├── game/           # Game layout, headers, panels
+│   └── charts/         # Stateless Nivo chart renderers
 |
-├── analytics/          # ESP telemetry aggregation & analysis for plots (ex: meetings held, total cadets)
+├── analytics/          # ESP telemetry aggregation & derived metrics
 |
-├── logging/            # User interaction logging of button interaction, journal answers, etc. (non-ESP)
+├── logging/            # Typed user interaction logging (non-ESP)
 |
-├── config/             # Declarative configurations (plots, journal questions, cadet names)
+├── config/             # Declarative configs (plots, journals, players)
 |
-├── data/               # Example / mock datasets (CAN BE REMOVED LATER)
+├── hooks/              # Public React hooks (GameState, Logger)
 |
-├── hooks/              # Shared React hooks (changes in game state)
+├── state/              # GameState ownership (Context + mutations)
 |
-├── state/              # Game state ownership (Context, owning and mutating GameState)
+├── types/              # Shared domain & schema types
 |
-├── types/              # Shared domain types
+├── firebase/           # Firebase clients (Realtime DB + Firestore)
 |
-├── firebase/           # Firebase initialization
-|
-└── utils/              # Plot helpers & validation
+└── utils/              # Plot helpers, validation, builders
 ```
 
 
-Each folder represents a **single responsibility domain**.
+
+Each directory represents a **single-responsibility domain** with explicit boundaries.
+
+---
+
+## Core Design Principles
+
+- **Telemetry ≠ Interaction Logging**  
+  Hardware data and human behavior data are intentionally separated.
+
+- **Declarative over conditional**  
+  Plots, variables, and journal questions are defined in config, not JSX.
+
+- **State has a single owner**  
+  All game state lives in `GameStateContext`.
+
+- **Charts are dumb**  
+  All data shaping happens *before* rendering.
+
+- **Research-first logging**  
+  Every meaningful UI interaction is captured with typed events.
 
 ---
 
 ## Landing Page
 
 **Purpose:**  
-Entry point for the platform. Displays available games and routes users into a specific experience.
+Entry point into the platform.
 
-**Key characteristics:**
-- Lists games declaratively (not hardcoded)
-- Only *Alien Invasion* is currently enabled
+**Characteristics:**
+- Declaratively lists available games
+- Routes users into a selected experience
 - No data logic
 - No logging logic
 
-**Design principle:**  
-> The landing page should only decide *where* a user can go, not *what happens next*.
+> The landing page decides *where* a user can go — not *what happens next*.
 
 ---
 
-## Game Flow
+## Game Entry Flow
 
 ### Game Entry Page
 
 **Purpose:**  
-Allows the user to select a **player identity (codename)** for the chosen game.
+Locks a **player identity (codename)** for the session.
 
 **Responsibilities:**
-- Display available codenames
-- Lock identity for the session
-- Route into the game experience
+- Display available player codenames
+- Initialize session identity
+- Route into the game
 
-**Non-responsibilities:**
+**Non-Responsibilities:**
 - Gameplay
-- Data analysis
 - Visualization logic
+- Data persistence
 
 ---
 
@@ -89,148 +107,173 @@ Allows the user to select a **player identity (codename)** for the chosen game.
 ### `GameLayout`
 
 **Purpose:**  
-Controls how game content is displayed.
+Controls how content is displayed, not what is displayed.
 
-**Supports two modes:**
-- **Single Screen:** one panel visible at a time (Journal or DataPlots)
-- **Dual Screen:** Journal and DataPlots visible side-by-side
+**Supported Modes:**
+- **Single Screen:** Journal *or* DataPlots
+- **Dual Screen:** Journal and DataPlots side-by-side
 
-**Key design decision:**
-- `GameLayout` does **not** handle user intent
-- It only reacts to layout state passed as props
+**Key Decisions:**
+- Layout state is passed *in*, never owned
+- Layout changes are logged as derived UI events
 
-**Logging behavior:**
-- Logs *derived layout changes* (screen mode, active panel)
+---
+
+## Game State (`state/`)
+
+### `GameStateContext`
+
+**Purpose:**  
+Single source of truth for all in-game state.
+
+**Owns:**
+- Session ID
+- Player identity
+- Current round
+- Journal answers (per round)
+
+**Does NOT own:**
+- ESP telemetry
+- Logging
+- Visualization logic
 
 ---
 
 ## Journal System
 
 **Purpose:**  
-Collects qualitative, reflective responses from users after each game round.
+Collect structured, reflective responses from users.
 
 ### Journal Questions
 
-- Stored declaratively in `config/journalQuestions.ts`
+- Defined declaratively in `config/journal.ts`
 - Organized by round
-- Completely decoupled from UI rendering
+- Fully decoupled from UI rendering
 
-**Example responsibilities:**
-- Render questions
-- Capture text input
-- Log writing activity (length, timing — not content)
+### Journal Behavior
 
-**Design principle:**  
-> Journal content is research data, not UI state.
+- Answers are stored **locally in GameState**
+- Explicit **Save** persists answers to **Realtime Database**
+- Answers are **hydrated on login**
+- Editing previously saved answers is supported and safe
+
+**Persistence Model:**
+- **Realtime DB** → journal answers (stateful, editable)
+- **Firestore** → interaction logs (append-only)
+
+> Journal content is research data — not UI state.
 
 ---
 
 ## DataPlots System
 
 **Purpose:**  
-Allows users to explore aggregated telemetry data through visualizations.
+Enable exploratory analysis of ESP-derived telemetry.
+
+### Supported Plot Types
+
+- Line Plot  
+- Scatter Plot  
+- Histogram  
+- Pie Chart
 
 ### Plot Configuration
 
 Defined in `config/plots.ts`:
-- Variables (time, meetings, infected cadets, sectors, etc.)
-- Plot types (line, scatter, histogram)
-- Allowed variable roles per plot type
+- Variables (time, infected cadets, sectors, meetings, etc.)
+- Plot types and allowed variable roles
+- Validation rules
 
-This allows:
-- Adding new plots without rewriting UI logic
-- Preventing invalid plot configurations
-
-### Plot Rendering
-
-- Implemented using **Nivo**
-- Plot selection and variable selection are user-driven
-- Current plots supported:
-  - Line Plot
-  - Scatter Plot
-  - Histogram
-
-**Design principle:**  
-> Plot logic should be driven by configuration, not conditionals.
+This enables:
+- Adding plots without rewriting UI
+- Preventing invalid configurations
+- Strong typing across UI and analytics
 
 ---
 
-## ESP Telemetry Analysis (`analytics/`)
+## ESP Telemetry Analytics (`analytics/`)
 
 **Purpose:**  
-Process raw ESP device data into meaningful, aggregated time-series metrics.
+Convert raw ESP readings into meaningful, plot-ready metrics.
 
-### Raw Data
+### Raw Data Includes
 
-- Comes from ESP chips via Firebase (future)
-- Each reading includes:
-  - device ID
-  - timestamp
-  - infection status
-  - proximity mask
+- Device ID
+- Timestamp
+- Infection status
+- Proximity mask
 
-### Aggregation Pipeline
+### Aggregated Outputs
 
-- `aggregateTelemetry.ts`
-- Converts raw readings into:
-  - Infected cadets over time
-  - Healthy cadets over time
-  - Infected sectors over time
-  - Meetings held
+- Total cadets / sectors
+- Infected vs healthy counts
+- Meetings held
+- Time-indexed telemetry points
 
-This data feeds the DataPlots system only.
+All aggregation happens **before** visualization.
 
-**Important boundary:**
-> ESP analytics are strictly separated from UI interaction logging.
+> ESP analytics never touch UI logging.
 
 ---
 
 ## User Interaction Logging (`logging/`)
 
 **Purpose:**  
-Capture **every meaningful user interaction** for research analysis.
+Capture fine-grained user behavior for research.
 
-### Logged Events Include:
-- Screen mode changes (single ↔ dual)
-- Active panel changes
-- Plot type changes
-- Plot variable changes
-- Journal input activity & submitted answers
+### Logged Events Include
 
-### Design Characteristics:
+- Screen mode changes
+- Active panel switches
+- Plot type & variable changes
+- Journal navigation
+- Journal submissions
+
+### Architecture
+
 - Strongly typed event schema
-- Centralized event registry
-- Pluggable logger backends
+- Logger interface (`Logger`)
+- Pluggable backends
 
-### Previous Logger:
-- `ConsoleLogger` (development)
+### Current Backend
 
-### Current Logger:
-- `FirebaseLogger` (production)
+- **FirebaseLogger**
+  - Writes to Firestore
+  - Append-only
+  - Session-aware
+  - Correctly resets on logout / re-login
 
----
-
-## Data Separation Philosophy
-
-Two fundamentally different data streams exist:
-
-| Data Type | Source | Purpose |
-|---------|------|--------|
-| ESP Telemetry | Hardware | System-level infection modeling |
-| User Interaction Logs | UI | Human reasoning & decision-making |
-
-These are intentionally **separated** in code and will be separated in storage.
+> Logging is session-scoped and identity-correct.
 
 ---
 
-## Next Steps (TODO)
+## Data Separation Model
 
-1. Initialize Firebase project
-2. Add environment variables (`.env`)
-3. Design database structure
-4. Implement `FirebaseLogger`
-5. Wire ESP ingestion → Firebase
-6. Enable real-time session analysis
+| Data Stream | Source | Storage | Purpose |
+|------------|------|--------|--------|
+| ESP Telemetry + Game Information| Hardware | Realtime DB | Infection modeling |
+| Journal Answers | UI | Realtime DB + Firestore | Qualitative research |
+| UI Interaction Logs | UI | Firestore | Behavioral analysis |
 
+Each stream has **distinct lifecycle, semantics, and storage**.
 
+---
 
+## Current Status
+
+- ✅ Core game loop implemented  
+- ✅ Journal persistence & hydration  
+- ✅ Real-time telemetry visualization  
+- ✅ Typed, session-safe logging  
+- ✅ Config-driven plot system  
+- ✅ Clean separation of concerns  
+
+---
+
+## Next Steps
+
+1. Teacher dashboard (read-only analytics & journals)  
+2. Firebase security rules  
+3. Session archival & export  
+4. Research analytics pipelines  
+5. Multi-game support  
