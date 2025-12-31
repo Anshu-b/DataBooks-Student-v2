@@ -23,32 +23,18 @@ type LoggingContextValue = {
 
 const LoggingContext = createContext<LoggingContextValue | null>(null);
 
-export function LoggingProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export function LoggingProvider({ children }: { children: React.ReactNode }) {
   const [logger, setLogger] = useState<Logger | null>(null);
 
-  function initializeLogger({ userId, gameId, batchTimestamp //, sessionId
-  }: LoggerInitArgs) {
-    setLogger((prev) => {
-      if (prev) return prev; // 👈 CRITICAL GUARD
-
-      return new FirebaseLogger({
-        userId,
-        gameId,
-        batchTimestamp,
-      });
-    });
+  function initializeLogger({ gameId, batchTimestamp }: LoggerInitArgs) {
+    setLogger(new FirebaseLogger({ gameId, batchTimestamp }));
   }
-
 
   return (
     <LoggingContext.Provider
       value={{
         log: (event) => {
-          if (!logger) return; // safe no-op before init
+          if (!logger) return;
           logger.log(event);
         },
         initializeLogger,

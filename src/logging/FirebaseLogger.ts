@@ -15,19 +15,19 @@ import type { Logger } from "./logger";
 import type { UserInteractionEvent } from "./events";
 
 type FirebaseLoggerOptions = {
-  userId: string;
+  //userId: string;
   gameId: string;
   batchTimestamp: string;
 };
 
 export class FirebaseLogger implements Logger {
-    private userId: string;
+    //private userId: string;
     private gameId: string;
     private batchTimestamp: string;
     private initialized = false; // 👈 ADD THIS
   
     constructor(options: FirebaseLoggerOptions) {
-      this.userId = options.userId;
+      //this.userId = options.userId;
       this.gameId = options.gameId;
       this.batchTimestamp = options.batchTimestamp;
       this.initialized = true; // 👈 SET HERE
@@ -37,7 +37,9 @@ export class FirebaseLogger implements Logger {
       if (!this.initialized) return; // 👈 SAFETY
   
       const basePayload = {
-        userId: this.userId,
+        //userId: this.userId,
+        userId: event.userId,
+        sessionId: event.sessionId,
         gameId: this.gameId,
         batchTimestamp: this.batchTimestamp,
   

@@ -79,6 +79,8 @@ function JournalPanel() {
                 logger.log({
                   type: "journal.round_navigation",
                   action: "round_viewed",
+                  userId: gameState.player.name,
+                  sessionId: gameState.sessionId,
                   details: {
                     fromRound: viewedRound,
                     toRound: r.roundNumber,
@@ -342,6 +344,8 @@ function JournalPanel() {
             logger.log({
               type: "journal.round_submission",
               action: "round_saved",
+              userId: gameState.player.name,
+              sessionId: gameState.sessionId,
               details: {
                 round: viewedRound,
                 answers: answers.map((a) => ({

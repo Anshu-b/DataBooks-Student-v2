@@ -39,6 +39,7 @@ function AlienInvasionPage() {
 
   const playerName: string = initialGameState.player.name;
   const sessionStatus = deriveSessionStatus(initialGameState);
+  const sessionId = initialGameState.sessionId;
   const game = GAMES.find((g) => g.id === initialGameState.gameId);
   const logger = useLogger();
 
@@ -64,6 +65,8 @@ function AlienInvasionPage() {
       logger.log({
         type: "layout.active_panel_changed",
         action: `${activePanel}_to_${panel}`,
+        userId: playerName,
+        sessionId: sessionId,
         details: {
           from: activePanel,
           to: panel,
@@ -79,6 +82,8 @@ function AlienInvasionPage() {
     logger.log({
       type: "layout.screen_mode_changed",
       action: screenMode === "single" ? "single_to_dual" : "dual_to_single",
+      userId: playerName,
+      sessionId: sessionId,
       details: {
         from: screenMode,
         to: next,

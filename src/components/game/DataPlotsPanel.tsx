@@ -261,6 +261,8 @@ function DataPlotsPanel() {
                 logger.log({
                   type: "plot.type_changed",
                   action: `${plotType}_to_${next}`,
+                  userId: gameState.player.name,
+                  sessionId: gameState.sessionId,
                   details: {
                     from: plotType,
                     to: next,
@@ -333,6 +335,8 @@ function DataPlotsPanel() {
                     logger.log({
                       type: "plot.change_variable",
                       action: "x_variable_changed",
+                      userId: gameState.player.name,
+                      sessionId: gameState.sessionId,
                       plotType,
                       details: {
                         axis: "x",
@@ -398,6 +402,8 @@ function DataPlotsPanel() {
                     logger.log({
                       type: "plot.change_variable",
                       action: "y_variable_changed",
+                      userId: gameState.player.name,
+                      sessionId: gameState.sessionId,
                       plotType,
                       details: {
                         axis: "y",
@@ -467,6 +473,8 @@ function DataPlotsPanel() {
                   logger.log({
                     type: "plot.change_variable",
                     action: "value_variable_changed",
+                    userId: gameState.player.name,
+                    sessionId: gameState.sessionId,
                     plotType,
                     details: {
                       axis: "value",
@@ -536,6 +544,8 @@ function DataPlotsPanel() {
               logger.log({
                 type: "plot.pie_population_changed",
                 action: "population_changed",
+                userId: gameState.player.name,
+                sessionId: gameState.sessionId,
                 details: {
                   from: piePopulation,
                   to: next,

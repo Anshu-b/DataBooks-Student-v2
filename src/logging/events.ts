@@ -6,16 +6,26 @@
  * These events are platform-wide and storage-agnostic.
  */
 
+type EventContext = {
+  userId: string;
+  sessionId: string;
+};
+
+
 export type UserInteractionEvent =
-  | LayoutScreenModeChanged
-  | LayoutActivePanelChanged
-  | PlotTypeChanged
-  | PlotVariableChanged
-  | JournalResponseEdited
-  | JournalInputFocused
-  | JournalInputCommitted
-  | JournalRoundNavigation
-  | JournalRoundSubmission;
+  EventContext &
+    (
+      | LayoutScreenModeChanged
+      | LayoutActivePanelChanged
+      | PlotTypeChanged
+      | PlotVariableChanged
+      | JournalResponseEdited
+      | JournalInputFocused
+      | JournalInputCommitted
+      | JournalRoundNavigation
+      | JournalRoundSubmission
+    );
+
 
 type Panel = "journal" | "plots";
 
