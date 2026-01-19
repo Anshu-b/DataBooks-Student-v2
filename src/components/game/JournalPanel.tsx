@@ -366,7 +366,12 @@ function JournalPanel() {
             fontWeight: 700,
             cursor: "pointer",
             fontSize: "1rem",
+            transition: "transform 0.1s, opacity 0.1s",
           }}
+          onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.05)"}
+          onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
+          onMouseDown={(e) => e.currentTarget.style.opacity = "0.7"}
+          onMouseUp={(e) => e.currentTarget.style.opacity = "1"}
         >
           Save Round {viewedRound} Answers
         </button>
