@@ -19,6 +19,10 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import GameEntryPage from "./pages/GameEntryPage";
 import AlienInvasionPage from "./pages/games/AlienInvasionPage";
+import TeacherLoginPage from "./pages/teacher/TeacherLoginPage";
+import TeacherHomePage from "./pages/teacher/TeacherHomePage";
+
+
 
 
 function App() {
@@ -27,6 +31,8 @@ function App() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/games/:gameId" element={<GameEntryPage />} />
       <Route path="/games/:gameId/play" element={<AlienInvasionPage />} />
+      <Route path="/teacher/login" element={<TeacherLoginPage />} />
+      <Route path="/teacher" element={<TeacherHomePage />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
