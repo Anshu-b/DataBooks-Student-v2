@@ -113,6 +113,7 @@ function GameEntryPage() {
     >
       {/* Animated background decoration */}
       <div
+      
         style={{
           position: "absolute",
           width: "100%",
@@ -142,6 +143,46 @@ function GameEntryPage() {
           position: "relative",
         }}
       >
+
+        {/* Top-left Back Button */}
+  <button
+    onClick={() => navigate("/")}
+    style={{
+      position: "absolute",
+      top: "1.25rem",
+      left: "1.25rem",
+      background: "rgba(255, 255, 255, 0.8)",
+      backdropFilter: "blur(6px)",
+      border: "1px solid rgba(0, 0, 0, 0.08)",
+      borderRadius: "10px",
+      padding: "0.4rem 0.8rem",
+      fontSize: "0.9rem",
+      fontWeight: 600,
+      color: "#4a5568",
+      cursor: "pointer",
+      display: "flex",
+      alignItems: "center",
+      gap: "0.4rem",
+      transition: "all 0.2s ease",
+      boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+    }}
+    onMouseEnter={(e) => {
+      e.currentTarget.style.transform = "translateX(-2px)";
+      e.currentTarget.style.color = "#667eea";
+      e.currentTarget.style.boxShadow =
+        "0 4px 12px rgba(0,0,0,0.12)";
+    }}
+    onMouseLeave={(e) => {
+      e.currentTarget.style.transform = "translateX(0)";
+      e.currentTarget.style.color = "#4a5568";
+      e.currentTarget.style.boxShadow =
+        "0 2px 8px rgba(0,0,0,0.08)";
+    }}
+  >
+    ← Back
+  </button>
+
+        
         {/* Data decorations */}
         <div
           style={{
