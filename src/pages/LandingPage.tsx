@@ -12,8 +12,9 @@
  * central game registry.
  */
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import { GAMES } from "../config/games";
+import { useRole } from "../state/RoleContext";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
@@ -68,6 +69,33 @@ const styles = `
     border-radius: 50%;
     background: #a070e0;
     box-shadow: 0 0 6px #a070e0;
+  }
+
+  /* ── Back button ── */
+  .back-to-role-btn {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 100px;
+    padding: 7px 14px 7px 10px;
+    color: rgba(200, 185, 220, 0.7);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    animation: fadeIn 0.4s ease both;
+  }
+
+  .back-to-role-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.18);
+    color: #f0ece8;
   }
 
   /* ── Hero heading ── */
@@ -243,17 +271,37 @@ const styles = `
 
 function LandingPage() {
   const navigate = useNavigate();
-  const isTeacher = true;
+  const { role, isTeacher, setRole } = useRole();
+  if (!role) {
+    return <Navigate to="/select-role" replace />;
+  }
 
   return (
     <>
       <style>{styles}</style>
       <main className="landing-root">
 
+        <button className="back-to-role-btn" onClick={() => {
+          setRole(null);
+          navigate("/select-role");
+        }}>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M9 2L4 7L9 12" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          Back
+        </button>
+
         {isTeacher && (
           <div className="instructor-badge">
             <span className="instructor-dot" />
             Instructor Version
+          </div>
+        )}
+
+        {!isTeacher && (
+          <div className="instructor-badge">
+            <span className="instructor-dot" />
+            Student Version
           </div>
         )}
 

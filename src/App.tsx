@@ -21,14 +21,13 @@ import GameEntryPage from "./pages/GameEntryPage";
 import AlienInvasionPage from "./pages/games/AlienInvasionPage";
 import TeacherLoginPage from "./pages/teacher/TeacherLoginPage";
 import TeacherHomePage from "./pages/teacher/TeacherHomePage";
-
-
-
+import RoleSelectPage from "./pages/RoleSelectPage";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
+      <Route path="/select-role" element={<RoleSelectPage />} />
       <Route path="/games/:gameId" element={<GameEntryPage />} />
       <Route path="/games/:gameId/play" element={<AlienInvasionPage />} />
       <Route path="/teacher/login" element={<TeacherLoginPage />} />
@@ -37,6 +36,7 @@ function App() {
     </Routes>
   );
 }
+
 
 export default App;
 

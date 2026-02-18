@@ -5,11 +5,11 @@
  * Logs all user interaction events to the console.
  */
 
-import type { InteractionLogger } from "./logger";
+import type { Logger } from "./logger";
 import type { UserInteractionEvent } from "./events";
 
-export class ConsoleLogger implements InteractionLogger {
+export class ConsoleLogger implements Logger {
   log(event: UserInteractionEvent) {
-    console.log("[InteractionEvent]", event.type, event.payload);
+    console.log("[InteractionEvent]", event.type);
   }
 }
