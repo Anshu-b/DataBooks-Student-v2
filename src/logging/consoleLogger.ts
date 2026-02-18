@@ -10,6 +10,6 @@ import type { UserInteractionEvent } from "./events";
 
 export class ConsoleLogger implements Logger {
   log(event: UserInteractionEvent) {
-    console.log(event.type, "payload" in event ? event.payload : null);
+    console.log("[InteractionEvent]", event.type);
   }
 }
