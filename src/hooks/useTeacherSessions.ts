@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { getDatabase, ref, get, set, update } from "firebase/database";
+import { getDatabase, ref, get, set, update, push } from "firebase/database";
 import { useTeacherAuth } from "./useTeacherAuth";
 
 export interface TeacherSession {
   id: string;
   teacherId: string;
   gameId: string;
-  start: null | {
+  start: {
     action: "start";
     teacher: string;
     class: string;
@@ -60,7 +60,7 @@ export function useTeacherSessions() {
           id,
           teacherId: meta.teacherId,
           gameId: meta.gameId,
-          start: meta.start ?? null,
+          start: meta.start,
           stop: meta.stop ?? null,
         });
       }
@@ -70,29 +70,8 @@ export function useTeacherSessions() {
     setLoading(false);
   }
 
-  async function createSession(gameId: string) {
-    if (!user) return;
-
-    const sessionId = generateSessionId();
-
-    await set(ref(db, `sessions/${sessionId}/metadata`), {
-      start: null,
-      stop: null,
-      teacherId: user.uid,
-      gameId,
-    });
-
-    await set(
-      ref(db, `teachers/${user.uid}/sessionsOwned/${sessionId}`),
-      true
-    );
-
-    await loadSessions();
-    return sessionId;
-  }
-
-  async function startSession(
-    sessionId: string,
+  async function createSession(
+    gameId: string,
     details: {
       className: string;
       cadets: number;
@@ -101,7 +80,12 @@ export function useTeacherSessions() {
   ) {
     if (!user) return;
 
-    await update(ref(db, `sessions/${sessionId}/metadata`), {
+    const sessionRef = push(ref(db, "sessions"));
+    const sessionId = sessionRef.key as string;
+
+    await set(ref(db, `sessions/${sessionId}/metadata`), {
+      teacherId: user.uid,
+      gameId,
       start: {
         action: "start",
         teacher: user.email ?? "Unknown",
@@ -113,7 +97,13 @@ export function useTeacherSessions() {
       stop: null,
     });
 
+    await set(
+      ref(db, `teachers/${user.uid}/sessionsOwned/${sessionId}`),
+      true
+    );
+
     await loadSessions();
+    return sessionId;
   }
 
   async function stopSession(sessionId: string) {
@@ -129,25 +119,14 @@ export function useTeacherSessions() {
 
   function getSessionState(session: TeacherSession) {
     if (session.stop) return "inactive";
-    if (session.start) return "active";
-    return "draft";
+    return "active";
   }
 
   return {
     sessions,
     loading,
     createSession,
-    startSession,
     stopSession,
     getSessionState,
   };
-}
-
-function generateSessionId() {
-  const now = new Date();
-  const y = now.getFullYear();
-  const m = String(now.getMonth() + 1).padStart(2, "0");
-  const d = String(now.getDate()).padStart(2, "0");
-
-  return `${y}${m}${d}_${Date.now()}`;
 }
