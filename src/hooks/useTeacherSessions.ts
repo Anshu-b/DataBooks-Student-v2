@@ -13,8 +13,9 @@ export interface TeacherSession {
     class: string;
     cadets: number;
     sectors: number;
+    slidesLink?: string;
     timestamp: string;
-  };
+};
   stop: null | {
     action: "stop";
     timestamp: string;
@@ -109,6 +110,7 @@ export function useTeacherSessions() {
       className: string;
       cadets: number;
       sectors: number;
+      slidesLink?: string;
     }
   ) {
     if (!user) return;
@@ -121,6 +123,8 @@ export function useTeacherSessions() {
         class: details.className,
         cadets: details.cadets,
         sectors: details.sectors,
+        ...(details.slidesLink ? { slidesLink: details.slidesLink } : {}),
+        //slidesLink: details.slidesLink ?? "",
         timestamp: new Date().toISOString(),
       },
       stop: null,

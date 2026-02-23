@@ -411,6 +411,7 @@ function TeacherHomePage() {
   const [className, setClassName] = useState("");
   const [cadets, setCadets] = useState(0);
   const [sectors, setSectors] = useState(0);
+  const [slidesLink, setSlidesLink] = useState("");
 
   if (authLoading) return null;
   if (!user) return <Navigate to="/teacher/login" />;
@@ -430,6 +431,7 @@ function TeacherHomePage() {
         className,
         cadets,
         sectors,
+        slidesLink,
       });
       
       // Auto-select the newly created session
@@ -440,6 +442,7 @@ function TeacherHomePage() {
     setClassName("");
     setCadets(0);
     setSectors(0);
+    setSlidesLink("");
   }
 
   function getSessionState(session: any): string {
@@ -527,6 +530,18 @@ function TeacherHomePage() {
                   />
                 </div>
 
+                {/* Google Slides Link */}
+                <div className="form-field">
+                  <label className="field-label">Google Slides Link</label>
+                  <input
+                    className="field-input"
+                    type="url"
+                    value={slidesLink}
+                    onChange={(e) => setSlidesLink(e.target.value)}
+                    placeholder="https://docs.google.com/presentation/..."
+                  />
+                </div>
+
                 <div className="form-actions">
                   <button className="confirm-btn" onClick={handleCreateSession}>
                     Confirm & Create
@@ -569,6 +584,7 @@ function TeacherHomePage() {
                                 className: session.start.class,
                                 cadets: session.start.cadets,
                                 sectors: session.start.sectors,
+                                slidesLink: session.start.slidesLink,
                               });
                             }
                           }}
