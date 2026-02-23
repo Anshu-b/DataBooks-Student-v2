@@ -6,7 +6,8 @@ export interface TeacherSession {
   id: string;
   teacherId: string;
   gameId: string;
-  start: {
+  status: "draft" | "active" | "inactive";
+  start: null | {
     action: "start";
     teacher: string;
     class: string;
@@ -60,7 +61,8 @@ export function useTeacherSessions() {
           id,
           teacherId: meta.teacherId,
           gameId: meta.gameId,
-          start: meta.start,
+          status: meta.status ?? "draft",
+          start: meta.start ?? null,
           stop: meta.stop ?? null,
         });
       }
@@ -70,14 +72,11 @@ export function useTeacherSessions() {
     setLoading(false);
   }
 
-  async function createSession(
-    gameId: string,
-    details: {
-      className: string;
-      cadets: number;
-      sectors: number;
-    }
-  ) {
+  /* ==============================
+     CREATE (default = draft)
+  ============================== */
+
+  async function createSession(gameId: string) {
     if (!user) return;
 
     const sessionRef = push(ref(db, "sessions"));
@@ -86,14 +85,8 @@ export function useTeacherSessions() {
     await set(ref(db, `sessions/${sessionId}/metadata`), {
       teacherId: user.uid,
       gameId,
-      start: {
-        action: "start",
-        teacher: user.email ?? "Unknown",
-        class: details.className,
-        cadets: details.cadets,
-        sectors: details.sectors,
-        timestamp: new Date().toISOString(),
-      },
+      status: "draft", // 🔥 default
+      start: null,
       stop: null,
     });
 
@@ -106,8 +99,43 @@ export function useTeacherSessions() {
     return sessionId;
   }
 
+  /* ==============================
+     ACTIVATE SESSION
+  ============================== */
+
+  async function activateSession(
+    sessionId: string,
+    details: {
+      className: string;
+      cadets: number;
+      sectors: number;
+    }
+  ) {
+    if (!user) return;
+
+    await update(ref(db, `sessions/${sessionId}/metadata`), {
+      status: "active",
+      start: {
+        action: "start",
+        teacher: user.email ?? "Unknown",
+        class: details.className,
+        cadets: details.cadets,
+        sectors: details.sectors,
+        timestamp: new Date().toISOString(),
+      },
+      stop: null,
+    });
+
+    await loadSessions();
+  }
+
+  /* ==============================
+     STOP SESSION
+  ============================== */
+
   async function stopSession(sessionId: string) {
     await update(ref(db, `sessions/${sessionId}/metadata`), {
+      status: "inactive",
       stop: {
         action: "stop",
         timestamp: new Date().toISOString(),
@@ -117,16 +145,11 @@ export function useTeacherSessions() {
     await loadSessions();
   }
 
-  function getSessionState(session: TeacherSession) {
-    if (session.stop) return "inactive";
-    return "active";
-  }
-
   return {
     sessions,
     loading,
     createSession,
+    activateSession,
     stopSession,
-    getSessionState,
   };
 }

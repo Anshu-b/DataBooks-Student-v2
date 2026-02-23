@@ -3,6 +3,8 @@ import { useTeacherAuth } from "../../hooks/useTeacherAuth";
 import { useTeacherSessions } from "../../hooks/useTeacherSessions";
 import { Navigate, useNavigate } from "react-router-dom";
 import SessionActivityLog from "./SessionActivityLog";
+import SessionRealtimeDashboard from "./SessionRealtimeDashboard";
+import JournalSubmissionViewer from "./JournalSubmissionViewer";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
@@ -252,6 +254,10 @@ const styles = `
     font-weight: 500;
     cursor: pointer;
     transition: opacity 0.2s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: center;
   }
 
   .confirm-btn:hover {
@@ -313,6 +319,12 @@ const styles = `
     background: rgba(255, 255, 255, 0.09);
   }
 
+  .session-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
   .stop-btn {
     padding: 11px 20px;
     background: rgba(220, 60, 80, 0.15);
@@ -331,10 +343,22 @@ const styles = `
     border-color: rgba(220, 60, 80, 0.45);
   }
 
-  .session-actions {
-    display: flex;
-    gap: 10px;
-    align-items: center;
+  .reactivate-btn {
+    padding: 11px 20px;
+    background: rgba(72, 187, 120, 0.15);
+    border: 1px solid rgba(72, 187, 120, 0.3);
+    border-radius: 11px;
+    color: #70d4a0;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .reactivate-btn:hover {
+    background: rgba(72, 187, 120, 0.22);
+    border-color: rgba(72, 187, 120, 0.45);
   }
 
   .copy-btn {
@@ -380,7 +404,7 @@ function TeacherHomePage() {
   const navigate = useNavigate();
   const { user, loading: authLoading, logout } = useTeacherAuth();
 
-  const { sessions, createSession, stopSession, getSessionState } = useTeacherSessions();
+  const { sessions, createSession, activateSession, stopSession } = useTeacherSessions();
 
   const [selectedSession, setSelectedSession] = useState("");
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -397,16 +421,29 @@ function TeacherHomePage() {
       return;
     }
 
-    await createSession("alien-invasion", {
-      className,
-      cadets,
-      sectors,
-    });
+    // Step 1: Create draft session
+    const sessionId = await createSession("alien-invasion");
+    
+    if (sessionId) {
+      // Step 2: Immediately activate it with class details
+      await activateSession(sessionId, {
+        className,
+        cadets,
+        sectors,
+      });
+      
+      // Auto-select the newly created session
+      setSelectedSession(sessionId);
+    }
 
     setShowCreateForm(false);
     setClassName("");
     setCadets(0);
     setSectors(0);
+  }
+
+  function getSessionState(session: any): string {
+    return session.status || "draft";
   }
 
   return (
@@ -522,9 +559,27 @@ function TeacherHomePage() {
                 {selectedSession && (
                   <>
                     <div className="session-actions">
-                      <button className="stop-btn" onClick={() => stopSession(selectedSession)}>
-                        Stop Session
-                      </button>
+                      {sessions.find(s => s.id === selectedSession)?.status === "inactive" ? (
+                        <button 
+                          className="reactivate-btn" 
+                          onClick={() => {
+                            const session = sessions.find(s => s.id === selectedSession);
+                            if (session?.start) {
+                              activateSession(selectedSession, {
+                                className: session.start.class,
+                                cadets: session.start.cadets,
+                                sectors: session.start.sectors,
+                              });
+                            }
+                          }}
+                        >
+                          Reactivate Session
+                        </button>
+                      ) : (
+                        <button className="stop-btn" onClick={() => stopSession(selectedSession)}>
+                          Stop Session
+                        </button>
+                      )}
                       <button 
                         className="copy-btn" 
                         onClick={() => {
@@ -545,7 +600,15 @@ function TeacherHomePage() {
 
                     <div className="activity-log-divider" />
                     
+                    <SessionRealtimeDashboard sessionId={selectedSession} />
+                    
+                    <div className="activity-log-divider" />
+                    
                     <SessionActivityLog sessionId={selectedSession} />
+                    
+                    <div className="activity-log-divider" />
+                    
+                    <JournalSubmissionViewer sessionId={selectedSession} />
                   </>
                 )}
               </>

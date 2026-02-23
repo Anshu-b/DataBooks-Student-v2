@@ -364,10 +364,10 @@ function SessionActivityLog({ sessionId }: Props) {
     if (!sessionId) return;
 
     const q = query(
-      collection(firestore, "ui_events"),
-      where("sessionId", "==", sessionId),
-      orderBy("serverTimestamp", "desc")
-    );
+        collection(firestore, "ui_events"),
+        where("sessionId", "==", sessionId),
+        orderBy("timestamp", "desc")
+      );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const data: UIEvent[] = [];
