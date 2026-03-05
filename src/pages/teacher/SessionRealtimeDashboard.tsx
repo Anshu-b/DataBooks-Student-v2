@@ -262,13 +262,13 @@ function SessionRealtimeDashboard({ sessionId }: Props) {
 
           <div className="metric-card metric-card-infected">
             <div className="metric-card-icon">🦠</div>
-            <div className="metric-label">Infected</div>
+            <div className="metric-label">Infected Players</div>
             <div className="metric-value">{stats.infectedCount}</div>
           </div>
 
           <div className="metric-card metric-card-healthy">
             <div className="metric-card-icon">✅</div>
-            <div className="metric-label">Healthy</div>
+            <div className="metric-label">Healthy Players</div>
             <div className="metric-value">{stats.healthyCount}</div>
           </div>
 

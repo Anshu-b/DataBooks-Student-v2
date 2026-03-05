@@ -5,6 +5,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import SessionActivityLog from "./SessionActivityLog";
 import SessionRealtimeDashboard from "./SessionRealtimeDashboard";
 import JournalSubmissionViewer from "./JournalSubmissionViewer";
+import JournalSubmissionChecklist from "./JournalSubmissionChecklist";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
@@ -617,13 +618,17 @@ function TeacherHomePage() {
                     <div className="activity-log-divider" />
                     
                     <SessionRealtimeDashboard sessionId={selectedSession} />
-                    
+
                     <div className="activity-log-divider" />
-                    
+
+                    <JournalSubmissionChecklist sessionId={selectedSession} />
+
+                    <div className="activity-log-divider" />
+
                     <SessionActivityLog sessionId={selectedSession} />
-                    
+
                     <div className="activity-log-divider" />
-                    
+
                     <JournalSubmissionViewer sessionId={selectedSession} />
                   </>
                 )}

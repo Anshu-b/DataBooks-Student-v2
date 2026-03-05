@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   getFirestore,
   collection,
@@ -19,8 +19,16 @@ const styles = `
   .activity-log-header {
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: space-between;
+    gap: 12px;
     margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .activity-log-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 
   .activity-log-title {
@@ -51,6 +59,69 @@ const styles = `
     border-radius: 50%;
     background: #70d4a0;
     box-shadow: 0 0 4px #70d4a0;
+  }
+
+  .activity-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .activity-filter-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(200, 185, 220, 0.65);
+    margin: 0;
+  }
+
+  .activity-filter-select {
+    padding: 8px 34px 8px 12px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 100px;
+    color: #f0ece8;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    transition: background 0.2s, border-color 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 7L11 1' stroke='%23c8bddc' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+  }
+
+  .activity-filter-select option {
+    background: #2e2a45;
+    color: #f0ece8;
+  }
+
+  .activity-filter-select:hover {
+    background: rgba(255, 255, 255, 0.09);
+    border-color: rgba(255, 255, 255, 0.16);
+  }
+
+  .clear-filter-btn {
+    padding: 8px 12px;
+    background: rgba(160, 110, 230, 0.14);
+    border: 1px solid rgba(160, 110, 230, 0.3);
+    border-radius: 100px;
+    color: #b08ae0;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .clear-filter-btn:hover {
+    background: rgba(160, 110, 230, 0.2);
+    border-color: rgba(160, 110, 230, 0.42);
   }
 
   .activity-table-wrapper {
@@ -268,7 +339,6 @@ function getEventCategory(type: string): string {
   return "navigation";
 }
 
-// Variable label mapping for readable names
 const VARIABLE_LABELS: Record<string, string> = {
   time: "Time",
   infectedCadets: "Infected Cadets",
@@ -289,7 +359,6 @@ function getReadableVariable(varName: string | undefined): string {
 function formatEventDescription(event: UIEvent): string {
   const { type, action, details } = event;
 
-  // Layout Events
   if (type === "layout.screen_mode_changed") {
     if (action === "single_to_dual") return "Switched to split-screen view (dual screen mode)";
     if (action === "dual_to_single") return "Switched to single-panel view";
@@ -302,7 +371,6 @@ function formatEventDescription(event: UIEvent): string {
     return `Switched from ${from} to ${to}`;
   }
 
-  // Journal Events
   if (type === "journal.round_navigation") {
     const toRound = details?.toRound || "?";
     return `Opened Round ${toRound} journal questions`;
@@ -332,7 +400,6 @@ function formatEventDescription(event: UIEvent): string {
     }
   }
 
-  // Plot Events
   if (type === "plot.type_changed") {
     const from = details?.from || "?";
     const to = details?.to || "?";
@@ -356,7 +423,6 @@ function formatEventDescription(event: UIEvent): string {
     return `Changed pie chart to show ${to} instead of ${from}`;
   }
 
-  // Game Events (legacy)
   if (type === "game.screen_mode_changed") {
     const to = details?.to === "dual" ? "split-screen" : "single-panel";
     return `Switched to ${to} mode`;
@@ -368,12 +434,11 @@ function formatEventDescription(event: UIEvent): string {
     return `Switched from ${from} to ${to}`;
   }
 
-  // Fallback
   if (action) {
     const readableAction = action.replace(/_/g, " ");
     return `${readableAction}`;
   }
-  
+
   const readableType = type.replace(/\./g, " › ").replace(/_/g, " ");
   return readableType;
 }
@@ -381,6 +446,7 @@ function formatEventDescription(event: UIEvent): string {
 function SessionActivityLog({ sessionId }: Props) {
   const [events, setEvents] = useState<UIEvent[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedStudent, setSelectedStudent] = useState<string>("all");
   const firestore = getFirestore();
 
   const ITEMS_PER_PAGE = 25;
@@ -399,7 +465,7 @@ function SessionActivityLog({ sessionId }: Props) {
       snapshot.forEach((doc) => {
         data.push({
           id: doc.id,
-          ...doc.data(),
+          ...(doc.data() as any),
         } as UIEvent);
       });
       setEvents(data);
@@ -408,62 +474,107 @@ function SessionActivityLog({ sessionId }: Props) {
     return () => unsubscribe();
   }, [sessionId, firestore]);
 
-  // Calculate pagination
-  const totalPages = Math.ceil(events.length / ITEMS_PER_PAGE);
+  const studentOptions = useMemo(() => {
+    const ids = Array.from(new Set(events.map((e) => e.userId).filter(Boolean)));
+    return ids.sort((a, b) => a.localeCompare(b));
+  }, [events]);
+
+  const filteredEvents = useMemo(() => {
+    if (selectedStudent === "all") return events;
+    return events.filter((e) => e.userId === selectedStudent);
+  }, [events, selectedStudent]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedStudent, sessionId]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredEvents.length / ITEMS_PER_PAGE));
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-  const currentEvents = events.slice(startIndex, endIndex);
+  const currentEvents = filteredEvents.slice(startIndex, endIndex);
 
   const goToPage = (page: number) => {
     setCurrentPage(Math.max(1, Math.min(page, totalPages)));
   };
 
-  // Generate page numbers to display
   const getPageNumbers = () => {
     const pages: (number | string)[] = [];
     const showPages = 5;
-    
+
     if (totalPages <= showPages) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
     } else {
       pages.push(1);
-      
-      let startPage = Math.max(2, currentPage - 1);
-      let endPage = Math.min(totalPages - 1, currentPage + 1);
-      
+
+      const startPage = Math.max(2, currentPage - 1);
+      const endPage = Math.min(totalPages - 1, currentPage + 1);
+
       if (startPage > 2) pages.push("...");
-      
-      for (let i = startPage; i <= endPage; i++) {
-        pages.push(i);
-      }
-      
+
+      for (let i = startPage; i <= endPage; i++) pages.push(i);
+
       if (endPage < totalPages - 1) pages.push("...");
       pages.push(totalPages);
     }
-    
+
     return pages;
   };
+
+  const showLiveBadge = events.length > 0;
 
   return (
     <>
       <style>{styles}</style>
       <div className="activity-log-root">
         <div className="activity-log-header">
-          <h3 className="activity-log-title">Live Activity Feed</h3>
+          <div className="activity-log-header-left">
+            <h3 className="activity-log-title">Live Activity Feed</h3>
+            {showLiveBadge && (
+              <span className="activity-badge">
+                <span className="activity-badge-dot" />
+                Live
+              </span>
+            )}
+          </div>
+
           {events.length > 0 && (
-            <span className="activity-badge">
-              <span className="activity-badge-dot" />
-              Live
-            </span>
+            <div className="activity-controls">
+              <label className="activity-filter-label">Student</label>
+              <select
+                className="activity-filter-select"
+                value={selectedStudent}
+                onChange={(e) => setSelectedStudent(e.target.value)}
+              >
+                <option value="all">All students</option>
+                {studentOptions.map((id) => (
+                  <option key={id} value={id}>
+                    {id}
+                  </option>
+                ))}
+              </select>
+
+              {selectedStudent !== "all" && (
+                <button
+                  className="clear-filter-btn"
+                  onClick={() => setSelectedStudent("all")}
+                >
+                  Clear
+                </button>
+              )}
+            </div>
           )}
         </div>
 
-        {events.length === 0 ? (
+        {filteredEvents.length === 0 ? (
           <div className="empty-state">
             <div className="empty-state-icon">📊</div>
-            <div>No activity yet. Student actions will appear here in real-time.</div>
+            <div>
+              {events.length === 0
+                ? "No activity yet. Student actions will appear here in real-time."
+                : selectedStudent === "all"
+                  ? "No activity yet."
+                  : "No activity found for this student."}
+            </div>
           </div>
         ) : (
           <>
@@ -502,13 +613,13 @@ function SessionActivityLog({ sessionId }: Props) {
               </table>
             </div>
 
-            {/* Pagination Controls */}
             {totalPages > 1 && (
               <div className="pagination-controls">
                 <div className="pagination-info">
-                  Showing {startIndex + 1}-{Math.min(endIndex, events.length)} of {events.length} events
+                  Showing {startIndex + 1}-{Math.min(endIndex, filteredEvents.length)} of{" "}
+                  {filteredEvents.length} events
                 </div>
-                
+
                 <div className="pagination-buttons">
                   <button
                     className="page-btn"
@@ -520,7 +631,7 @@ function SessionActivityLog({ sessionId }: Props) {
                     </svg>
                   </button>
 
-                  {getPageNumbers().map((page, index) => 
+                  {getPageNumbers().map((page, index) =>
                     typeof page === "number" ? (
                       <button
                         key={index}
