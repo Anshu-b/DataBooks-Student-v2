@@ -10,7 +10,7 @@
  */
 
 import { useParams, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { GAMES } from "../config/games";
 import { PLAYER_NAMES } from "../config/playerNames";
 import { getDatabase, ref, get, set, update } from "firebase/database";
@@ -42,7 +42,6 @@ const styles = `
     pointer-events: none;
   }
 
-  /* ── Back button ── */
   .back-btn {
     position: absolute;
     top: 1.5rem;
@@ -68,7 +67,6 @@ const styles = `
     color: #f0ece8;
   }
 
-  /* ── Card ── */
   .entry-card {
     position: relative;
     width: 100%;
@@ -91,7 +89,6 @@ const styles = `
     to   { opacity: 1; transform: translateY(0) scale(1); }
   }
 
-  /* ── Game header ── */
   .game-icon {
     width: 64px;
     height: 64px;
@@ -125,14 +122,12 @@ const styles = `
     letter-spacing: 0.04em;
   }
 
-  /* ── Divider ── */
   .card-divider {
     height: 1px;
     background: rgba(255, 255, 255, 0.07);
     margin: 24px 0;
   }
 
-  /* ── Section label ── */
   .section-label {
     font-size: 10.5px;
     font-weight: 500;
@@ -142,7 +137,6 @@ const styles = `
     margin: 0 0 10px;
   }
 
-  /* ── Field ── */
   .field-label {
     display: block;
     font-size: 11px;
@@ -199,7 +193,6 @@ const styles = `
     box-shadow: 0 0 0 3px rgba(220, 60, 80, 0.15) !important;
   }
 
-  /* ── Validate button ── */
   .validate-btn {
     width: 100%;
     padding: 13px;
@@ -238,7 +231,6 @@ const styles = `
     box-shadow: none;
   }
 
-  /* ── Player grid ── */
   .player-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -275,7 +267,6 @@ const styles = `
     transform: translateY(-2px);
   }
 
-  /* ── Show password toggle ── */
   .show-password-label {
     display: flex;
     align-items: center;
@@ -294,7 +285,6 @@ const styles = `
     cursor: pointer;
   }
 
-  /* ── Error / warning boxes ── */
   .error-box {
     display: flex;
     align-items: center;
@@ -315,7 +305,6 @@ const styles = `
     75%       { transform: translateX(4px); }
   }
 
-  /* ── Bottom action row ── */
   .action-row {
     display: flex;
     gap: 10px;
@@ -379,7 +368,6 @@ const styles = `
     box-shadow: none;
   }
 
-  /* ── Validated session pill ── */
   .session-validated-pill {
     display: inline-flex;
     align-items: center;
@@ -414,11 +402,21 @@ function GameEntryPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const game = GAMES.find((g) => g.id === gameId);
   const [sessionValidated, setSessionValidated] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [cadetLimit, setCadetLimit] = useState<number | null>(null);
+
+  const game = GAMES.find((g) => g.id === gameId);
   const passwordsMatch = password.length > 0 && password === confirmPassword;
+
+  const allowedPlayerNames = useMemo(() => {
+    const maxNames = Math.min(
+      cadetLimit ?? PLAYER_NAMES.length,
+      PLAYER_NAMES.length
+    );
+    return PLAYER_NAMES.slice(0, maxNames);
+  }, [cadetLimit]);
 
   if (!game) {
     return <p style={{ padding: "2rem", color: "#f0ece8" }}>Game not found.</p>;
@@ -432,30 +430,42 @@ function GameEntryPage() {
     rounds: { 1: { roundNumber: 1, journalAnswers: {} } },
   };
 
-  async function sessionExists(sessionId: string): Promise<boolean> {
+  async function getSessionMetadata(sessionIdValue: string) {
     const db = getDatabase();
-    const sessionRef = ref(db, `sessions/${sessionId}`);
+    const metadataRef = ref(db, `sessions/${sessionIdValue}/metadata`);
+    const snapshot = await get(metadataRef);
+
+    if (!snapshot.exists()) {
+      return null;
+    }
+
+    return snapshot.val();
+  }
+
+  async function sessionExists(sessionIdValue: string): Promise<boolean> {
+    const db = getDatabase();
+    const sessionRef = ref(db, `sessions/${sessionIdValue}`);
     const snapshot = await get(sessionRef);
     return snapshot.exists();
   }
 
   async function resolvePlayer(
-    sessionId: string,
+    sessionIdValue: string,
     username: string,
-    password: string
+    passwordValue: string
   ): Promise<{ ok: true } | { ok: false; error: string }> {
     const db = getDatabase();
-    const playerRef = ref(db, `sessions/${sessionId}/players/${username}`);
+    const playerRef = ref(db, `sessions/${sessionIdValue}/players/${username}`);
     const snapshot = await get(playerRef);
     const now = new Date().toISOString();
 
     if (!snapshot.exists()) {
-      await set(playerRef, { password, createdAt: now, lastLoginAt: now });
+      await set(playerRef, { password: passwordValue, createdAt: now, lastLoginAt: now });
       return { ok: true };
     }
 
     const player = snapshot.val();
-    if (player.password !== password) {
+    if (player.password !== passwordValue) {
       return {
         ok: false,
         error: "Incorrect password for this username. Please check with your teacher if you forgot it.",
@@ -470,7 +480,6 @@ function GameEntryPage() {
     <>
       <style>{styles}</style>
       <main className="entry-root">
-
         <button className="back-btn" onClick={() => navigate("/")}>
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
             <path d="M9 2L4 7L9 12" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
@@ -479,13 +488,10 @@ function GameEntryPage() {
         </button>
 
         <div className="entry-card">
-
-          {/* Game header */}
           <div className="game-icon">🎮</div>
           <h2 className="game-title">{game.name}</h2>
           <p className="game-subtitle">Enter your session details to begin</p>
 
-          {/* Session ID */}
           <p className="section-label">Session</p>
           <div style={{ marginBottom: 0 }}>
             <label className="field-label" htmlFor="session-id">
@@ -502,7 +508,13 @@ function GameEntryPage() {
               onChange={(e) => setSessionId(e.target.value)}
               placeholder="e.g. 20250715_period3"
               disabled={sessionValidated}
-              onKeyDown={(e) => e.key === "Enter" && !sessionValidated && sessionId && !loading && document.getElementById("validate-btn")?.click()}
+              onKeyDown={(e) =>
+                e.key === "Enter" &&
+                !sessionValidated &&
+                sessionId &&
+                !loading &&
+                document.getElementById("validate-btn")?.click()
+              }
             />
           </div>
 
@@ -513,22 +525,45 @@ function GameEntryPage() {
             onClick={async () => {
               setLoading(true);
               setError(null);
+              setSelectedPlayer(null);
+
               try {
-                const exists = await sessionExists(sessionId);
-                if (!exists) {
+                const metadata = await getSessionMetadata(sessionId);
+
+                if (!metadata) {
                   setError("Session ID not found. Please check with your teacher.");
+                  setCadetLimit(null);
                   setLoading(false);
                   return;
                 }
+
+                const teacherCadetCount = metadata.start?.cadets;
+
+                if (
+                  typeof teacherCadetCount !== "number" ||
+                  teacherCadetCount <= 0
+                ) {
+                  setError("This session is missing a valid cadet limit.");
+                  setCadetLimit(null);
+                  setLoading(false);
+                  return;
+                }
+
+                setCadetLimit(teacherCadetCount);
                 setSessionValidated(true);
                 setLoading(false);
               } catch {
                 setError("Error validating session.");
+                setCadetLimit(null);
                 setLoading(false);
               }
             }}
           >
-            {loading && !sessionValidated ? "Validating…" : sessionValidated ? "Session Verified ✓" : "Validate Session"}
+            {loading && !sessionValidated
+              ? "Validating…"
+              : sessionValidated
+              ? "Session Verified ✓"
+              : "Validate Session"}
           </button>
 
           {error && !sessionValidated && (
@@ -542,19 +577,21 @@ function GameEntryPage() {
             </div>
           )}
 
-          {/* Identity + password — shown after session validated */}
           {sessionValidated && (
             <>
               <div className="card-divider" />
 
-              {/* Player selection */}
               <p className="section-label">Identity</p>
-              <label className="field-label" style={{ marginBottom: 12 }}>Choose your data explorer</label>
+              <label className="field-label" style={{ marginBottom: 12 }}>
+                Choose your data explorer
+              </label>
               <div className="player-grid">
-                {PLAYER_NAMES.map((name) => (
+                {allowedPlayerNames.map((name) => (
                   <button
                     key={name}
-                    className={`player-btn${selectedPlayer === name ? " player-btn-selected" : ""}`}
+                    className={`player-btn${
+                      selectedPlayer === name ? " player-btn-selected" : ""
+                    }`}
                     onClick={() => setSelectedPlayer(name)}
                     onMouseEnter={() => setHoveredPlayer(name)}
                     onMouseLeave={() => setHoveredPlayer(null)}
@@ -566,11 +603,12 @@ function GameEntryPage() {
 
               <div className="card-divider" />
 
-              {/* Password */}
               <p className="section-label">Security</p>
               <div style={{ marginBottom: 14 }}>
                 <label className="field-label" htmlFor="password">Password</label>
-                <p className="field-hint">Protects your work from other students in this class.</p>
+                <p className="field-hint">
+                  Protects your work from other students in this class.
+                </p>
                 <input
                   id="password"
                   className="field-input"
@@ -582,10 +620,14 @@ function GameEntryPage() {
               </div>
 
               <div>
-                <label className="field-label" htmlFor="confirm-password">Re-enter Password</label>
+                <label className="field-label" htmlFor="confirm-password">
+                  Re-enter Password
+                </label>
                 <input
                   id="confirm-password"
-                  className={`field-input${confirmPassword && !passwordsMatch ? " field-input-error" : ""}`}
+                  className={`field-input${
+                    confirmPassword && !passwordsMatch ? " field-input-error" : ""
+                  }`}
                   type={showPassword ? "text" : "password"}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
@@ -630,25 +672,50 @@ function GameEntryPage() {
                 </button>
                 <button
                   className="start-btn"
-                  disabled={!selectedPlayer || !sessionValidated || !passwordsMatch || loading}
+                  disabled={
+                    !selectedPlayer ||
+                    !sessionValidated ||
+                    !passwordsMatch ||
+                    loading
+                  }
                   onClick={async () => {
-                    if (!selectedPlayer || !sessionId || !password) return;
+                    if (!selectedPlayer || !sessionId || !password) {
+                      return;
+                    }
+
                     setLoading(true);
                     setError(null);
+
                     try {
                       const exists = await sessionExists(sessionId);
+
                       if (!exists) {
                         setError("Session ID not found. Please check with your teacher.");
                         setLoading(false);
                         return;
                       }
-                      const result = await resolvePlayer(sessionId, selectedPlayer, password);
+
+                      if (!allowedPlayerNames.includes(selectedPlayer)) {
+                        setError("That player slot is not available for this session.");
+                        setLoading(false);
+                        return;
+                      }
+
+                      const result = await resolvePlayer(
+                        sessionId,
+                        selectedPlayer,
+                        password
+                      );
+
                       if (!result.ok) {
                         setError(result.error);
                         setLoading(false);
                         return;
                       }
-                      navigate(`/games/${game.id}/play`, { state: { initialGameState } });
+
+                      navigate(`/games/${game.id}/play`, {
+                        state: { initialGameState },
+                      });
                     } catch (err) {
                       console.error(err);
                       setError("Error joining session. Please try again.");
@@ -661,7 +728,6 @@ function GameEntryPage() {
               </div>
             </>
           )}
-
         </div>
       </main>
     </>

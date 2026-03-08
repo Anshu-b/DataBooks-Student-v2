@@ -6,6 +6,7 @@ import SessionActivityLog from "./SessionActivityLog";
 import SessionRealtimeDashboard from "./SessionRealtimeDashboard";
 import JournalSubmissionViewer from "./JournalSubmissionViewer";
 import JournalSubmissionChecklist from "./JournalSubmissionChecklist";
+import { PLAYER_NAMES } from "../../config/playerNames";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
@@ -405,6 +406,8 @@ function TeacherHomePage() {
   const navigate = useNavigate();
   const { user, loading: authLoading, logout } = useTeacherAuth();
 
+  const maxCadets = PLAYER_NAMES.length;
+
   const { sessions, createSession, activateSession, stopSession } = useTeacherSessions();
 
   const [selectedSession, setSelectedSession] = useState("");
@@ -423,19 +426,21 @@ function TeacherHomePage() {
       return;
     }
 
-    // Step 1: Create draft session
+    if (cadets > maxCadets) {
+      alert(`Maximum cadets allowed is ${maxCadets}.`);
+      return;
+    }
+
     const sessionId = await createSession("alien-invasion");
-    
+
     if (sessionId) {
-      // Step 2: Immediately activate it with class details
       await activateSession(sessionId, {
         className,
         cadets,
         sectors,
         slidesLink,
       });
-      
-      // Auto-select the newly created session
+
       setSelectedSession(sessionId);
     }
 
@@ -514,9 +519,11 @@ function TeacherHomePage() {
                   <input
                     className="field-input"
                     type="number"
+                    min="1"
+                    max={maxCadets}
                     value={cadets || ""}
                     onChange={(e) => setCadets(Number(e.target.value))}
-                    placeholder="e.g., 30"
+                    placeholder={`e.g., up to ${maxCadets}`}
                   />
                 </div>
 

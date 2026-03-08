@@ -35,24 +35,46 @@ function sanitizeSegment(value: string): string {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
-    .slice(0, 40);
+    .slice(0, 10);
 }
 
 function buildSessionId(gameId: string): string {
+  const safeGameId =
+    sanitizeSegment(gameId).replace(/-/g, "").toUpperCase().slice(0, 5) ||
+    "GAME";
+
   const now = new Date();
 
-  const year = now.getUTCFullYear();
+  const year = String(now.getUTCFullYear()).slice(-2);
   const month = String(now.getUTCMonth() + 1).padStart(2, "0");
   const day = String(now.getUTCDate()).padStart(2, "0");
   const hours = String(now.getUTCHours()).padStart(2, "0");
   const minutes = String(now.getUTCMinutes()).padStart(2, "0");
-  const seconds = String(now.getUTCSeconds()).padStart(2, "0");
-  const milliseconds = String(now.getUTCMilliseconds()).padStart(3, "0");
 
-  const randomPart = Math.random().toString(36).slice(2, 7);
-  const safeGameId = sanitizeSegment(gameId) || "session";
+  const characters = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let randomPart = "";
 
-  return `${safeGameId}-${year}${month}${day}-${hours}${minutes}${seconds}${milliseconds}-${randomPart}`;
+  for (let x = 0; x < 4; x += 1) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    randomPart += characters[randomIndex];
+  }
+
+  return `${safeGameId}-${year}${month}${day}-${hours}${minutes}-${randomPart}`;
+}
+
+async function generateUniqueSessionId(
+  db: ReturnType<typeof getDatabase>,
+  gameId: string
+): Promise<string> {
+  let sessionId = buildSessionId(gameId);
+  let snapshot = await get(ref(db, `sessions/${sessionId}`));
+
+  while (snapshot.exists()) {
+    sessionId = buildSessionId(gameId);
+    snapshot = await get(ref(db, `sessions/${sessionId}`));
+  }
+
+  return sessionId;
 }
 
 export function useTeacherSessions() {
@@ -132,7 +154,7 @@ export function useTeacherSessions() {
       return;
     }
 
-    const sessionId = buildSessionId(gameId);
+    const sessionId = await generateUniqueSessionId(db, gameId);
 
     await set(ref(db, `sessions/${sessionId}/metadata`), {
       teacherId: user.uid,

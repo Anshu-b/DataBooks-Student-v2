@@ -42,7 +42,7 @@ export function GameStateProvider({ initialGameState, children }: Props) {
 
       // console.log("🟡 loadJournalAnswers returned:", saved);
   
-      if (!saved) return;
+      if (!saved || Object.keys(saved).length === 0) return;
   
       setGameState((prev) => {
         // console.log("🟡 merging saved answers into gameState", saved);
@@ -86,9 +86,10 @@ export function GameStateProvider({ initialGameState, children }: Props) {
       rounds: {
         ...prev.rounds,
         [round]: {
-          ...prev.rounds[round],
+          ...(prev.rounds[round] ?? {}),
+          roundNumber: round,
           journalAnswers: {
-            ...prev.rounds[round].journalAnswers,
+            ...(prev.rounds[round]?.journalAnswers ?? {}),
             [answer.questionId]: answer,
           },
         },

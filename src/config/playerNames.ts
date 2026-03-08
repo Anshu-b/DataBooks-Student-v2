@@ -11,6 +11,13 @@ export const PLAYER_NAMES = [
     "Synth", "Jazz", "Drift",
     "Nova", "Hex", "Ember",
     "Mav", "Geo", "Eli",
-    "Glow", "Lex",
+    "Glow", "Lex", "Flux", 
+    "Vega", "Orbit", "Rex",
+    "Ion", "Nyx", "Rift",
+    "Bolt", "Aero", "Skye",
+    "Rune", "Blaze", "Cosmo",
+    "Kairo", "Pixel", "Zen",
+    "Halo", "Atlas", "Lux",
+    "Juno"
   ];
   
