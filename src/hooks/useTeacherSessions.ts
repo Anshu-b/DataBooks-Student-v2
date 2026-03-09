@@ -15,6 +15,7 @@ export interface TeacherSession {
     sectors: number;
     slidesLink?: string;
     timestamp: string;
+    activatedAtMs: number;
   };
   stop: null | {
     action: "stop";
@@ -28,6 +29,11 @@ interface ActivateSessionDetails {
   sectors: number;
   slidesLink?: string;
 }
+
+type ReadingValue = {
+  timestamp?: string;
+  [key: string]: unknown;
+};
 
 function sanitizeSegment(value: string): string {
   return value
@@ -77,12 +83,80 @@ async function generateUniqueSessionId(
   return sessionId;
 }
 
+function parseIsoTimestampToMs(timestamp: unknown): number | null {
+  if (typeof timestamp !== "string" || !timestamp.trim()) {
+    return null;
+  }
+
+  const parsedMs = Date.parse(timestamp);
+  return Number.isNaN(parsedMs) ? null : parsedMs;
+}
+
 export function useTeacherSessions() {
   const { user } = useTeacherAuth();
   const [sessions, setSessions] = useState<TeacherSession[]>([]);
   const [loading, setLoading] = useState(true);
 
   const db = getDatabase();
+
+  const moveTopLevelReadingsToSession = useCallback(
+    async (sessionId: string, activatedAtMs: number) => {
+      const topLevelReadingsRef = ref(db, "readings");
+      const sessionReadingsRef = ref(db, `sessions/${sessionId}/readings`);
+
+      const topLevelSnapshot = await get(topLevelReadingsRef);
+
+      if (!topLevelSnapshot.exists()) {
+        return;
+      }
+
+      const topLevelValue = topLevelSnapshot.val();
+
+      if (
+        topLevelValue === null ||
+        topLevelValue === "" ||
+        typeof topLevelValue !== "object"
+      ) {
+        return;
+      }
+
+      const topLevelReadings = topLevelValue as Record<string, ReadingValue>;
+      const readingsToMove: Record<string, ReadingValue> = {};
+      const readingsToKeep: Record<string, ReadingValue> = {};
+
+      for (const [readingId, readingValue] of Object.entries(topLevelReadings)) {
+        const readingMs = parseIsoTimestampToMs(readingValue?.timestamp);
+
+        if (readingMs !== null && readingMs >= activatedAtMs) {
+          readingsToMove[readingId] = readingValue;
+        } else {
+          readingsToKeep[readingId] = readingValue;
+        }
+      }
+
+      if (Object.keys(readingsToMove).length > 0) {
+        const sessionSnapshot = await get(sessionReadingsRef);
+        const existingSessionReadings =
+          sessionSnapshot.exists() &&
+          typeof sessionSnapshot.val() === "object" &&
+          sessionSnapshot.val() !== null
+            ? (sessionSnapshot.val() as Record<string, ReadingValue>)
+            : {};
+
+        await set(sessionReadingsRef, {
+          ...existingSessionReadings,
+          ...readingsToMove,
+        });
+      }
+
+      if (Object.keys(readingsToKeep).length > 0) {
+        await set(topLevelReadingsRef, readingsToKeep);
+      } else {
+        await set(topLevelReadingsRef, null);
+      }
+    },
+    [db]
+  );
 
   const loadSessions = useCallback(async () => {
     if (!user) {
@@ -105,21 +179,21 @@ export function useTeacherSessions() {
       const sessionIds = Object.keys(snapshot.val() as Record<string, true>);
       const sessionSnapshots = await Promise.all(
         sessionIds.map(async (id) => {
-          const metaSnap = await get(ref(db, `sessions/${id}/metadata`));
+          const metaSnapshot = await get(ref(db, `sessions/${id}/metadata`));
 
-          if (!metaSnap.exists()) {
+          if (!metaSnapshot.exists()) {
             return null;
           }
 
-          const meta = metaSnap.val();
+          const metadata = metaSnapshot.val();
 
           return {
             id,
-            teacherId: meta.teacherId,
-            gameId: meta.gameId,
-            status: meta.status ?? "draft",
-            start: meta.start ?? null,
-            stop: meta.stop ?? null,
+            teacherId: metadata.teacherId,
+            gameId: metadata.gameId,
+            status: metadata.status ?? "draft",
+            start: metadata.start ?? null,
+            stop: metadata.stop ?? null,
           } as TeacherSession;
         })
       );
@@ -127,16 +201,9 @@ export function useTeacherSessions() {
       const loadedSessions = sessionSnapshots
         .filter((session): session is TeacherSession => session !== null)
         .sort((leftSession, rightSession) => {
-          const leftTime =
-            leftSession.start?.timestamp ??
-            leftSession.stop?.timestamp ??
-            "";
-          const rightTime =
-            rightSession.start?.timestamp ??
-            rightSession.stop?.timestamp ??
-            "";
-
-          return rightTime.localeCompare(leftTime);
+          const leftMs = leftSession.start?.activatedAtMs ?? 0;
+          const rightMs = rightSession.start?.activatedAtMs ?? 0;
+          return rightMs - leftMs;
         });
 
       setSessions(loadedSessions);
@@ -148,6 +215,25 @@ export function useTeacherSessions() {
   useEffect(() => {
     loadSessions();
   }, [loadSessions]);
+
+  useEffect(() => {
+    const intervalId = setInterval(async () => {
+      const activeSession = sessions.find(
+        (session) => session.status === "active"
+      );
+
+      if (!activeSession?.start?.activatedAtMs) {
+        return;
+      }
+
+      await moveTopLevelReadingsToSession(
+        activeSession.id,
+        activeSession.start.activatedAtMs
+      );
+    }, 5000);
+
+    return () => clearInterval(intervalId);
+  }, [sessions, moveTopLevelReadingsToSession]);
 
   async function createSession(gameId: string) {
     if (!user) {
@@ -178,6 +264,8 @@ export function useTeacherSessions() {
       return;
     }
 
+    const activatedAtMs = Date.now();
+
     await update(ref(db, `sessions/${sessionId}/metadata`), {
       status: "active",
       start: {
@@ -187,11 +275,13 @@ export function useTeacherSessions() {
         cadets: details.cadets,
         sectors: details.sectors,
         ...(details.slidesLink ? { slidesLink: details.slidesLink } : {}),
-        timestamp: new Date().toISOString(),
+        timestamp: new Date(activatedAtMs).toISOString(),
+        activatedAtMs,
       },
       stop: null,
     });
 
+    await moveTopLevelReadingsToSession(sessionId, activatedAtMs);
     await loadSessions();
   }
 
