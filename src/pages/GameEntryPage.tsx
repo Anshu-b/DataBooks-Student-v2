@@ -1,19 +1,15 @@
-/**
- * GameEntryPage
- * -------------
- * Pre-game identity selection screen.
- *
- * This page is shared across all games and is responsible for:
- *   - displaying the selected game
- *   - allowing the user to choose a player identity
- *   - gating entry into the actual game
- */
-
 import { useParams, useNavigate } from "react-router-dom";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { GAMES } from "../config/games";
 import { PLAYER_NAMES } from "../config/playerNames";
-import { getDatabase, ref, get, set, update } from "firebase/database";
+import {
+  getDatabase,
+  ref,
+  get,
+  set,
+  update,
+  onValue,
+} from "firebase/database";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
@@ -267,6 +263,44 @@ const styles = `
     transform: translateY(-2px);
   }
 
+  .player-btn-used {
+    background: rgba(130, 170, 255, 0.12);
+    border-color: rgba(130, 170, 255, 0.28);
+    color: rgba(220, 228, 255, 0.92);
+    box-shadow: inset 0 0 0 1px rgba(130, 170, 255, 0.08);
+  }
+
+  .player-btn-used:hover {
+    background: rgba(130, 170, 255, 0.18);
+    border-color: rgba(130, 170, 255, 0.38);
+    color: #f0ece8;
+  }
+
+  .player-name-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+  }
+
+  .player-used-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #8db2ff;
+    box-shadow: 0 0 8px rgba(141, 178, 255, 0.6);
+    flex-shrink: 0;
+  }
+
+  .player-used-label {
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(220, 228, 255, 0.72);
+    flex-shrink: 0;
+  }
+
   .show-password-label {
     display: flex;
     align-items: center;
@@ -397,7 +431,6 @@ function GameEntryPage() {
   const { gameId } = useParams<{ gameId: string }>();
   const navigate = useNavigate();
   const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null);
-  const [hoveredPlayer, setHoveredPlayer] = useState<string | null>(null);
   const [sessionId, setSessionId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -406,6 +439,7 @@ function GameEntryPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [cadetLimit, setCadetLimit] = useState<number | null>(null);
+  const [chosenPlayers, setChosenPlayers] = useState<string[]>([]);
 
   const game = GAMES.find((g) => g.id === gameId);
   const passwordsMatch = password.length > 0 && password === confirmPassword;
@@ -417,6 +451,37 @@ function GameEntryPage() {
     );
     return PLAYER_NAMES.slice(0, maxNames);
   }, [cadetLimit]);
+
+  useEffect(() => {
+    if (!sessionValidated || !sessionId) {
+      setChosenPlayers([]);
+      return;
+    }
+
+    const db = getDatabase();
+    const playersRef = ref(db, `sessions/${sessionId}/players`);
+
+    const unsubscribe = onValue(playersRef, (snapshot) => {
+      if (!snapshot.exists()) {
+        setChosenPlayers([]);
+        return;
+      }
+
+      const players = snapshot.val() as Record<
+        string,
+        { hasChosen?: boolean }
+      >;
+      const names = Object.entries(players)
+        .filter(([, value]) => value?.hasChosen === true)
+        .map(([name]) => name);
+
+      setChosenPlayers(names);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [sessionId, sessionValidated]);
 
   if (!game) {
     return <p style={{ padding: "2rem", color: "#f0ece8" }}>Game not found.</p>;
@@ -460,7 +525,12 @@ function GameEntryPage() {
     const now = new Date().toISOString();
 
     if (!snapshot.exists()) {
-      await set(playerRef, { password: passwordValue, createdAt: now, lastLoginAt: now });
+      await set(playerRef, {
+        password: passwordValue,
+        createdAt: now,
+        lastLoginAt: now,
+        hasChosen: true,
+      });
       return { ok: true };
     }
 
@@ -468,11 +538,15 @@ function GameEntryPage() {
     if (player.password !== passwordValue) {
       return {
         ok: false,
-        error: "Incorrect password for this username. Please check with your teacher if you forgot it.",
+        error:
+          "Incorrect password for this username. Please check with your teacher if you forgot it.",
       };
     }
 
-    await update(playerRef, { lastLoginAt: now });
+    await update(playerRef, {
+      lastLoginAt: now,
+      hasChosen: true,
+    });
     return { ok: true };
   }
 
@@ -482,7 +556,13 @@ function GameEntryPage() {
       <main className="entry-root">
         <button className="back-btn" onClick={() => navigate("/")}>
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M9 2L4 7L9 12" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+            <path
+              d="M9 2L4 7L9 12"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
           Back
         </button>
@@ -569,9 +649,14 @@ function GameEntryPage() {
           {error && !sessionValidated && (
             <div className="error-box">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <circle cx="7" cy="7" r="6.5" stroke="#f08090"/>
-                <path d="M7 4v3.5" stroke="#f08090" strokeWidth="1.5" strokeLinecap="round"/>
-                <circle cx="7" cy="10" r="0.75" fill="#f08090"/>
+                <circle cx="7" cy="7" r="6.5" stroke="#f08090" />
+                <path
+                  d="M7 4v3.5"
+                  stroke="#f08090"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
+                <circle cx="7" cy="10" r="0.75" fill="#f08090" />
               </svg>
               {error}
             </div>
@@ -586,26 +671,38 @@ function GameEntryPage() {
                 Choose your data explorer
               </label>
               <div className="player-grid">
-                {allowedPlayerNames.map((name) => (
-                  <button
-                    key={name}
-                    className={`player-btn${
-                      selectedPlayer === name ? " player-btn-selected" : ""
-                    }`}
-                    onClick={() => setSelectedPlayer(name)}
-                    onMouseEnter={() => setHoveredPlayer(name)}
-                    onMouseLeave={() => setHoveredPlayer(null)}
-                  >
-                    {name}
-                  </button>
-                ))}
+                {allowedPlayerNames.map((name) => {
+                  const isChosen = chosenPlayers.includes(name);
+
+                  return (
+                    <button
+                      key={name}
+                      className={`player-btn${
+                        selectedPlayer === name ? " player-btn-selected" : ""
+                      }${isChosen ? " player-btn-used" : ""}`}
+                      onClick={() => setSelectedPlayer(name)}
+                    >
+                      <span className="player-name-wrap">
+                        <span>{name}</span>
+                        {isChosen && (
+                          <>
+                            <span className="player-used-dot" />
+                            <span className="player-used-label">Used</span>
+                          </>
+                        )}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
 
               <div className="card-divider" />
 
               <p className="section-label">Security</p>
               <div style={{ marginBottom: 14 }}>
-                <label className="field-label" htmlFor="password">Password</label>
+                <label className="field-label" htmlFor="password">
+                  Password
+                </label>
                 <p className="field-hint">
                   Protects your work from other students in this class.
                 </p>
@@ -626,7 +723,9 @@ function GameEntryPage() {
                 <input
                   id="confirm-password"
                   className={`field-input${
-                    confirmPassword && !passwordsMatch ? " field-input-error" : ""
+                    confirmPassword && !passwordsMatch
+                      ? " field-input-error"
+                      : ""
                   }`}
                   type={showPassword ? "text" : "password"}
                   value={confirmPassword}
@@ -647,9 +746,14 @@ function GameEntryPage() {
               {confirmPassword && !passwordsMatch && (
                 <div className="error-box" style={{ marginTop: 10 }}>
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                    <circle cx="7" cy="7" r="6.5" stroke="#f08090"/>
-                    <path d="M7 4v3.5" stroke="#f08090" strokeWidth="1.5" strokeLinecap="round"/>
-                    <circle cx="7" cy="10" r="0.75" fill="#f08090"/>
+                    <circle cx="7" cy="7" r="6.5" stroke="#f08090" />
+                    <path
+                      d="M7 4v3.5"
+                      stroke="#f08090"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                    />
+                    <circle cx="7" cy="10" r="0.75" fill="#f08090" />
                   </svg>
                   Passwords do not match.
                 </div>
@@ -658,9 +762,14 @@ function GameEntryPage() {
               {error && sessionValidated && (
                 <div className="error-box">
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                    <circle cx="7" cy="7" r="6.5" stroke="#f08090"/>
-                    <path d="M7 4v3.5" stroke="#f08090" strokeWidth="1.5" strokeLinecap="round"/>
-                    <circle cx="7" cy="10" r="0.75" fill="#f08090"/>
+                    <circle cx="7" cy="7" r="6.5" stroke="#f08090" />
+                    <path
+                      d="M7 4v3.5"
+                      stroke="#f08090"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                    />
+                    <circle cx="7" cy="10" r="0.75" fill="#f08090" />
                   </svg>
                   {error}
                 </div>
