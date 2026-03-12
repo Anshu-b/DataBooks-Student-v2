@@ -1,5 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
-import { getDatabase, ref, get, set, update } from "firebase/database";
+import {
+  getDatabase,
+  ref,
+  get,
+  set,
+  update,
+  runTransaction,
+} from "firebase/database";
 import { useTeacherAuth } from "./useTeacherAuth";
 
 export interface TeacherSession {
@@ -35,52 +42,31 @@ type ReadingValue = {
   [key: string]: unknown;
 };
 
-function sanitizeSegment(value: string): string {
-  return value
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 10);
-}
+async function generateUniqueSessionId(
+  db: ReturnType<typeof getDatabase>
+): Promise<string> {
+  const counterRef = ref(db, "sessionCounter");
 
-function buildSessionId(gameId: string): string {
-  const safeGameId =
-    sanitizeSegment(gameId).replace(/-/g, "").toUpperCase().slice(0, 5) ||
-    "GAME";
+  const transactionResult = await runTransaction(counterRef, (currentValue) => {
+    const currentCount =
+      typeof currentValue === "number" && Number.isFinite(currentValue)
+        ? currentValue
+        : 0;
+
+    return currentCount + 1;
+  });
+
+  const nextCount = transactionResult.snapshot.val();
+
+  if (typeof nextCount !== "number" || !Number.isFinite(nextCount)) {
+    throw new Error("Failed to generate session ID.");
+  }
 
   const now = new Date();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
 
-  const year = String(now.getUTCFullYear()).slice(-2);
-  const month = String(now.getUTCMonth() + 1).padStart(2, "0");
-  const day = String(now.getUTCDate()).padStart(2, "0");
-  const hours = String(now.getUTCHours()).padStart(2, "0");
-  const minutes = String(now.getUTCMinutes()).padStart(2, "0");
-
-  const characters = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  let randomPart = "";
-
-  for (let x = 0; x < 4; x += 1) {
-    const randomIndex = Math.floor(Math.random() * characters.length);
-    randomPart += characters[randomIndex];
-  }
-
-  return `${safeGameId}-${year}${month}${day}-${hours}${minutes}-${randomPart}`;
-}
-
-async function generateUniqueSessionId(
-  db: ReturnType<typeof getDatabase>,
-  gameId: string
-): Promise<string> {
-  let sessionId = buildSessionId(gameId);
-  let snapshot = await get(ref(db, `sessions/${sessionId}`));
-
-  while (snapshot.exists()) {
-    sessionId = buildSessionId(gameId);
-    snapshot = await get(ref(db, `sessions/${sessionId}`));
-  }
-
-  return sessionId;
+  return `A${nextCount}${month}${day}`;
 }
 
 function parseIsoTimestampToMs(timestamp: unknown): number | null {
@@ -240,7 +226,7 @@ export function useTeacherSessions() {
       return;
     }
 
-    const sessionId = await generateUniqueSessionId(db, gameId);
+    const sessionId = await generateUniqueSessionId(db);
 
     await set(ref(db, `sessions/${sessionId}/metadata`), {
       teacherId: user.uid,
