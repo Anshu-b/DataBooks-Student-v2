@@ -50,7 +50,7 @@ export const JOURNAL_ROUNDS: JournalRound[] = [
       // ── First data observation ────────────────────────────────────────────
       {
         id: "r1-q5",
-        type: "plot-required",
+        type: "text",
         prompt:
           "Open a line plot showing Infected Cadets on the y-axis and Time on the x-axis. What do you notice about how the number of infected cadets has changed so far?",
         plotConstraints: {
@@ -102,7 +102,7 @@ export const JOURNAL_ROUNDS: JournalRound[] = [
       // ── Plot reasoning: change over time ──────────────────────────────────
       {
         id: "r2-q3",
-        type: "plot-required",
+        type: "text",
         prompt:
           "Open a line plot with Time on the x-axis and Infected Cadets on the y-axis. Compare what the plot looks like now versus what it looked like after Round 1. Describe what changed.",
         plotConstraints: {
@@ -121,7 +121,7 @@ export const JOURNAL_ROUNDS: JournalRound[] = [
       // ── Sector-level analysis ─────────────────────────────────────────────
       {
         id: "r2-q5",
-        type: "plot-required",
+        type: "text",
         prompt:
           "Now look at infected sectors over time using a line plot or bar chart — your choice. Which plot type did you pick, and why did it seem more useful for this question?",
         plotConstraints: {
@@ -177,7 +177,7 @@ export const JOURNAL_ROUNDS: JournalRound[] = [
       // ── Full arc analysis ────────────────────────────────────────────────
       {
         id: "r3-q3",
-        type: "plot-required",
+        type: "text",
         prompt:
           "Open any plot that shows the full picture of infection across all three rounds. Describe the overall pattern — did infections grow quickly, slowly, or unevenly? What does the shape of the data tell you?",
         plotConstraints: {
