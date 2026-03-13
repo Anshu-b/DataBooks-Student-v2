@@ -83,7 +83,7 @@ export function aggregateTelemetry(
 
   /* -------------------- Metadata (authoritative) -------------------- */
 
-  const totalCadets = 12;
+  const totalCadets = 22;
   const totalSectors = 6;
 
   const CADET_END = totalCadets;
