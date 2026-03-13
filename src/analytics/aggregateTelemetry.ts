@@ -154,14 +154,12 @@ export function aggregateTelemetry(
     let infectedSectors = 0;
 
     // Device self-status
-    if (device_id.startsWith("T") && infection_status === 1) {
+    if (device_id.startsWith("S") && infection_status === 1) {
       infectedCadets += 1;
     }
-
-    if (device_id.startsWith("S") && infection_status === 1) {
+    if (device_id.startsWith("T") && infection_status === 1) {
       infectedSectors += 1;
     }
-
 
     // Proximity-based counts
     infectedCadets += cadetMask.reduce((sum, v) => sum + (v ? 1 : 0), 0);
