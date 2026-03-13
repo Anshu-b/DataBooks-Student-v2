@@ -39,7 +39,7 @@ export type RawReading = {
 
 export type MeetingLog = {
   startTime: string;
-  endTime: string;
+  endTime?: string;
 };
 
 export type SessionData = {
@@ -92,13 +92,35 @@ export function aggregateTelemetry(
 
   /* -------------------- Meetings (interval normalization) -------------------- */
 
-  const meetingIntervals = Object.values(session.meetings || {}).map(m => ({
-    start: new Date(m.startTime),
-    end: new Date(m.endTime),
-  }));
+  const meetingIntervals = Object.values(session.meetings || {})
+    .map((meeting) => {
+      const start = new Date(meeting.startTime);
+      const end = meeting.endTime ? new Date(meeting.endTime) : null;
+
+      if (Number.isNaN(start.getTime())) {
+        return null;
+      }
+
+      if (end && Number.isNaN(end.getTime())) {
+        return null;
+      }
+
+      return {
+        start,
+        end,
+      };
+    })
+    .filter((meeting): meeting is { start: Date; end: Date | null } => meeting !== null);
+
+  const getCumulativeMeetings = (time: Date): number =>
+    meetingIntervals.filter((meeting) => meeting.start <= time).length;
 
   const isDuringMeeting = (time: Date): boolean =>
-    meetingIntervals.some(m => time >= m.start && time <= m.end);
+    meetingIntervals.some((meeting) =>
+      meeting.end
+        ? time >= meeting.start && time <= meeting.end
+        : time >= meeting.start
+    );
 
   /* -------------------- Readings (sorted, normalized) -------------------- */
 
@@ -114,19 +136,11 @@ export function aggregateTelemetry(
 
   const aggregated: AggregatedTelemetryPoint[] = [];
 
-  let cumulativeMeetings = 0;
-  let wasInMeeting = false;
-
   sortedReadings.forEach(reading => {
     const { time, device_id, infection_status, mask } = reading;
 
     const duringMeeting = isDuringMeeting(time);
-
-    // Increment meeting count on rising edge only
-    if (duringMeeting && !wasInMeeting) {
-      cumulativeMeetings += 1;
-    }
-    wasInMeeting = duringMeeting;
+    const cumulativeMeetings = getCumulativeMeetings(time);
 
     /* -------- Proximity mask slicing (NO inference) -------- */
 
@@ -167,6 +181,30 @@ export function aggregateTelemetry(
       cumulativeMeetings,
     });
   });
+
+  if (aggregated.length > 0) {
+    const latestReadingTime = aggregated[aggregated.length - 1].time;
+    const latestMeetingEventTime = meetingIntervals.reduce<Date | null>((latestTime, meeting) => {
+      const meetingEventTime = meeting.end ?? meeting.start;
+
+      if (!latestTime || meetingEventTime > latestTime) {
+        return meetingEventTime;
+      }
+
+      return latestTime;
+    }, null);
+
+    if (latestMeetingEventTime && latestMeetingEventTime > latestReadingTime) {
+      const lastPoint = aggregated[aggregated.length - 1];
+
+      aggregated.push({
+        ...lastPoint,
+        time: latestMeetingEventTime,
+        duringMeeting: isDuringMeeting(latestMeetingEventTime),
+        cumulativeMeetings: getCumulativeMeetings(latestMeetingEventTime),
+      });
+    }
+  }
 
   return aggregated;
 }

@@ -6,6 +6,7 @@ import SessionActivityLog from "./SessionActivityLog";
 import SessionRealtimeDashboard from "./SessionRealtimeDashboard";
 import JournalSubmissionViewer from "./JournalSubmissionViewer";
 import JournalSubmissionChecklist from "./JournalSubmissionChecklist";
+import SessionMeetingsTable from "./SessionMeetingsTable";
 import { PLAYER_NAMES } from "../../config/playerNames";
 
 const styles = `
@@ -388,6 +389,38 @@ const styles = `
     transform: scale(0.98);
   }
 
+  .meeting-btn {
+    padding: 11px 20px;
+    border-radius: 11px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .meeting-btn-start {
+    background: rgba(160, 110, 230, 0.15);
+    border: 1px solid rgba(160, 110, 230, 0.3);
+    color: #b08ae0;
+  }
+
+  .meeting-btn-start:hover {
+    background: rgba(160, 110, 230, 0.22);
+    border-color: rgba(160, 110, 230, 0.45);
+  }
+
+  .meeting-btn-end {
+    background: rgba(243, 156, 18, 0.15);
+    border: 1px solid rgba(243, 156, 18, 0.3);
+    color: #f5c842;
+  }
+
+  .meeting-btn-end:hover {
+    background: rgba(243, 156, 18, 0.22);
+    border-color: rgba(243, 156, 18, 0.45);
+  }
+
   .activity-log-divider {
     height: 1px;
     background: rgba(255, 255, 255, 0.07);
@@ -408,7 +441,14 @@ function TeacherHomePage() {
 
   const maxCadets = PLAYER_NAMES.length;
 
-  const { sessions, createSession, activateSession, stopSession } = useTeacherSessions();
+  const {
+    sessions,
+    createSession,
+    activateSession,
+    stopSession,
+    startMeeting,
+    endMeeting,
+  } = useTeacherSessions();
 
   const [selectedSession, setSelectedSession] = useState("");
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -454,6 +494,8 @@ function TeacherHomePage() {
   function getSessionState(session: any): string {
     return session.status || "draft";
   }
+
+  const selectedSessionData = sessions.find((session) => session.id === selectedSession);
 
   return (
     <>
@@ -582,7 +624,7 @@ function TeacherHomePage() {
                 {selectedSession && (
                   <>
                     <div className="session-actions">
-                      {sessions.find(s => s.id === selectedSession)?.status === "inactive" ? (
+                      {selectedSessionData?.status === "inactive" ? (
                         <button 
                           className="reactivate-btn" 
                           onClick={() => {
@@ -602,6 +644,18 @@ function TeacherHomePage() {
                       ) : (
                         <button className="stop-btn" onClick={() => stopSession(selectedSession)}>
                           Stop Session
+                        </button>
+                      )}
+                      {selectedSessionData?.status === "active" && (
+                        <button
+                          className={`meeting-btn ${selectedSessionData.activeMeeting ? "meeting-btn-end" : "meeting-btn-start"}`}
+                          onClick={() =>
+                            selectedSessionData.activeMeeting
+                              ? endMeeting(selectedSession)
+                              : startMeeting(selectedSession)
+                          }
+                        >
+                          {selectedSessionData.activeMeeting ? "End Meeting" : "Start Meeting"}
                         </button>
                       )}
                       <button 
@@ -625,6 +679,10 @@ function TeacherHomePage() {
                     <div className="activity-log-divider" />
                     
                     <SessionRealtimeDashboard sessionId={selectedSession} />
+
+                    <div className="activity-log-divider" />
+
+                    <SessionMeetingsTable sessionId={selectedSession} />
 
                     <div className="activity-log-divider" />
 

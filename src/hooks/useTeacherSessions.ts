@@ -28,6 +28,11 @@ export interface TeacherSession {
     action: "stop";
     timestamp: string;
   };
+  activeMeeting: null | {
+    id: string;
+    startTime: string;
+  };
+  meetingCount: number;
 }
 
 interface ActivateSessionDetails {
@@ -166,12 +171,30 @@ export function useTeacherSessions() {
       const sessionSnapshots = await Promise.all(
         sessionIds.map(async (id) => {
           const metaSnapshot = await get(ref(db, `sessions/${id}/metadata`));
+          const meetingsSnapshot = await get(ref(db, `sessions/${id}/meetings`));
 
           if (!metaSnapshot.exists()) {
             return null;
           }
 
           const metadata = metaSnapshot.val();
+          const meetings =
+            meetingsSnapshot.exists() &&
+            typeof meetingsSnapshot.val() === "object" &&
+            meetingsSnapshot.val() !== null
+              ? (meetingsSnapshot.val() as Record<
+                  string,
+                  { startTime?: string; endTime?: string }
+                >)
+              : {};
+
+          const activeMeetingEntry = Object.entries(meetings)
+            .filter(([, meeting]) => meeting.startTime && !meeting.endTime)
+            .sort((leftMeeting, rightMeeting) => {
+              const leftMs = parseIsoTimestampToMs(leftMeeting[1].startTime) ?? 0;
+              const rightMs = parseIsoTimestampToMs(rightMeeting[1].startTime) ?? 0;
+              return rightMs - leftMs;
+            })[0];
 
           return {
             id,
@@ -180,6 +203,13 @@ export function useTeacherSessions() {
             status: metadata.status ?? "draft",
             start: metadata.start ?? null,
             stop: metadata.stop ?? null,
+            activeMeeting: activeMeetingEntry
+              ? {
+                  id: activeMeetingEntry[0],
+                  startTime: activeMeetingEntry[1].startTime as string,
+                }
+              : null,
+            meetingCount: Object.keys(meetings).length,
           } as TeacherSession;
         })
       );
@@ -283,11 +313,95 @@ export function useTeacherSessions() {
     await loadSessions();
   }
 
+  async function startMeeting(sessionId: string) {
+    if (!user) {
+      return;
+    }
+
+    const meetingsRef = ref(db, `sessions/${sessionId}/meetings`);
+    const meetingsSnapshot = await get(meetingsRef);
+    const meetings =
+      meetingsSnapshot.exists() &&
+      typeof meetingsSnapshot.val() === "object" &&
+      meetingsSnapshot.val() !== null
+        ? (meetingsSnapshot.val() as Record<
+            string,
+            { startTime?: string; endTime?: string }
+          >)
+        : {};
+
+    const hasActiveMeeting = Object.values(meetings).some(
+      (meeting) => meeting.startTime && !meeting.endTime
+    );
+
+    if (hasActiveMeeting) {
+      return;
+    }
+
+    const nextMeetingNumber =
+      Object.keys(meetings).reduce((maxValue, meetingId) => {
+        const match = meetingId.match(/^meeting_(\d+)$/);
+        if (!match) {
+          return maxValue;
+        }
+
+        return Math.max(maxValue, Number(match[1]));
+      }, 0) + 1;
+
+    await set(ref(db, `sessions/${sessionId}/meetings/meeting_${nextMeetingNumber}`), {
+      startTime: new Date().toISOString(),
+      startedBy: user.email ?? "Unknown",
+    });
+
+    await loadSessions();
+  }
+
+  async function endMeeting(sessionId: string) {
+    if (!user) {
+      return;
+    }
+
+    const meetingsRef = ref(db, `sessions/${sessionId}/meetings`);
+    const meetingsSnapshot = await get(meetingsRef);
+
+    if (!meetingsSnapshot.exists()) {
+      return;
+    }
+
+    const meetings = meetingsSnapshot.val() as Record<
+      string,
+      { startTime?: string; endTime?: string }
+    >;
+
+    const activeMeetingEntry = Object.entries(meetings)
+      .filter(([, meeting]) => meeting.startTime && !meeting.endTime)
+      .sort((leftMeeting, rightMeeting) => {
+        const leftMs = parseIsoTimestampToMs(leftMeeting[1].startTime) ?? 0;
+        const rightMs = parseIsoTimestampToMs(rightMeeting[1].startTime) ?? 0;
+        return rightMs - leftMs;
+      })[0];
+
+    if (!activeMeetingEntry) {
+      return;
+    }
+
+    const [meetingId] = activeMeetingEntry;
+
+    await update(ref(db, `sessions/${sessionId}/meetings/${meetingId}`), {
+      endTime: new Date().toISOString(),
+      endedBy: user.email ?? "Unknown",
+    });
+
+    await loadSessions();
+  }
+
   return {
     sessions,
     loading,
     createSession,
     activateSession,
     stopSession,
+    startMeeting,
+    endMeeting,
   };
 }
