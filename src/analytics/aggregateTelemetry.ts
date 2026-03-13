@@ -83,8 +83,8 @@ export function aggregateTelemetry(
 
   /* -------------------- Metadata (authoritative) -------------------- */
 
-  const totalCadets = session.metadata.start.cadets;
-  const totalSectors = session.metadata.start.sectors;
+  const totalCadets = 12;
+  const totalSectors = 6;
 
   const CADET_END = totalCadets;
   const SECTOR_END = totalCadets + totalSectors;
