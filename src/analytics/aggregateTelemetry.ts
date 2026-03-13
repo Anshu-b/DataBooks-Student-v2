@@ -81,14 +81,10 @@ export function aggregateTelemetry(
 ): AggregatedTelemetryPoint[] {
   if (!session?.metadata?.start) return [];
 
-  /* -------------------- Metadata (authoritative) -------------------- */
+ /* -------------------- Metadata (authoritative) -------------------- */
 
-  const totalCadets = 22;
-  const totalSectors = 6;
-
-  const CADET_END = totalCadets;
-  const SECTOR_END = totalCadets + totalSectors;
-  const QUARANTINE_INDEX = totalCadets + totalSectors;
+  const totalCadets = session.metadata.start.cadets || 22;
+  const totalSectors = session.metadata.start.sectors || 6;
 
   /* -------------------- Meetings (interval normalization) -------------------- */
 
@@ -125,45 +121,38 @@ export function aggregateTelemetry(
   /* -------------------- Readings (sorted, normalized) -------------------- */
 
   const sortedReadings = Object.values(session.readings || {})
-    .map(r => ({
+    .map((r) => ({
       ...r,
       time: new Date(r.timestamp),
-      mask: JSON.parse(r.proximity_mask) as number[],
     }))
+    .filter((reading) => !Number.isNaN(reading.time.getTime()))
     .sort((a, b) => a.time.getTime() - b.time.getTime());
 
   /* -------------------- Aggregation -------------------- */
 
   const aggregated: AggregatedTelemetryPoint[] = [];
+  const cadetStatuses = new Map<number, number>();
+  const sectorStatuses = new Map<number, number>();
 
-  sortedReadings.forEach(reading => {
-    const { time, device_id, infection_status, mask } = reading;
+  sortedReadings.forEach((reading) => {
+    const { time, device_id, infection_status } = reading;
 
     const duringMeeting = isDuringMeeting(time);
     const cumulativeMeetings = getCumulativeMeetings(time);
+    const entityIndex = getDeviceIndex(device_id);
 
-    /* -------- Proximity mask slicing (NO inference) -------- */
+    if (entityIndex !== null) {
+      if (device_id.startsWith("S") && entityIndex < totalCadets) {
+        cadetStatuses.set(entityIndex, infection_status === 1 ? 1 : 0);
+      }
 
-    const cadetMask = mask.slice(0, CADET_END);
-    const sectorMask = mask.slice(CADET_END, SECTOR_END);
-    // const quarantine = mask[QUARANTINE_INDEX]; // intentionally unused
-
-    /* -------- Infection aggregation -------- */
-
-    let infectedCadets = 0;
-    let infectedSectors = 0;
-
-    // Device self-status
-    if (device_id.startsWith("S") && infection_status === 1) {
-      infectedCadets += 1;
-    }
-    if (device_id.startsWith("T") && infection_status === 1) {
-      infectedSectors += 1;
+      if (device_id.startsWith("T") && entityIndex < totalSectors) {
+        sectorStatuses.set(entityIndex, infection_status === 1 ? 1 : 0);
+      }
     }
 
-    // Proximity-based counts
-    infectedCadets += cadetMask.reduce((sum, v) => sum + (v ? 1 : 0), 0);
-    infectedSectors += sectorMask.reduce((sum, v) => sum + (v ? 1 : 0), 0);
+    const infectedCadets = countInfected(cadetStatuses);
+    const infectedSectors = countInfected(sectorStatuses);
 
     aggregated.push({
       time,
@@ -172,10 +161,10 @@ export function aggregateTelemetry(
       totalSectors,
 
       infectedCadets,
-      healthyCadets: totalCadets - infectedCadets,
+      healthyCadets: Math.max(0, totalCadets - infectedCadets),
 
       infectedSectors,
-      healthySectors: totalSectors - infectedSectors,
+      healthySectors: Math.max(0, totalSectors - infectedSectors),
 
       duringMeeting,
       cumulativeMeetings,
@@ -207,4 +196,25 @@ export function aggregateTelemetry(
   }
 
   return aggregated;
+}
+
+function getDeviceIndex(deviceId: string): number | null {
+  const numericPortion = Number.parseInt(deviceId.slice(1), 10);
+  if (Number.isNaN(numericPortion) || numericPortion <= 0) {
+    return null;
+  }
+
+  return numericPortion - 1;
+}
+
+function countInfected(statuses: Map<number, number>): number {
+  let infected = 0;
+
+  statuses.forEach((status) => {
+    if (status === 1) {
+      infected += 1;
+    }
+  });
+
+  return infected;
 }
