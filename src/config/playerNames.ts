@@ -51,4 +51,5 @@ export const PLAYER_NAMES = [
   "Tarak Nath",
   "Zainab",
   "Zeeshan",
+  "Instructor",
 ];

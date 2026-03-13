@@ -8,7 +8,7 @@ import { ResponsiveBar } from "@nivo/bar";
 
 type HistogramChartProps = {
   data: {
-    bucket: number;
+    bucket: string;
     count: number;
   }[];
   xLegend?: string;
@@ -27,7 +27,7 @@ function HistogramChart({ data, xLegend = "X" }: HistogramChartProps) {
           legendOffset: 36,
           legendPosition: "middle",
         }}
-        axisLeft={{ legend: "Frequency", legendOffset: -50 }}
+        axisLeft={{ legend: "Count", legendOffset: -50 }}
         colors={{ scheme: "category10" }}
         valueScale={{ type: "linear", min: 0 }}
       />

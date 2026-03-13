@@ -4,15 +4,14 @@ export function buildHistogramPlotData(
   telemetry: AggregatedTelemetryPoint[],
   key: keyof AggregatedTelemetryPoint
 ) {
-  const bins: Record<number, number> = {};
+  if (telemetry.length === 0) return [];
 
-  telemetry.forEach((d) => {
-    const v = d[key] as number;
-    bins[v] = (bins[v] || 0) + 1;
-  });
+  const latest = telemetry[telemetry.length - 1];
 
-  return Object.entries(bins).map(([bucket, count]) => ({
-    bucket: Number(bucket),
-    count,
-  }));
+  return [
+    {
+      bucket: String(key),
+      count: Number(latest[key]),
+    },
+  ];
 }
