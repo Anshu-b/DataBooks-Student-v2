@@ -378,7 +378,7 @@ function buildEntityStatuses(
         : "unknown",
       updatedAt: formatTimestamp(latestStatus?.timestamp),
     };
-  });
+  }).filter((entity) => entity.status !== "unknown");
 }
 
 function getDeviceIndex(deviceId: string): number | null {
