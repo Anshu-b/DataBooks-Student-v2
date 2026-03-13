@@ -154,6 +154,14 @@ export function aggregateTelemetry(
     const infectedCadets = countInfected(cadetStatuses);
     const infectedSectors = countInfected(sectorStatuses);
 
+    console.debug("[aggregateTelemetry] infected entities", {
+      timestamp: time.toISOString(),
+      sourceDevice: device_id,
+      sourceStatus: infection_status,
+      infectedStudents: getInfectedEntityLabels(cadetStatuses, "S"),
+      infectedSectors: getInfectedEntityLabels(sectorStatuses, "T"),
+    });
+
     aggregated.push({
       time,
 
@@ -217,4 +225,14 @@ function countInfected(statuses: Map<number, number>): number {
   });
 
   return infected;
+}
+
+function getInfectedEntityLabels(
+  statuses: Map<number, number>,
+  prefix: "S" | "T"
+): string[] {
+  return Array.from(statuses.entries())
+    .filter(([, status]) => status === 1)
+    .map(([index]) => `${prefix}${index + 1}`)
+    .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
 }

@@ -7,6 +7,7 @@ import SessionRealtimeDashboard from "./SessionRealtimeDashboard";
 import JournalSubmissionViewer from "./JournalSubmissionViewer";
 import JournalSubmissionChecklist from "./JournalSubmissionChecklist";
 import SessionMeetingsTable from "./SessionMeetingsTable";
+import SessionInfectionStatusTable from "./SessionInfectionStatusTable";
 import { PLAYER_NAMES } from "../../config/playerNames";
 
 const styles = `
@@ -695,6 +696,10 @@ function TeacherHomePage() {
                     <div className="activity-log-divider" />
 
                     <JournalSubmissionViewer sessionId={selectedSession} />
+
+                    <div className="activity-log-divider" />
+
+                    <SessionInfectionStatusTable sessionId={selectedSession} />
                   </>
                 )}
               </>
