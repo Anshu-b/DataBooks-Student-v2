@@ -45,7 +45,7 @@ const styles = `
 
   @keyframes cardIn {
     from { opacity: 0; transform: translateY(24px) scale(0.97); }
-    to   { opacity: 1; transform: translateY(0)   scale(1);    }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
   }
 
   .login-badge {
@@ -80,6 +80,7 @@ const styles = `
     margin: 0 0 6px 0;
     line-height: 1.15;
     letter-spacing: -0.02em;
+    white-space: pre-line;
   }
 
   .login-subtitle {
@@ -136,6 +137,43 @@ const styles = `
     box-shadow: 0 0 0 3px rgba(140, 90, 200, 0.15);
   }
 
+  .forgot-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+
+  .forgot-btn {
+    background: none;
+    border: none;
+    color: #b08ae0;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.2s;
+  }
+
+  .forgot-btn:hover {
+    color: #c8a8f4;
+  }
+
+  .message-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(72, 187, 120, 0.12);
+    border: 1px solid rgba(72, 187, 120, 0.3);
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin: 14px 0 0;
+    color: #70d4a0;
+    font-size: 13px;
+  }
+
   .error-box {
     display: flex;
     align-items: center;
@@ -152,8 +190,8 @@ const styles = `
 
   @keyframes shake {
     0%, 100% { transform: translateX(0); }
-    25%       { transform: translateX(-4px); }
-    75%       { transform: translateX(4px); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
   }
 
   .submit-btn {
@@ -262,22 +300,45 @@ const styles = `
 
 function TeacherLoginPage() {
   const navigate = useNavigate();
-  const { login, register } = useTeacherAuth();
+  const { login, register, resetPassword } = useTeacherAuth();
 
-  const [email, setEmail]       = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isRegister, setIsRegister] = useState(false);
-  const [error, setError]       = useState("");
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
 
   async function handleSubmit() {
     try {
       setError("");
+      setMessage("");
+
       if (isRegister) {
         await register(email, password);
       } else {
         await login(email, password);
       }
+
       navigate("/teacher");
+    } catch (err: any) {
+      setError(err.message);
+    }
+  }
+
+  async function handleForgotPassword() {
+    if (!email) {
+      setError("Enter your email address first.");
+      setMessage("");
+      return;
+    }
+
+    try {
+      setError("");
+      setMessage("");
+      await resetPassword(email);
+      setMessage(
+        "If an account exists for that email, a reset link has been sent."
+      );
     } catch (err: any) {
       setError(err.message);
     }
@@ -289,10 +350,17 @@ function TeacherLoginPage() {
       <main className="login-root">
         <button className="back-btn" onClick={() => navigate("/")}>
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M9 2L4 7L9 12" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+            <path
+              d="M9 2L4 7L9 12"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
           Back
         </button>
+
         <div className="login-card">
           <div className="login-badge">
             <span className="login-badge-dot" />
@@ -302,6 +370,7 @@ function TeacherLoginPage() {
           <h2 className="login-title">
             {isRegister ? "Create your\naccount" : "Welcome\nback"}
           </h2>
+
           <p className="login-subtitle">
             {isRegister
               ? "Sign up to manage your classes"
@@ -310,7 +379,9 @@ function TeacherLoginPage() {
 
           <div className="field-group">
             <div className="field-wrapper">
-              <label className="field-label" htmlFor="email">Email address</label>
+              <label className="field-label" htmlFor="email">
+                Email address
+              </label>
               <input
                 id="email"
                 className="field-input"
@@ -323,7 +394,9 @@ function TeacherLoginPage() {
             </div>
 
             <div className="field-wrapper">
-              <label className="field-label" htmlFor="password">Password</label>
+              <label className="field-label" htmlFor="password">
+                Password
+              </label>
               <input
                 id="password"
                 className="field-input"
@@ -336,12 +409,41 @@ function TeacherLoginPage() {
             </div>
           </div>
 
+          {!isRegister && (
+            <div className="forgot-row">
+              <button className="forgot-btn" onClick={handleForgotPassword}>
+                Forgot password?
+              </button>
+            </div>
+          )}
+
+          {message && (
+            <div className="message-box">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <circle cx="7" cy="7" r="6.5" stroke="#70d4a0" />
+                <path
+                  d="M4.2 7.3l1.8 1.8 3.8-4"
+                  stroke="#70d4a0"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              {message}
+            </div>
+          )}
+
           {error && (
             <div className="error-box">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <circle cx="7" cy="7" r="6.5" stroke="#f08090"/>
-                <path d="M7 4v3.5" stroke="#f08090" strokeWidth="1.5" strokeLinecap="round"/>
-                <circle cx="7" cy="10" r="0.75" fill="#f08090"/>
+                <circle cx="7" cy="7" r="6.5" stroke="#f08090" />
+                <path
+                  d="M7 4v3.5"
+                  stroke="#f08090"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
+                <circle cx="7" cy="10" r="0.75" fill="#f08090" />
               </svg>
               {error}
             </div>
@@ -354,8 +456,16 @@ function TeacherLoginPage() {
           <div className="divider">or</div>
 
           <p className="toggle-link">
-            {isRegister ? "Already have an account? " : "Don't have an account? "}
-            <button onClick={() => { setIsRegister(!isRegister); setError(""); }}>
+            {isRegister
+              ? "Already have an account? "
+              : "Don't have an account? "}
+            <button
+              onClick={() => {
+                setIsRegister(!isRegister);
+                setError("");
+                setMessage("");
+              }}
+            >
               {isRegister ? "Sign in" : "Register"}
             </button>
           </p>

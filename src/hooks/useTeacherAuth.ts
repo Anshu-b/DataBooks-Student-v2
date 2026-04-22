@@ -4,9 +4,10 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import type { User } from "firebase/auth";
-import { getDatabase, ref, set, get } from "firebase/database";
+import { getDatabase, ref, set } from "firebase/database";
 import { auth } from "../firebase/auth";
 
 export function useTeacherAuth() {
@@ -32,7 +33,6 @@ export function useTeacherAuth() {
     const uid = credential.user.uid;
     const db = getDatabase();
 
-    // Create teacher record if first time
     await set(ref(db, `teachers/${uid}`), {
       email,
       createdAt: new Date().toISOString(),
@@ -55,11 +55,19 @@ export function useTeacherAuth() {
     await signOut(auth);
   }
 
+  async function resetPassword(email: string) {
+    await sendPasswordResetEmail(auth, email, {
+      url: "https://dataorganismsstudent-v2.netlify.app/teacher/login",
+      handleCodeInApp: false,
+    });
+  }
+
   return {
     user,
     loading,
     register,
     login,
     logout,
+    resetPassword,
   };
 }
