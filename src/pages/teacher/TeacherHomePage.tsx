@@ -436,6 +436,8 @@ const styles = `
   }
 `;
 
+
+
 function TeacherHomePage() {
   const navigate = useNavigate();
   const { user, loading: authLoading, logout } = useTeacherAuth();
@@ -453,6 +455,7 @@ function TeacherHomePage() {
 
   const [selectedSession, setSelectedSession] = useState("");
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [sessionName, setSessionName] = useState("");
   const [className, setClassName] = useState("");
   const [cadets, setCadets] = useState(0);
   const [sectors, setSectors] = useState(0);
@@ -462,8 +465,15 @@ function TeacherHomePage() {
   if (!user) return <Navigate to="/teacher/login" />;
 
   async function handleCreateSession() {
-    if (!className || cadets <= 0 || sectors <= 0) {
+    if (!sessionName || !className || cadets <= 0 || sectors <= 0) {
       alert("Please complete all fields.");
+      return;
+    }
+
+    if (!/^[a-zA-Z0-9 _-]+$/.test(sessionName)) {
+      alert(
+        "Session name can only contain letters, numbers, spaces, hyphens, and underscores."
+      );
       return;
     }
 
@@ -472,43 +482,59 @@ function TeacherHomePage() {
       return;
     }
 
-    const sessionId = await createSession("alien-invasion");
+    try {
+      const sessionId = await createSession("alien-invasion", sessionName);
 
-    if (sessionId) {
-      await activateSession(sessionId, {
-        className,
-        cadets,
-        sectors,
-        slidesLink,
-      });
+      if (sessionId) {
+        await activateSession(sessionId, {
+          className,
+          cadets,
+          sectors,
+          slidesLink,
+        });
 
-      setSelectedSession(sessionId);
+        setSelectedSession(sessionId);
+      }
+
+      setShowCreateForm(false);
+      setSessionName("");
+      setClassName("");
+      setCadets(0);
+      setSectors(0);
+      setSlidesLink("");
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Failed to create session.";
+
+      alert(message);
     }
-
-    setShowCreateForm(false);
-    setClassName("");
-    setCadets(0);
-    setSectors(0);
-    setSlidesLink("");
   }
 
   function getSessionState(session: any): string {
     return session.status || "draft";
   }
 
-  const selectedSessionData = sessions.find((session) => session.id === selectedSession);
+  const selectedSessionData = sessions.find(
+    (session) => session.id === selectedSession
+  );
 
   return (
     <>
       <style>{styles}</style>
       <div className="teacher-root">
-
-        {/* Header */}
         <header className="teacher-header">
           <div className="header-left">
             <button className="back-btn" onClick={() => navigate("/")}>
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <path d="M9 2L4 7L9 12" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                <path
+                  d="M9 2L4 7L9 12"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
               Back
             </button>
@@ -518,25 +544,43 @@ function TeacherHomePage() {
           <div className="header-user">
             <span className="user-badge">
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <circle cx="6" cy="3.5" r="2" stroke="currentColor" strokeWidth="1.2"/>
-                <path d="M2 10c0-2 1.5-3 4-3s4 1 4 3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+                <circle
+                  cx="6"
+                  cy="3.5"
+                  r="2"
+                  stroke="currentColor"
+                  strokeWidth="1.2"
+                />
+                <path
+                  d="M2 10c0-2 1.5-3 4-3s4 1 4 3"
+                  stroke="currentColor"
+                  strokeWidth="1.2"
+                  strokeLinecap="round"
+                />
               </svg>
               {user.email}
             </span>
-            <button className="logout-btn" onClick={logout}>Log Out</button>
+            <button className="logout-btn" onClick={logout}>
+              Log Out
+            </button>
           </div>
         </header>
 
-        {/* Content */}
         <div className="teacher-content">
-
-          {/* Sessions section */}
           <div className="section-card">
             <div className="section-header">
               <h2 className="section-title">Sessions</h2>
-              <button className="create-btn" onClick={() => setShowCreateForm(true)}>
+              <button
+                className="create-btn"
+                onClick={() => setShowCreateForm(true)}
+              >
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M7 2v10M2 7h10" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+                  <path
+                    d="M7 2v10M2 7h10"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                  />
                 </svg>
                 Create New Session
               </button>
@@ -545,6 +589,17 @@ function TeacherHomePage() {
             {showCreateForm && (
               <div className="form-card">
                 <h3 className="form-title">New Session Details</h3>
+
+                <div className="form-field">
+                  <label className="field-label">Session Name</label>
+                  <input
+                    className="field-input"
+                    type="text"
+                    value={sessionName}
+                    onChange={(e) => setSessionName(e.target.value)}
+                    placeholder="e.g., period3-biology-apr22"
+                  />
+                </div>
 
                 <div className="form-field">
                   <label className="field-label">Class Name</label>
@@ -581,7 +636,6 @@ function TeacherHomePage() {
                   />
                 </div>
 
-                {/* Google Slides Link */}
                 <div className="form-field">
                   <label className="field-label">Google Slides Link</label>
                   <input
@@ -597,7 +651,10 @@ function TeacherHomePage() {
                   <button className="confirm-btn" onClick={handleCreateSession}>
                     Confirm & Create
                   </button>
-                  <button className="cancel-btn" onClick={() => setShowCreateForm(false)}>
+                  <button
+                    className="cancel-btn"
+                    onClick={() => setShowCreateForm(false)}
+                  >
                     Cancel
                   </button>
                 </div>
@@ -616,7 +673,7 @@ function TeacherHomePage() {
                     <option value="">— Choose a session —</option>
                     {sessions.map((s) => (
                       <option key={s.id} value={s.id}>
-                        {s.id} ({getSessionState(s)})
+                        {s.sessionName} ({getSessionState(s)})
                       </option>
                     ))}
                   </select>
@@ -626,10 +683,12 @@ function TeacherHomePage() {
                   <>
                     <div className="session-actions">
                       {selectedSessionData?.status === "inactive" ? (
-                        <button 
-                          className="reactivate-btn" 
+                        <button
+                          className="reactivate-btn"
                           onClick={() => {
-                            const session = sessions.find(s => s.id === selectedSession);
+                            const session = sessions.find(
+                              (s) => s.id === selectedSession
+                            );
                             if (session?.start) {
                               activateSession(selectedSession, {
                                 className: session.start.class,
@@ -643,42 +702,70 @@ function TeacherHomePage() {
                           Reactivate Session
                         </button>
                       ) : (
-                        <button className="stop-btn" onClick={() => stopSession(selectedSession)}>
+                        <button
+                          className="stop-btn"
+                          onClick={() => stopSession(selectedSession)}
+                        >
                           Stop Session
                         </button>
                       )}
+
                       {selectedSessionData?.status === "active" && (
                         <button
-                          className={`meeting-btn ${selectedSessionData.activeMeeting ? "meeting-btn-end" : "meeting-btn-start"}`}
+                          className={`meeting-btn ${
+                            selectedSessionData.activeMeeting
+                              ? "meeting-btn-end"
+                              : "meeting-btn-start"
+                          }`}
                           onClick={() =>
                             selectedSessionData.activeMeeting
                               ? endMeeting(selectedSession)
                               : startMeeting(selectedSession)
                           }
                         >
-                          {selectedSessionData.activeMeeting ? "End Meeting" : "Start Meeting"}
+                          {selectedSessionData.activeMeeting
+                            ? "End Meeting"
+                            : "Start Meeting"}
                         </button>
                       )}
-                      <button 
-                        className="copy-btn" 
+
+                      <button
+                        className="copy-btn"
                         onClick={() => {
                           navigator.clipboard.writeText(selectedSession);
-                          const btn = document.activeElement as HTMLButtonElement;
+                          const btn =
+                            document.activeElement as HTMLButtonElement;
                           const originalText = btn.innerHTML;
-                          btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg> Copied!';
-                          setTimeout(() => { btn.innerHTML = originalText; }, 2000);
+                          btn.innerHTML =
+                            '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg> Copied!';
+                          setTimeout(() => {
+                            btn.innerHTML = originalText;
+                          }, 2000);
                         }}
                       >
                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                          <rect x="4" y="4" width="7" height="8" rx="1" stroke="currentColor" strokeWidth="1.2"/>
-                          <path d="M3 10V3a1 1 0 0 1 1-1h5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+                          <rect
+                            x="4"
+                            y="4"
+                            width="7"
+                            height="8"
+                            rx="1"
+                            stroke="currentColor"
+                            strokeWidth="1.2"
+                          />
+                          <path
+                            d="M3 10V3a1 1 0 0 1 1-1h5"
+                            stroke="currentColor"
+                            strokeWidth="1.2"
+                            strokeLinecap="round"
+                          />
                         </svg>
                         Copy Session ID
                       </button>
                     </div>
 
                     <div className="activity-log-divider" />
-                    
+
                     <SessionRealtimeDashboard sessionId={selectedSession} />
 
                     <div className="activity-log-divider" />
@@ -711,7 +798,6 @@ function TeacherHomePage() {
               )
             )}
           </div>
-
         </div>
       </div>
     </>

@@ -5,7 +5,6 @@ import {
   get,
   set,
   update,
-  runTransaction,
 } from "firebase/database";
 import { useTeacherAuth } from "./useTeacherAuth";
 
@@ -14,6 +13,7 @@ export interface TeacherSession {
   teacherId: string;
   gameId: string;
   status: "draft" | "active" | "inactive";
+  sessionName: string;
   start: null | {
     action: "start";
     teacher: string;
@@ -47,31 +47,19 @@ type ReadingValue = {
   [key: string]: unknown;
 };
 
-async function generateUniqueSessionId(
-  db: ReturnType<typeof getDatabase>
-): Promise<string> {
-  const counterRef = ref(db, "sessionCounter");
+function sanitizeSessionName(rawSessionName: string): string {
+  return rawSessionName
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9_-]/g, "")
+    .replace(/-+/g, "-")
+    .replace(/_+/g, "_")
+    .replace(/^[-_]+|[-_]+$/g, "");
+}
 
-  const transactionResult = await runTransaction(counterRef, (currentValue) => {
-    const currentCount =
-      typeof currentValue === "number" && Number.isFinite(currentValue)
-        ? currentValue
-        : 0;
-
-    return currentCount + 1;
-  });
-
-  const nextCount = transactionResult.snapshot.val();
-
-  if (typeof nextCount !== "number" || !Number.isFinite(nextCount)) {
-    throw new Error("Failed to generate session ID.");
-  }
-
-  const now = new Date();
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  const day = String(now.getDate()).padStart(2, "0");
-
-  return `A${nextCount}${month}${day}`;
+function isValidSessionName(sessionName: string): boolean {
+  return /^[a-z0-9_-]+$/.test(sessionName);
 }
 
 function parseIsoTimestampToMs(timestamp: unknown): number | null {
@@ -201,6 +189,7 @@ export function useTeacherSessions() {
             teacherId: metadata.teacherId,
             gameId: metadata.gameId,
             status: metadata.status ?? "draft",
+            sessionName: metadata.sessionName ?? id,
             start: metadata.start ?? null,
             stop: metadata.stop ?? null,
             activeMeeting: activeMeetingEntry
@@ -251,16 +240,35 @@ export function useTeacherSessions() {
     return () => clearInterval(intervalId);
   }, [sessions, moveTopLevelReadingsToSession]);
 
-  async function createSession(gameId: string) {
+    async function createSession(gameId: string, rawSessionName: string) {
     if (!user) {
       return;
     }
 
-    const sessionId = await generateUniqueSessionId(db);
+    const sessionId = sanitizeSessionName(rawSessionName);
+
+    if (!sessionId) {
+      throw new Error(
+        "Session name is required and can only contain letters, numbers, hyphens, and underscores."
+      );
+    }
+
+    if (!isValidSessionName(sessionId)) {
+      throw new Error(
+        "Session name can only contain letters, numbers, hyphens, and underscores."
+      );
+    }
+
+    const existingSessionSnapshot = await get(ref(db, `sessions/${sessionId}`));
+
+    if (existingSessionSnapshot.exists()) {
+      throw new Error("That session name is already taken.");
+    }
 
     await set(ref(db, `sessions/${sessionId}/metadata`), {
       teacherId: user.uid,
       gameId,
+      sessionName: sessionId,
       status: "draft",
       start: null,
       stop: null,
