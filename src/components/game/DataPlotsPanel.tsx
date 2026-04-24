@@ -309,6 +309,12 @@ function DataPlotsPanel() {
   const [piePopulation, setPiePopulation] = useState<PiePopulation>("cadets");
 
   const isTimeAxis = xVar === "time";
+  const xTimeDomain = isTimeAxis && telemetry.length > 0
+    ? {
+        min: telemetry[0].time,
+        max: telemetry[telemetry.length - 1].time,
+      }
+    : undefined;
   const plotTitle = getPlotTitle({ plotType, xLabel, yLabel, valueLabel, piePopulation });
 
   return (
@@ -455,7 +461,7 @@ function DataPlotsPanel() {
           {plotType === "line" && xVar && yVar && (
             <LineChart
               data={buildLinePlotData(telemetry, xVar as any, yVar as any)}
-              xScaleType={isTimeAxis ? "time" : "point"}
+              xScaleType={isTimeAxis ? "time" : "linear"}
               xLegend={xLabel}
               yLegend={yLabel}
             />
@@ -463,6 +469,8 @@ function DataPlotsPanel() {
           {plotType === "scatter" && xVar && yVar && (
             <ScatterChart
               data={buildScatterPlotData(telemetry, xVar as any, yVar as any)}
+              xScaleType={isTimeAxis ? "time" : "linear"}
+              xTimeDomain={xTimeDomain}
               xLegend={xLabel}
               yLegend={yLabel}
             />

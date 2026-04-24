@@ -64,7 +64,7 @@ export const PLOT_TYPES: PlotType[] = [
     id: "scatter",
     label: "Scatter Plot",
     roles: {
-      x: ["quantitative"],
+      x: ["temporal", "quantitative"],
       y: ["quantitative"],
     },
   },
