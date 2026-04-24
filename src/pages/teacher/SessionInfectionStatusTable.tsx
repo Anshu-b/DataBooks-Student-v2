@@ -357,25 +357,25 @@ function buildEntityStatuses(
   prefix: "S" | "T",
   latestStatuses: Map<number, { status: 0 | 1; timestamp: string }>
 ): EntityStatus[] {
-  return Array.from({ length: count }, (_, index) => {
+  return Array.from({ length: count }, (_, index): EntityStatus => {
     const entityId = `${prefix}${index + 1}`;
     const latestStatus = latestStatuses.get(index);
     const displayName =
       prefix === "S"
-        ? PLAYER_NAMES[index]
-          ? `${PLAYER_NAMES[index]}`
-          : `Cadet ${index + 1}`
+        ? PLAYER_NAMES[index] ?? `Cadet ${index + 1}`
         : `Sector ${index + 1}`;
+
+    const status: EntityStatus["status"] = latestStatus
+      ? latestStatus.status === 1
+        ? "infected"
+        : "healthy"
+      : "unknown";
 
     return {
       id: entityId,
       name: displayName,
       secondaryLabel: prefix === "S" ? entityId : `Telemetry ${entityId}`,
-      status: latestStatus
-        ? latestStatus.status === 1
-          ? "infected"
-          : "healthy"
-        : "unknown",
+      status,
       updatedAt: formatTimestamp(latestStatus?.timestamp),
     };
   }).filter((entity) => entity.status !== "unknown");
