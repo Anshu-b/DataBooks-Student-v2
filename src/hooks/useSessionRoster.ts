@@ -40,9 +40,11 @@ export function useSessionRoster(sessionId: string | null) {
         const value = snapshot.val();
 
         setRoster({
-          playerNames: value?.playerNames ?? [],
-          cadets: value?.cadets ?? 0,
-          sectors: value?.sectors ?? 0,
+          playerNames: Array.isArray(value?.playerNames)
+            ? value.playerNames
+            : [],
+          cadets: typeof value?.cadets === "number" ? value.cadets : 0,
+          sectors: typeof value?.sectors === "number" ? value.sectors : 0,
         });
 
         setLoading(false);

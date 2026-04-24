@@ -3,13 +3,15 @@ import { getDatabase, onValue, ref } from "firebase/database";
 
 export type SessionReading = {
   id: string;
+  device_id?: string;
+  infection_status?: number;
+  timestamp?: string;
   deviceId?: string;
   playerId?: string;
   playerName?: string;
   infectionStatus?: string;
   value?: number;
   reading?: unknown;
-  timestamp?: unknown;
   [key: string]: unknown;
 };
 

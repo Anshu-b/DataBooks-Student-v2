@@ -11,12 +11,14 @@ import { db } from "../firebase/firebase";
 export type SessionActivityLogEvent = {
   id: string;
   sessionId?: string;
-  eventType?: string;
-  actorId?: string;
-  actorName?: string;
-  page?: string;
+  type?: string;
   action?: string;
-  timestamp?: unknown;
+  userId?: string;
+  timestamp?: string;
+  serverTimestamp?: unknown;
+  details?: any;
+  plotType?: string;
+  round?: number;
   [key: string]: unknown;
 };
 

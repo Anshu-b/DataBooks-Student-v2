@@ -1,14 +1,8 @@
+import { useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { GAMES } from "../config/games";
-import {
-  getDatabase,
-  ref,
-  get,
-  set,
-  update,
-  onValue,
-} from "firebase/database";
+import { getDatabase, ref, get, set, update } from "firebase/database";
+import { useSessionPlayers } from "../hooks/useSessionPlayers";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
@@ -429,6 +423,7 @@ const styles = `
 function GameEntryPage() {
   const { gameId } = useParams<{ gameId: string }>();
   const navigate = useNavigate();
+
   const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null);
   const [sessionId, setSessionId] = useState("");
   const [password, setPassword] = useState("");
@@ -437,43 +432,20 @@ function GameEntryPage() {
   const [sessionValidated, setSessionValidated] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [chosenPlayers, setChosenPlayers] = useState<string[]>([]);
   const [allowedPlayerNames, setAllowedPlayerNames] = useState<string[]>([]);
 
   const game = GAMES.find((g) => g.id === gameId);
   const passwordsMatch = password.length > 0 && password === confirmPassword;
 
-  useEffect(() => {
-    if (!sessionValidated || !sessionId) {
-      setChosenPlayers([]);
-      return;
-    }
+  const { players } = useSessionPlayers(
+    sessionValidated && sessionId ? sessionId : null
+  );
 
-    const db = getDatabase();
-    const playersRef = ref(db, `sessions/${sessionId}/players`);
-
-    const unsubscribe = onValue(playersRef, (snapshot) => {
-      if (!snapshot.exists()) {
-        setChosenPlayers([]);
-        return;
-      }
-
-      const players = snapshot.val() as Record<
-        string,
-        { hasChosen?: boolean }
-      >;
-
-      const names = Object.entries(players)
-        .filter(([, value]) => value?.hasChosen === true)
-        .map(([name]) => name);
-
-      setChosenPlayers(names);
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, [sessionId, sessionValidated]);
+  const chosenPlayers = useMemo(() => {
+    return players
+      .filter((player) => player.hasChosen === true)
+      .map((player) => player.id);
+  }, [players]);
 
   if (!game) {
     return <p style={{ padding: "2rem", color: "#f0ece8" }}>Game not found.</p>;
@@ -503,6 +475,7 @@ function GameEntryPage() {
     const db = getDatabase();
     const sessionRef = ref(db, `sessions/${sessionIdValue}`);
     const snapshot = await get(sessionRef);
+
     return snapshot.exists();
   }
 
@@ -523,6 +496,7 @@ function GameEntryPage() {
         lastLoginAt: now,
         hasChosen: true,
       });
+
       return { ok: true };
     }
 
@@ -567,6 +541,7 @@ function GameEntryPage() {
           <p className="game-subtitle">Enter your session details to begin</p>
 
           <p className="section-label">Session</p>
+
           <div style={{ marginBottom: 0 }}>
             <label className="field-label" htmlFor="session-id">
               Session ID
@@ -641,19 +616,7 @@ function GameEntryPage() {
           </button>
 
           {error && !sessionValidated && (
-            <div className="error-box">
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <circle cx="7" cy="7" r="6.5" stroke="#f08090" />
-                <path
-                  d="M7 4v3.5"
-                  stroke="#f08090"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                />
-                <circle cx="7" cy="10" r="0.75" fill="#f08090" />
-              </svg>
-              {error}
-            </div>
+            <div className="error-box">{error}</div>
           )}
 
           {sessionValidated && (
@@ -664,6 +627,7 @@ function GameEntryPage() {
               <label className="field-label" style={{ marginBottom: 12 }}>
                 Choose your data explorer
               </label>
+
               <div className="player-grid">
                 {allowedPlayerNames.map((name) => {
                   const isChosen = chosenPlayers.includes(name);
@@ -693,6 +657,7 @@ function GameEntryPage() {
               <div className="card-divider" />
 
               <p className="section-label">Security</p>
+
               <div style={{ marginBottom: 14 }}>
                 <label className="field-label" htmlFor="password">
                   Password
@@ -739,40 +704,19 @@ function GameEntryPage() {
 
               {confirmPassword && !passwordsMatch && (
                 <div className="error-box" style={{ marginTop: 10 }}>
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                    <circle cx="7" cy="7" r="6.5" stroke="#f08090" />
-                    <path
-                      d="M7 4v3.5"
-                      stroke="#f08090"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                    />
-                    <circle cx="7" cy="10" r="0.75" fill="#f08090" />
-                  </svg>
                   Passwords do not match.
                 </div>
               )}
 
               {error && sessionValidated && (
-                <div className="error-box">
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                    <circle cx="7" cy="7" r="6.5" stroke="#f08090" />
-                    <path
-                      d="M7 4v3.5"
-                      stroke="#f08090"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                    />
-                    <circle cx="7" cy="10" r="0.75" fill="#f08090" />
-                  </svg>
-                  {error}
-                </div>
+                <div className="error-box">{error}</div>
               )}
 
               <div className="action-row">
                 <button className="cancel-btn" onClick={() => navigate("/")}>
                   Cancel
                 </button>
+
                 <button
                   className="start-btn"
                   disabled={
@@ -793,13 +737,17 @@ function GameEntryPage() {
                       const exists = await sessionExists(sessionId);
 
                       if (!exists) {
-                        setError("Session ID not found. Please check with your teacher.");
+                        setError(
+                          "Session ID not found. Please check with your teacher."
+                        );
                         setLoading(false);
                         return;
                       }
 
                       if (!allowedPlayerNames.includes(selectedPlayer)) {
-                        setError("That player slot is not available for this session.");
+                        setError(
+                          "That player slot is not available for this session."
+                        );
                         setLoading(false);
                         return;
                       }

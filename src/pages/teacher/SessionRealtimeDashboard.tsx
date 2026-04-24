@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
-import { getDatabase, ref, onValue } from "firebase/database";
+import { useMemo } from "react";
+import { useSessionPlayers } from "../../hooks/useSessionPlayers";
+import { useSessionJournalAnswers } from "../../hooks/useSessionJournalAnswers";
+import { useSessionMeetings } from "../../hooks/useSessionMeetings";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap');
@@ -179,46 +181,34 @@ interface LiveStats {
 }
 
 function SessionRealtimeDashboard({ sessionId }: Props) {
-  const [stats, setStats] = useState<LiveStats | null>(null);
-  const db = getDatabase();
+  const { players, loading: playersLoading } = useSessionPlayers(sessionId);
+  const { answersMap, loading: answersLoading } =
+    useSessionJournalAnswers(sessionId);
+  const { meetings, loading: meetingsLoading } = useSessionMeetings(sessionId);
 
-  useEffect(() => {
-    if (!sessionId) return;
+  const loading = playersLoading || answersLoading || meetingsLoading;
 
-    const sessionRef = ref(db, `sessions/${sessionId}`);
+  const stats: LiveStats = useMemo(() => {
+    const totalPlayers = players.length;
 
-    const unsubscribe = onValue(sessionRef, (snapshot) => {
-      const data = snapshot.val();
-      if (!data) return;
+    const infectedCount = players.filter(
+      (player) => player.infection_status === 1
+    ).length;
 
-      const players = data.players ?? {};
-      const journalAnswers = data.journalAnswers ?? {};
-      const meetings = data.meetings ?? {};
+    const healthyCount = totalPlayers - infectedCount;
+    const journalSubmissions = Object.keys(answersMap).length;
+    const meetingCount = meetings.length;
 
-      const playerList = Object.values(players);
-      const totalPlayers = playerList.length;
+    return {
+      totalPlayers,
+      infectedCount,
+      healthyCount,
+      journalSubmissions,
+      meetingCount,
+    };
+  }, [players, answersMap, meetings]);
 
-      const infectedCount = playerList.filter(
-        (p: any) => p.infection_status === 1
-      ).length;
-
-      const healthyCount = totalPlayers - infectedCount;
-      const journalSubmissions = Object.keys(journalAnswers).length;
-      const meetingCount = Object.keys(meetings).length;
-
-      setStats({
-        totalPlayers,
-        infectedCount,
-        healthyCount,
-        journalSubmissions,
-        meetingCount,
-      });
-    });
-
-    return () => unsubscribe();
-  }, [sessionId, db]);
-
-  if (!stats) {
+  if (loading) {
     return (
       <>
         <style>{styles}</style>
@@ -244,7 +234,6 @@ function SessionRealtimeDashboard({ sessionId }: Props) {
     <>
       <style>{styles}</style>
       <div className="dashboard-root">
-        
         <div className="dashboard-header">
           <h3 className="dashboard-title">Live Session Metrics</h3>
           <span className="metrics-badge">
@@ -284,7 +273,6 @@ function SessionRealtimeDashboard({ sessionId }: Props) {
             <div className="metric-value">{stats.meetingCount}</div>
           </div>
         </div>
-
       </div>
     </>
   );

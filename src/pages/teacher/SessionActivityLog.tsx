@@ -1,12 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import {
-  getFirestore,
-  collection,
-  query,
-  where,
-  orderBy,
-  onSnapshot,
-} from "firebase/firestore";
+import { useSessionActivityLog } from "../../hooks/useSessionActivityLog";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap');
@@ -133,24 +126,6 @@ const styles = `
     padding: 0;
   }
 
-  .activity-table-wrapper::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  .activity-table-wrapper::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 0 12px 12px 0;
-  }
-
-  .activity-table-wrapper::-webkit-scrollbar-thumb {
-    background: rgba(160, 110, 230, 0.3);
-    border-radius: 4px;
-  }
-
-  .activity-table-wrapper::-webkit-scrollbar-thumb:hover {
-    background: rgba(160, 110, 230, 0.5);
-  }
-
   .activity-table {
     width: 100%;
     border-collapse: collapse;
@@ -184,10 +159,6 @@ const styles = `
 
   .activity-table tbody tr:hover {
     background: rgba(255, 255, 255, 0.03);
-  }
-
-  .activity-table tbody tr:last-child {
-    border-bottom: none;
   }
 
   .activity-table td {
@@ -309,11 +280,6 @@ const styles = `
     border-color: rgba(160, 110, 230, 0.4);
     color: #b08ae0;
   }
-
-  .page-btn-active:hover {
-    background: rgba(160, 110, 230, 0.25);
-    border-color: rgba(160, 110, 230, 0.5);
-  }
 `;
 
 interface Props {
@@ -360,8 +326,14 @@ function formatEventDescription(event: UIEvent): string {
   const { type, action, details } = event;
 
   if (type === "layout.screen_mode_changed") {
-    if (action === "single_to_dual") return "Switched to split-screen view (dual screen mode)";
-    if (action === "dual_to_single") return "Switched to single-panel view";
+    if (action === "single_to_dual") {
+      return "Switched to split-screen view (dual screen mode)";
+    }
+
+    if (action === "dual_to_single") {
+      return "Switched to single-panel view";
+    }
+
     return `Changed screen layout from ${details?.from} to ${details?.to}`;
   }
 
@@ -372,28 +344,39 @@ function formatEventDescription(event: UIEvent): string {
   }
 
   if (type === "journal.round_navigation") {
-    const toRound = details?.toRound || "?";
-    return `Opened Round ${toRound} journal questions`;
+    return `Opened Round ${details?.toRound || "?"} journal questions`;
   }
 
   if (type === "journal.round_submission") {
     const round = details?.round || "?";
     const count = details?.answerCount || 0;
-    if (count === 0) return `Saved Round ${round} (no answers entered yet)`;
+
+    if (count === 0) {
+      return `Saved Round ${round} (no answers entered yet)`;
+    }
+
     return `Saved ${count} answer${count !== 1 ? "s" : ""} for Round ${round}`;
   }
 
   if (type === "journal.response_edited") {
     const questionNum = (details?.questionIndex || 0) + 1;
     const length = details?.length || 0;
-    if (length === 0) return `Cleared answer for Question ${questionNum}`;
+
+    if (length === 0) {
+      return `Cleared answer for Question ${questionNum}`;
+    }
+
     return `Edited answer for Question ${questionNum} (${length} characters)`;
   }
 
   if (type === "journal.input") {
     const round = details?.round || "?";
     const questionNum = (details?.questionIndex || 0) + 1;
-    if (action === "answer_focused") return `Started working on Round ${round}, Question ${questionNum}`;
+
+    if (action === "answer_focused") {
+      return `Started working on Round ${round}, Question ${questionNum}`;
+    }
+
     if (action === "answer_committed") {
       const length = details?.length || 0;
       return `Finished answering Round ${round}, Question ${questionNum} (${length} characters)`;
@@ -412,9 +395,18 @@ function formatEventDescription(event: UIEvent): string {
     const axis = details?.axis || "?";
     const from = getReadableVariable(details?.from);
     const to = getReadableVariable(details?.to);
-    if (axis === "x") return `Changed X-axis from "${from}" to "${to}"`;
-    if (axis === "y") return `Changed Y-axis from "${from}" to "${to}"`;
-    if (axis === "value") return `Changed data variable from "${from}" to "${to}"`;
+
+    if (axis === "x") {
+      return `Changed X-axis from "${from}" to "${to}"`;
+    }
+
+    if (axis === "y") {
+      return `Changed Y-axis from "${from}" to "${to}"`;
+    }
+
+    if (axis === "value") {
+      return `Changed data variable from "${from}" to "${to}"`;
+    }
   }
 
   if (type === "plot.pie_population_changed") {
@@ -435,92 +427,105 @@ function formatEventDescription(event: UIEvent): string {
   }
 
   if (action) {
-    const readableAction = action.replace(/_/g, " ");
-    return `${readableAction}`;
+    return action.replace(/_/g, " ");
   }
 
-  const readableType = type.replace(/\./g, " › ").replace(/_/g, " ");
-  return readableType;
+  return type.replace(/\./g, " › ").replace(/_/g, " ");
+}
+
+function isUIEvent(event: unknown): event is UIEvent {
+  if (!event || typeof event !== "object") {
+    return false;
+  }
+
+  const candidate = event as Partial<UIEvent>;
+
+  return (
+    typeof candidate.id === "string" &&
+    typeof candidate.type === "string" &&
+    typeof candidate.userId === "string" &&
+    typeof candidate.timestamp === "string"
+  );
 }
 
 function SessionActivityLog({ sessionId }: Props) {
-  const [events, setEvents] = useState<UIEvent[]>([]);
+  const { events } = useSessionActivityLog(sessionId);
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedStudent, setSelectedStudent] = useState<string>("all");
-  const firestore = getFirestore();
+  const [selectedStudent, setSelectedStudent] = useState("all");
+
+  const typedEvents = useMemo(() => {
+    return events.filter(isUIEvent);
+  }, [events]);
 
   const ITEMS_PER_PAGE = 25;
 
-  useEffect(() => {
-    if (!sessionId) return;
-
-    const q = query(
-      collection(firestore, "ui_events"),
-      where("sessionId", "==", sessionId),
-      orderBy("serverTimestamp", "desc")
+  const studentOptions = useMemo(() => {
+    const ids = Array.from(
+      new Set(typedEvents.map((event) => event.userId).filter(Boolean))
     );
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const data: UIEvent[] = [];
-      snapshot.forEach((doc) => {
-        data.push({
-          id: doc.id,
-          ...(doc.data() as any),
-        } as UIEvent);
-      });
-      setEvents(data);
-    });
-
-    return () => unsubscribe();
-  }, [sessionId, firestore]);
-
-  const studentOptions = useMemo(() => {
-    const ids = Array.from(new Set(events.map((e) => e.userId).filter(Boolean)));
-    return ids.sort((a, b) => a.localeCompare(b));
-  }, [events]);
+    return ids.sort((leftId, rightId) => leftId.localeCompare(rightId));
+  }, [typedEvents]);
 
   const filteredEvents = useMemo(() => {
-    if (selectedStudent === "all") return events;
-    return events.filter((e) => e.userId === selectedStudent);
-  }, [events, selectedStudent]);
+    if (selectedStudent === "all") {
+      return typedEvents;
+    }
+
+    return typedEvents.filter((event) => event.userId === selectedStudent);
+  }, [typedEvents, selectedStudent]);
 
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedStudent, sessionId]);
 
-  const totalPages = Math.max(1, Math.ceil(filteredEvents.length / ITEMS_PER_PAGE));
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredEvents.length / ITEMS_PER_PAGE)
+  );
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const currentEvents = filteredEvents.slice(startIndex, endIndex);
 
-  const goToPage = (page: number) => {
+  function goToPage(page: number) {
     setCurrentPage(Math.max(1, Math.min(page, totalPages)));
-  };
+  }
 
-  const getPageNumbers = () => {
+  function getPageNumbers() {
     const pages: (number | string)[] = [];
     const showPages = 5;
 
     if (totalPages <= showPages) {
-      for (let i = 1; i <= totalPages; i++) pages.push(i);
-    } else {
-      pages.push(1);
+      for (let page = 1; page <= totalPages; page++) {
+        pages.push(page);
+      }
 
-      const startPage = Math.max(2, currentPage - 1);
-      const endPage = Math.min(totalPages - 1, currentPage + 1);
-
-      if (startPage > 2) pages.push("...");
-
-      for (let i = startPage; i <= endPage; i++) pages.push(i);
-
-      if (endPage < totalPages - 1) pages.push("...");
-      pages.push(totalPages);
+      return pages;
     }
 
-    return pages;
-  };
+    pages.push(1);
 
-  const showLiveBadge = events.length > 0;
+    const startPage = Math.max(2, currentPage - 1);
+    const endPage = Math.min(totalPages - 1, currentPage + 1);
+
+    if (startPage > 2) {
+      pages.push("...");
+    }
+
+    for (let page = startPage; page <= endPage; page++) {
+      pages.push(page);
+    }
+
+    if (endPage < totalPages - 1) {
+      pages.push("...");
+    }
+
+    pages.push(totalPages);
+
+    return pages;
+  }
+
+  const showLiveBadge = typedEvents.length > 0;
 
   return (
     <>
@@ -537,13 +542,13 @@ function SessionActivityLog({ sessionId }: Props) {
             )}
           </div>
 
-          {events.length > 0 && (
+          {typedEvents.length > 0 && (
             <div className="activity-controls">
               <label className="activity-filter-label">Student</label>
               <select
                 className="activity-filter-select"
                 value={selectedStudent}
-                onChange={(e) => setSelectedStudent(e.target.value)}
+                onChange={(event) => setSelectedStudent(event.target.value)}
               >
                 <option value="all">All students</option>
                 {studentOptions.map((id) => (
@@ -569,11 +574,11 @@ function SessionActivityLog({ sessionId }: Props) {
           <div className="empty-state">
             <div className="empty-state-icon">📊</div>
             <div>
-              {events.length === 0
+              {typedEvents.length === 0
                 ? "No activity yet. Student actions will appear here in real-time."
                 : selectedStudent === "all"
-                  ? "No activity yet."
-                  : "No activity found for this student."}
+                ? "No activity yet."
+                : "No activity found for this student."}
             </div>
           </div>
         ) : (
@@ -590,6 +595,7 @@ function SessionActivityLog({ sessionId }: Props) {
                 <tbody>
                   {currentEvents.map((event) => {
                     const category = getEventCategory(event.type);
+
                     return (
                       <tr key={event.id}>
                         <td className="time-cell">
@@ -601,7 +607,9 @@ function SessionActivityLog({ sessionId }: Props) {
                         </td>
                         <td className="user-cell">{event.userId}</td>
                         <td className="event-cell">
-                          <span className={`event-type-badge event-type-${category}`}>
+                          <span
+                            className={`event-type-badge event-type-${category}`}
+                          >
                             {category}
                           </span>
                           {formatEventDescription(event)}
@@ -616,7 +624,8 @@ function SessionActivityLog({ sessionId }: Props) {
             {totalPages > 1 && (
               <div className="pagination-controls">
                 <div className="pagination-info">
-                  Showing {startIndex + 1}-{Math.min(endIndex, filteredEvents.length)} of{" "}
+                  Showing {startIndex + 1}-
+                  {Math.min(endIndex, filteredEvents.length)} of{" "}
                   {filteredEvents.length} events
                 </div>
 
@@ -627,7 +636,13 @@ function SessionActivityLog({ sessionId }: Props) {
                     disabled={currentPage === 1}
                   >
                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                      <path d="M9 2L4 7l5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path
+                        d="M9 2L4 7l5 5"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
                     </svg>
                   </button>
 
@@ -635,13 +650,21 @@ function SessionActivityLog({ sessionId }: Props) {
                     typeof page === "number" ? (
                       <button
                         key={index}
-                        className={`page-btn ${currentPage === page ? "page-btn-active" : ""}`}
+                        className={`page-btn ${
+                          currentPage === page ? "page-btn-active" : ""
+                        }`}
                         onClick={() => goToPage(page)}
                       >
                         {page}
                       </button>
                     ) : (
-                      <span key={index} style={{ padding: "0 8px", color: "rgba(200, 185, 220, 0.4)" }}>
+                      <span
+                        key={index}
+                        style={{
+                          padding: "0 8px",
+                          color: "rgba(200, 185, 220, 0.4)",
+                        }}
+                      >
                         {page}
                       </span>
                     )
@@ -653,7 +676,13 @@ function SessionActivityLog({ sessionId }: Props) {
                     disabled={currentPage === totalPages}
                   >
                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                      <path d="M5 2l5 5-5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path
+                        d="M5 2l5 5-5 5"
+                        stroke="currentColor"
+                        strokeWidth="1.6"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
                     </svg>
                   </button>
                 </div>
