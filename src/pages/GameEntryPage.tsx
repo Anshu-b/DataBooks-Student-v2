@@ -1,7 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { GAMES } from "../config/games";
-import { PLAYER_NAMES } from "../config/playerNames";
 import {
   getDatabase,
   ref,
@@ -438,19 +437,11 @@ function GameEntryPage() {
   const [sessionValidated, setSessionValidated] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [cadetLimit, setCadetLimit] = useState<number | null>(null);
   const [chosenPlayers, setChosenPlayers] = useState<string[]>([]);
+  const [allowedPlayerNames, setAllowedPlayerNames] = useState<string[]>([]);
 
   const game = GAMES.find((g) => g.id === gameId);
   const passwordsMatch = password.length > 0 && password === confirmPassword;
-
-  const allowedPlayerNames = useMemo(() => {
-    const maxNames = Math.min(
-      cadetLimit ?? PLAYER_NAMES.length,
-      PLAYER_NAMES.length
-    );
-    return PLAYER_NAMES.slice(0, maxNames);
-  }, [cadetLimit]);
 
   useEffect(() => {
     if (!sessionValidated || !sessionId) {
@@ -471,6 +462,7 @@ function GameEntryPage() {
         string,
         { hasChosen?: boolean }
       >;
+
       const names = Object.entries(players)
         .filter(([, value]) => value?.hasChosen === true)
         .map(([name]) => name);
@@ -535,6 +527,7 @@ function GameEntryPage() {
     }
 
     const player = snapshot.val();
+
     if (player.password !== passwordValue) {
       return {
         ok: false,
@@ -547,6 +540,7 @@ function GameEntryPage() {
       lastLoginAt: now,
       hasChosen: true,
     });
+
     return { ok: true };
   }
 
@@ -586,7 +580,7 @@ function GameEntryPage() {
               type="text"
               value={sessionId}
               onChange={(e) => setSessionId(e.target.value)}
-              placeholder="e.g. 20250715_period3"
+              placeholder="e.g. period3-biology-apr22"
               disabled={sessionValidated}
               onKeyDown={(e) =>
                 e.key === "Enter" &&
@@ -606,35 +600,35 @@ function GameEntryPage() {
               setLoading(true);
               setError(null);
               setSelectedPlayer(null);
+              setAllowedPlayerNames([]);
 
               try {
                 const metadata = await getSessionMetadata(sessionId);
 
                 if (!metadata) {
                   setError("Session ID not found. Please check with your teacher.");
-                  setCadetLimit(null);
                   setLoading(false);
                   return;
                 }
 
-                const teacherCadetCount = metadata.start?.cadets;
+                const teacherPlayerNames = Array.isArray(
+                  metadata.start?.playerNames
+                )
+                  ? metadata.start.playerNames
+                  : [];
 
-                if (
-                  typeof teacherCadetCount !== "number" ||
-                  teacherCadetCount <= 0
-                ) {
-                  setError("This session is missing a valid cadet limit.");
-                  setCadetLimit(null);
+                if (teacherPlayerNames.length === 0) {
+                  setError("This session is missing a valid student roster.");
                   setLoading(false);
                   return;
                 }
 
-                setCadetLimit(teacherCadetCount);
+                setAllowedPlayerNames(teacherPlayerNames);
                 setSessionValidated(true);
                 setLoading(false);
               } catch {
                 setError("Error validating session.");
-                setCadetLimit(null);
+                setAllowedPlayerNames([]);
                 setLoading(false);
               }
             }}

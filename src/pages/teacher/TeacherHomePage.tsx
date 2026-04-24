@@ -8,7 +8,6 @@ import JournalSubmissionViewer from "./JournalSubmissionViewer";
 import JournalSubmissionChecklist from "./JournalSubmissionChecklist";
 import SessionMeetingsTable from "./SessionMeetingsTable";
 import SessionInfectionStatusTable from "./SessionInfectionStatusTable";
-import { PLAYER_NAMES } from "../../config/playerNames";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
@@ -438,11 +437,18 @@ const styles = `
 
 
 
+const STUDENT_TEMPLATE_URL = "https://docs.google.com/spreadsheets/d/1s0V46jr0vAHJvpc0Yur45_xUVgGgeoDyL7otBYb6Chc/edit?usp=sharing";
+
+function parseStudentCsv(text: string): string[] {
+  return text
+    .split(/\r?\n/)
+    .map((line) => line.split(",")[0]?.trim())
+    .filter((name) => name && name.toLowerCase() !== "name");
+}
+
 function TeacherHomePage() {
   const navigate = useNavigate();
   const { user, loading: authLoading, logout } = useTeacherAuth();
-
-  const maxCadets = PLAYER_NAMES.length;
 
   const {
     sessions,
@@ -457,16 +463,44 @@ function TeacherHomePage() {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [sessionName, setSessionName] = useState("");
   const [className, setClassName] = useState("");
+  const [uploadedPlayerNames, setUploadedPlayerNames] = useState<string[]>([]);
   const [cadets, setCadets] = useState(0);
   const [sectors, setSectors] = useState(0);
   const [slidesLink, setSlidesLink] = useState("");
 
+  const maxCadets = uploadedPlayerNames.length;
+
   if (authLoading) return null;
   if (!user) return <Navigate to="/teacher/login" />;
 
+  function handleStudentCsvUpload(file: File) {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const text = String(reader.result ?? "");
+      const names = parseStudentCsv(text);
+
+      if (names.length === 0) {
+        alert("No student names found in the CSV.");
+        return;
+      }
+
+      setUploadedPlayerNames(names);
+      setCadets(names.length);
+    };
+
+    reader.readAsText(file);
+  }
+
   async function handleCreateSession() {
-    if (!sessionName || !className || cadets <= 0 || sectors <= 0) {
-      alert("Please complete all fields.");
+    if (
+      !sessionName ||
+      !className ||
+      uploadedPlayerNames.length === 0 ||
+      cadets <= 0 ||
+      sectors <= 0
+    ) {
+      alert("Please complete all fields and upload a student CSV.");
       return;
     }
 
@@ -491,6 +525,7 @@ function TeacherHomePage() {
           cadets,
           sectors,
           slidesLink,
+          playerNames: uploadedPlayerNames.slice(0, cadets),
         });
 
         setSelectedSession(sessionId);
@@ -499,6 +534,7 @@ function TeacherHomePage() {
       setShowCreateForm(false);
       setSessionName("");
       setClassName("");
+      setUploadedPlayerNames([]);
       setCadets(0);
       setSectors(0);
       setSlidesLink("");
@@ -542,24 +578,7 @@ function TeacherHomePage() {
           </div>
 
           <div className="header-user">
-            <span className="user-badge">
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <circle
-                  cx="6"
-                  cy="3.5"
-                  r="2"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                />
-                <path
-                  d="M2 10c0-2 1.5-3 4-3s4 1 4 3"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                  strokeLinecap="round"
-                />
-              </svg>
-              {user.email}
-            </span>
+            <span className="user-badge">{user.email}</span>
             <button className="logout-btn" onClick={logout}>
               Log Out
             </button>
@@ -574,14 +593,6 @@ function TeacherHomePage() {
                 className="create-btn"
                 onClick={() => setShowCreateForm(true)}
               >
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path
-                    d="M7 2v10M2 7h10"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                  />
-                </svg>
                 Create New Session
               </button>
             </div>
@@ -613,15 +624,55 @@ function TeacherHomePage() {
                 </div>
 
                 <div className="form-field">
+                  <label className="field-label">Student Roster Template</label>
+                  <a
+                    href={STUDENT_TEMPLATE_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Open Google Sheet Template
+                  </a>
+                  <p>
+                    Make a copy, add student names in the first column, then
+                    download as CSV and upload it below.
+                  </p>
+                </div>
+
+                <div className="form-field">
+                  <label className="field-label">Upload Student CSV</label>
+                  <p>
+                    Upload a CSV with one column of student names. The first row should be
+                    "Name".
+                  </p>
+                  <input
+                    className="field-input"
+                    type="file"
+                    accept=".csv"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+
+                      if (file) {
+                        handleStudentCsvUpload(file);
+                      }
+                    }}
+                  />
+                </div>
+
+                {uploadedPlayerNames.length > 0 && (
+                  <div className="form-field">
+                    <label className="field-label">Uploaded Students</label>
+                    <p>{uploadedPlayerNames.length} students loaded.</p>
+                  </div>
+                )}
+
+                <div className="form-field">
                   <label className="field-label">Number of Cadets</label>
                   <input
                     className="field-input"
                     type="number"
-                    min="1"
-                    max={maxCadets}
                     value={cadets || ""}
-                    onChange={(e) => setCadets(Number(e.target.value))}
-                    placeholder={`e.g., up to ${maxCadets}`}
+                    readOnly
+                    placeholder="Upload a CSV to set cadet count"
                   />
                 </div>
 
@@ -689,12 +740,14 @@ function TeacherHomePage() {
                             const session = sessions.find(
                               (s) => s.id === selectedSession
                             );
+
                             if (session?.start) {
                               activateSession(selectedSession, {
                                 className: session.start.class,
                                 cadets: session.start.cadets,
                                 sectors: session.start.sectors,
                                 slidesLink: session.start.slidesLink,
+                                playerNames: session.start.playerNames ?? [],
                               });
                             }
                           }}
@@ -733,59 +786,28 @@ function TeacherHomePage() {
                         className="copy-btn"
                         onClick={() => {
                           navigator.clipboard.writeText(selectedSession);
-                          const btn =
-                            document.activeElement as HTMLButtonElement;
-                          const originalText = btn.innerHTML;
-                          btn.innerHTML =
-                            '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg> Copied!';
-                          setTimeout(() => {
-                            btn.innerHTML = originalText;
-                          }, 2000);
                         }}
                       >
-                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                          <rect
-                            x="4"
-                            y="4"
-                            width="7"
-                            height="8"
-                            rx="1"
-                            stroke="currentColor"
-                            strokeWidth="1.2"
-                          />
-                          <path
-                            d="M3 10V3a1 1 0 0 1 1-1h5"
-                            stroke="currentColor"
-                            strokeWidth="1.2"
-                            strokeLinecap="round"
-                          />
-                        </svg>
                         Copy Session ID
                       </button>
                     </div>
 
                     <div className="activity-log-divider" />
-
                     <SessionRealtimeDashboard sessionId={selectedSession} />
 
                     <div className="activity-log-divider" />
-
                     <SessionMeetingsTable sessionId={selectedSession} />
 
                     <div className="activity-log-divider" />
-
                     <JournalSubmissionChecklist sessionId={selectedSession} />
 
                     <div className="activity-log-divider" />
-
                     <SessionActivityLog sessionId={selectedSession} />
 
                     <div className="activity-log-divider" />
-
                     <JournalSubmissionViewer sessionId={selectedSession} />
 
                     <div className="activity-log-divider" />
-
                     <SessionInfectionStatusTable sessionId={selectedSession} />
                   </>
                 )}

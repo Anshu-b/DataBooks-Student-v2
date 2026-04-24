@@ -21,6 +21,7 @@ export interface TeacherSession {
     cadets: number;
     sectors: number;
     slidesLink?: string;
+    playerNames?: string[];
     timestamp: string;
     activatedAtMs: number;
   };
@@ -40,6 +41,7 @@ interface ActivateSessionDetails {
   cadets: number;
   sectors: number;
   slidesLink?: string;
+  playerNames?: string[];
 }
 
 type ReadingValue = {
@@ -298,6 +300,7 @@ export function useTeacherSessions() {
         class: details.className,
         cadets: details.cadets,
         sectors: details.sectors,
+        playerNames: details.playerNames ?? [],
         ...(details.slidesLink ? { slidesLink: details.slidesLink } : {}),
         timestamp: new Date(activatedAtMs).toISOString(),
         activatedAtMs,
