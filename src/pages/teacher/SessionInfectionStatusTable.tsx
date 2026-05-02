@@ -347,12 +347,12 @@ function buildEntityStatuses(
   latestStatuses: Map<number, { status: 0 | 1; timestamp: string }>,
   playerNames: string[]
 ): EntityStatus[] {
-  return Array.from({ length: count }, (_, index) => {
+  return Array.from({ length: count }, (_, index): EntityStatus => {
     const entityId = `${prefix}${index + 1}`;
     const latestStatus = latestStatuses.get(index);
     const displayName =
       prefix === "S"
-        ? playerNames[index] || `Cadet ${index + 1}`
+        ? PLAYER_NAMES[index] ?? `Cadet ${index + 1}`
         : `Sector ${index + 1}`;
 
     const status: EntityStatus["status"] = latestStatus
