@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
-import { getDatabase, onValue, ref } from "firebase/database";
-import { PLAYER_NAMES } from "../../config/playerNames";
+import { useMemo } from "react";
+import { useSessionRoster } from "../../hooks/useSessionRoster";
+import { useSessionReadings } from "../../hooks/useSessionReadings";
 
 const styles = `
   .infection-table-root {
@@ -178,12 +178,6 @@ interface Props {
   sessionId: string;
 }
 
-type Reading = {
-  device_id?: string;
-  infection_status?: number;
-  timestamp?: string;
-};
-
 type EntityStatus = {
   id: string;
   name: string;
@@ -192,77 +186,68 @@ type EntityStatus = {
   updatedAt: string;
 };
 
-type SessionStatusSnapshot = {
-  cadets: EntityStatus[];
-  sectors: EntityStatus[];
-};
-
 function SessionInfectionStatusTable({ sessionId }: Props) {
-  const [statusSnapshot, setStatusSnapshot] = useState<SessionStatusSnapshot | null>(null);
-  const db = getDatabase();
+  const { roster } = useSessionRoster(sessionId);
+  const { readings } = useSessionReadings(sessionId);
 
-  useEffect(() => {
-    if (!sessionId) return;
+  const statusSnapshot = useMemo(() => {
+    const cadetStatuses = new Map<number, { status: 0 | 1; timestamp: string }>();
+    const sectorStatuses = new Map<number, { status: 0 | 1; timestamp: string }>();
 
-    const sessionRef = ref(db, `sessions/${sessionId}`);
+    const sortedReadings = readings
+      .filter((reading) => typeof reading.device_id === "string")
+      .sort((left, right) => {
+        const leftMs = Date.parse(left.timestamp ?? "");
+        const rightMs = Date.parse(right.timestamp ?? "");
 
-    const unsubscribe = onValue(sessionRef, (snapshot) => {
-      const session = snapshot.val();
+        return leftMs - rightMs;
+      });
 
-      if (!session) {
-        setStatusSnapshot(null);
+    sortedReadings.forEach((reading) => {
+      const deviceId = reading.device_id ?? "";
+      const entityIndex = getDeviceIndex(deviceId);
+
+      if (entityIndex === null) {
         return;
       }
 
-      const totalCadets = session.metadata?.start?.cadets ?? 0;
-      const totalSectors = session.metadata?.start?.sectors ?? 0;
-      const readings = Object.values(session.readings ?? {}) as Reading[];
+      const payload = {
+        status: reading.infection_status === 1 ? 1 : 0,
+        timestamp: reading.timestamp ?? "",
+      } as const;
 
-      const cadetStatuses = new Map<number, { status: 0 | 1; timestamp: string }>();
-      const sectorStatuses = new Map<number, { status: 0 | 1; timestamp: string }>();
+      if (deviceId.startsWith("S") && entityIndex < roster.cadets) {
+        cadetStatuses.set(entityIndex, payload);
+      }
 
-      const sortedReadings = readings
-        .filter((reading) => typeof reading.device_id === "string")
-        .sort((left, right) => {
-          const leftMs = Date.parse(left.timestamp ?? "");
-          const rightMs = Date.parse(right.timestamp ?? "");
-          return leftMs - rightMs;
-        });
-
-      sortedReadings.forEach((reading) => {
-        const deviceId = reading.device_id ?? "";
-        const entityIndex = getDeviceIndex(deviceId);
-        if (entityIndex === null) return;
-
-        const payload = {
-          status: reading.infection_status === 1 ? 1 : 0,
-          timestamp: reading.timestamp ?? "",
-        } as const;
-
-        if (deviceId.startsWith("S") && entityIndex < totalCadets) {
-          cadetStatuses.set(entityIndex, payload);
-        }
-
-        if (deviceId.startsWith("T") && entityIndex < totalSectors) {
-          sectorStatuses.set(entityIndex, payload);
-        }
-      });
-
-      setStatusSnapshot({
-        cadets: buildEntityStatuses(totalCadets, "S", cadetStatuses),
-        sectors: buildEntityStatuses(totalSectors, "T", sectorStatuses),
-      });
+      if (deviceId.startsWith("T") && entityIndex < roster.sectors) {
+        sectorStatuses.set(entityIndex, payload);
+      }
     });
 
-    return () => unsubscribe();
-  }, [db, sessionId]);
+    return {
+      cadets: buildEntityStatuses(
+        roster.cadets,
+        "S",
+        cadetStatuses,
+        roster.playerNames
+      ),
+      sectors: buildEntityStatuses(
+        roster.sectors,
+        "T",
+        sectorStatuses,
+        roster.playerNames
+      ),
+    };
+  }, [readings, roster]);
 
   const totals = useMemo(() => {
-    const cadets = statusSnapshot?.cadets ?? [];
-    const sectors = statusSnapshot?.sectors ?? [];
-
-    const infectedCadets = cadets.filter((entity) => entity.status === "infected").length;
-    const infectedSectors = sectors.filter((entity) => entity.status === "infected").length;
+    const infectedCadets = statusSnapshot.cadets.filter(
+      (entity) => entity.status === "infected"
+    ).length;
+    const infectedSectors = statusSnapshot.sectors.filter(
+      (entity) => entity.status === "infected"
+    ).length;
 
     return {
       infectedCadets,
@@ -286,12 +271,12 @@ function SessionInfectionStatusTable({ sessionId }: Props) {
           <StatusTableCard
             title="Sectors"
             meta={`${totals.infectedSectors} infected`}
-            rows={statusSnapshot?.sectors ?? []}
+            rows={statusSnapshot.sectors}
           />
           <StatusTableCard
             title="Cadets"
             meta={`${totals.infectedCadets} infected`}
-            rows={statusSnapshot?.cadets ?? []}
+            rows={statusSnapshot.cadets}
           />
         </div>
       </div>
@@ -331,8 +316,12 @@ function StatusTableCard({
               <tr key={row.id}>
                 <td>
                   <div className="infection-entity-name">
-                    <span className="infection-entity-primary">{row.name}</span>
-                    <span className="infection-entity-secondary">{row.secondaryLabel}</span>
+                    <span className="infection-entity-primary">
+                      {row.name}
+                    </span>
+                    <span className="infection-entity-secondary">
+                      {row.secondaryLabel}
+                    </span>
                   </div>
                 </td>
                 <td>
@@ -355,7 +344,8 @@ function StatusTableCard({
 function buildEntityStatuses(
   count: number,
   prefix: "S" | "T",
-  latestStatuses: Map<number, { status: 0 | 1; timestamp: string }>
+  latestStatuses: Map<number, { status: 0 | 1; timestamp: string }>,
+  playerNames: string[]
 ): EntityStatus[] {
   return Array.from({ length: count }, (_, index): EntityStatus => {
     const entityId = `${prefix}${index + 1}`;
@@ -383,6 +373,7 @@ function buildEntityStatuses(
 
 function getDeviceIndex(deviceId: string): number | null {
   const numericPortion = Number.parseInt(deviceId.slice(1), 10);
+
   if (Number.isNaN(numericPortion) || numericPortion <= 0) {
     return null;
   }
@@ -391,9 +382,12 @@ function getDeviceIndex(deviceId: string): number | null {
 }
 
 function formatTimestamp(timestamp?: string): string {
-  if (!timestamp) return "No reading yet";
+  if (!timestamp) {
+    return "No reading yet";
+  }
 
   const date = new Date(timestamp);
+
   if (Number.isNaN(date.getTime())) {
     return "Invalid timestamp";
   }

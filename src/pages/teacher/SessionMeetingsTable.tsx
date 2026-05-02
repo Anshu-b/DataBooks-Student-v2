@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { getDatabase, onValue, ref } from "firebase/database";
+import { useMemo } from "react";
+import { useSessionMeetings } from "../../hooks/useSessionMeetings";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap');
@@ -151,12 +151,6 @@ interface Props {
   sessionId: string;
 }
 
-type MeetingRecord = {
-  id: string;
-  startTime?: string;
-  endTime?: string;
-};
-
 function formatTimestamp(timestamp?: string): string {
   if (!timestamp) {
     return "In progress";
@@ -172,35 +166,30 @@ function formatTimestamp(timestamp?: string): string {
 }
 
 function SessionMeetingsTable({ sessionId }: Props) {
-  const db = getDatabase();
-  const [meetings, setMeetings] = useState<Record<string, Omit<MeetingRecord, "id">>>({});
-
-  useEffect(() => {
-    if (!sessionId) return;
-
-    const meetingsRef = ref(db, `sessions/${sessionId}/meetings`);
-    const unsubscribe = onValue(meetingsRef, (snapshot) => {
-      setMeetings(snapshot.val() ?? {});
-    });
-
-    return () => unsubscribe();
-  }, [db, sessionId]);
+  const { meetings } = useSessionMeetings(sessionId);
 
   const meetingRows = useMemo(() => {
-    return Object.entries(meetings)
-      .map(([id, meeting]) => ({
-        id,
+    return meetings
+      .map((meeting) => ({
+        id: meeting.id,
         startTime: meeting.startTime,
         endTime: meeting.endTime,
       }))
       .sort((leftMeeting, rightMeeting) => {
-        const leftMs = leftMeeting.startTime ? Date.parse(leftMeeting.startTime) : 0;
-        const rightMs = rightMeeting.startTime ? Date.parse(rightMeeting.startTime) : 0;
+        const leftMs = leftMeeting.startTime
+          ? Date.parse(leftMeeting.startTime)
+          : 0;
+        const rightMs = rightMeeting.startTime
+          ? Date.parse(rightMeeting.startTime)
+          : 0;
+
         return rightMs - leftMs;
       });
   }, [meetings]);
 
-  const activeMeetingsCount = meetingRows.filter((meeting) => !meeting.endTime).length;
+  const activeMeetingsCount = meetingRows.filter(
+    (meeting) => !meeting.endTime
+  ).length;
 
   return (
     <>
@@ -228,7 +217,8 @@ function SessionMeetingsTable({ sessionId }: Props) {
 
           {meetingRows.length === 0 ? (
             <div className="empty-state">
-              No meetings recorded yet. Start a meeting from the control bar to populate this table.
+              No meetings recorded yet. Start a meeting from the control bar to
+              populate this table.
             </div>
           ) : (
             <div className="table-wrap">
@@ -248,11 +238,21 @@ function SessionMeetingsTable({ sessionId }: Props) {
                     return (
                       <tr key={meeting.id}>
                         <td className="meeting-id">{meeting.id}</td>
-                        <td className={`meeting-status ${isActive ? "meeting-status-active" : "meeting-status-ended"}`}>
+                        <td
+                          className={`meeting-status ${
+                            isActive
+                              ? "meeting-status-active"
+                              : "meeting-status-ended"
+                          }`}
+                        >
                           {isActive ? "Active" : "Ended"}
                         </td>
-                        <td className="time-cell">{formatTimestamp(meeting.startTime)}</td>
-                        <td className="time-cell">{formatTimestamp(meeting.endTime)}</td>
+                        <td className="time-cell">
+                          {formatTimestamp(meeting.startTime)}
+                        </td>
+                        <td className="time-cell">
+                          {formatTimestamp(meeting.endTime)}
+                        </td>
                       </tr>
                     );
                   })}

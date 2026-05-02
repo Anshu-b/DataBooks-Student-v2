@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTeacherAuth } from "../../hooks/useTeacherAuth";
 import { useTeacherSessions } from "../../hooks/useTeacherSessions";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -8,7 +8,6 @@ import JournalSubmissionViewer from "./JournalSubmissionViewer";
 import JournalSubmissionChecklist from "./JournalSubmissionChecklist";
 import SessionMeetingsTable from "./SessionMeetingsTable";
 import SessionInfectionStatusTable from "./SessionInfectionStatusTable";
-import { PLAYER_NAMES } from "../../config/playerNames";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
@@ -29,11 +28,9 @@ const styles = `
     content: '';
     position: absolute;
     inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     pointer-events: none;
   }
 
-  /* ── Header bar ── */
   .teacher-header {
     padding: 16px 32px;
     background: rgba(255, 255, 255, 0.04);
@@ -123,7 +120,6 @@ const styles = `
     border-color: rgba(220, 60, 80, 0.45);
   }
 
-  /* ── Content container ── */
   .teacher-content {
     max-width: 900px;
     margin: 0 auto;
@@ -132,7 +128,6 @@ const styles = `
     z-index: 1;
   }
 
-  /* ── Section ── */
   .section-card {
     background: rgba(255, 255, 255, 0.04);
     backdrop-filter: blur(20px);
@@ -185,7 +180,6 @@ const styles = `
     box-shadow: 0 4px 16px rgba(100, 70, 200, 0.4);
   }
 
-  /* ── Form card ── */
   .form-card {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -240,6 +234,84 @@ const styles = `
     box-shadow: 0 0 0 3px rgba(140, 90, 200, 0.15);
   }
 
+  .template-card,
+  .upload-card,
+  .roster-manager-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    padding: 16px;
+  }
+
+  .template-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 14px;
+    background: rgba(102, 126, 234, 0.14);
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    border-radius: 100px;
+    color: #c8d0ff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+  }
+
+  .template-link:hover {
+    background: rgba(102, 126, 234, 0.2);
+    border-color: rgba(102, 126, 234, 0.42);
+    transform: translateY(-1px);
+  }
+
+  .template-help,
+  .upload-help,
+  .csv-status,
+  .roster-help {
+    margin: 10px 0 0;
+    color: rgba(220, 210, 235, 0.68);
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .csv-status {
+    color: #70d4a0;
+    font-weight: 500;
+  }
+
+  .file-input {
+    width: 100%;
+    padding: 11px 14px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 11px;
+    color: rgba(240, 236, 232, 0.85);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+
+  .file-input::file-selector-button {
+    margin-right: 12px;
+    padding: 8px 13px;
+    background: linear-gradient(135deg, #8b4fcf, #5b6ef5);
+    border: none;
+    border-radius: 100px;
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .field-warning {
+    margin: 8px 0 0;
+    color: #f5c842;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
   .form-actions {
     display: flex;
     gap: 10px;
@@ -287,7 +359,6 @@ const styles = `
     border-color: rgba(255, 255, 255, 0.18);
   }
 
-  /* ── Session list ── */
   .session-select-wrapper {
     margin-bottom: 16px;
   }
@@ -307,7 +378,6 @@ const styles = `
     transition: border-color 0.2s, background 0.2s;
     appearance: none;
     -webkit-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 7L11 1' stroke='%23a090c0' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 14px center;
     padding-right: 40px;
@@ -434,15 +504,144 @@ const styles = `
     color: rgba(200, 185, 220, 0.5);
     font-size: 14px;
   }
+
+  .roster-manager-card {
+    margin-bottom: 24px;
+  }
+
+  .roster-manager-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .roster-manager-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+    font-weight: 700;
+    color: #f0ece8;
+    margin: 0;
+  }
+
+  .roster-count-badge {
+    background: rgba(72, 187, 120, 0.15);
+    border: 1px solid rgba(72, 187, 120, 0.3);
+    border-radius: 100px;
+    color: #70d4a0;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .roster-tools {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .roster-add-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .roster-add-row .field-input {
+    flex: 1;
+  }
+
+  .add-student-btn,
+  .replace-roster-btn,
+  .clear-roster-btn {
+    padding: 11px 16px;
+    border-radius: 11px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s, background 0.2s;
+    white-space: nowrap;
+  }
+
+  .add-student-btn,
+  .replace-roster-btn {
+    background: linear-gradient(135deg, #8b4fcf, #5b6ef5);
+    border: none;
+    color: white;
+  }
+
+  .clear-roster-btn {
+    background: rgba(220, 60, 80, 0.15);
+    border: 1px solid rgba(220, 60, 80, 0.3);
+    color: #f08090;
+  }
+
+  .add-student-btn:hover,
+  .replace-roster-btn:hover,
+  .clear-roster-btn:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+  }
+
+  .roster-file-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .roster-list {
+    margin-top: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .student-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    background: rgba(102, 126, 234, 0.12);
+    border: 1px solid rgba(102, 126, 234, 0.25);
+    border-radius: 100px;
+    color: rgba(220, 225, 255, 0.92);
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .remove-student-btn {
+    background: none;
+    border: none;
+    color: rgba(240, 128, 144, 0.95);
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 1;
+    padding: 0;
+  }
+
+  .roster-empty {
+    margin: 14px 0 0;
+    color: rgba(200, 185, 220, 0.5);
+    font-size: 13px;
+  }
 `;
 
+const STUDENT_TEMPLATE_URL =
+  "https://docs.google.com/spreadsheets/d/1s0V46jr0vAHJvpc0Yur45_xUVgGgeoDyL7otBYb6Chc/edit?usp=sharing";
 
+function parseStudentCsv(text: string): string[] {
+  return text
+    .split(/\r?\n/)
+    .map((line) => line.split(",")[0]?.trim())
+    .filter((name) => name && name.toLowerCase() !== "name");
+}
 
 function TeacherHomePage() {
   const navigate = useNavigate();
   const { user, loading: authLoading, logout } = useTeacherAuth();
-
-  const maxCadets = PLAYER_NAMES.length;
 
   const {
     sessions,
@@ -454,19 +653,183 @@ function TeacherHomePage() {
   } = useTeacherSessions();
 
   const [selectedSession, setSelectedSession] = useState("");
+  const [cadetsTouched, setCadetsTouched] = useState(false);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [sessionName, setSessionName] = useState("");
   const [className, setClassName] = useState("");
+  const [uploadedPlayerNames, setUploadedPlayerNames] = useState<string[]>([]);
   const [cadets, setCadets] = useState(0);
   const [sectors, setSectors] = useState(0);
-  const [slidesLink, setSlidesLink] = useState("");
+  const [manualStudentName, setManualStudentName] = useState("");
+  const [liveRosterNames, setLiveRosterNames] = useState<string[]>([]);
+  // const [slidesLink, setSlidesLink] = useState("");
+
+  const selectedSessionData = sessions.find(
+    (session) => session.id === selectedSession
+  );
+
+  useEffect(() => {
+    const names = selectedSessionData?.start?.playerNames ?? [];
+    setLiveRosterNames(Array.isArray(names) ? names : []);
+    setManualStudentName("");
+  }, [selectedSession, selectedSessionData]);
 
   if (authLoading) return null;
   if (!user) return <Navigate to="/teacher/login" />;
 
+  function getSessionClass(session: any): string {
+    return session?.start?.className || session?.start?.class || "";
+  }
+
+  function getSessionCadets(session: any): number {
+    return Number(session?.start?.cadets || 0);
+  }
+
+  function getSessionSectors(session: any): number {
+    return Number(session?.start?.sectors || 0);
+  }
+
+  async function saveLiveRoster(nextRoster: string[]) {
+    if (!selectedSession || !selectedSessionData?.start) {
+      alert("Please select a session first.");
+      return;
+    }
+
+    await activateSession(selectedSession, {
+      className: getSessionClass(selectedSessionData),
+      cadets: nextRoster.length,
+      sectors: getSessionSectors(selectedSessionData),
+      // slidesLink: selectedSessionData.start.slidesLink,
+      playerNames: nextRoster,
+    });
+
+    setLiveRosterNames(nextRoster);
+  }
+
+  function handleStudentCsvUpload(file: File) {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const text = String(reader.result ?? "");
+      const names = parseStudentCsv(text);
+
+      if (names.length === 0) {
+        alert("No student names found in the CSV.");
+        return;
+      }
+
+      setUploadedPlayerNames(names);
+      setCadetsTouched(false);
+    };
+
+    reader.readAsText(file);
+  }
+
+  function handleReplaceLiveRosterCsv(file: File) {
+    const reader = new FileReader();
+
+    reader.onload = async () => {
+      const text = String(reader.result ?? "");
+      const names = parseStudentCsv(text);
+
+      if (names.length === 0) {
+        alert("No student names found in the CSV.");
+        return;
+      }
+
+      const shouldReplace = window.confirm(
+        `Replace the current roster with ${names.length} names from this CSV?`
+      );
+
+      if (!shouldReplace) return;
+
+      try {
+        await saveLiveRoster(names);
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : "Failed to replace roster.";
+
+        alert(message);
+      }
+    };
+
+    reader.readAsText(file);
+  }
+
+  async function handleAddLiveStudent() {
+    const trimmedName = manualStudentName.trim();
+
+    if (!trimmedName) {
+      alert("Please enter a student name.");
+      return;
+    }
+
+    if (
+      liveRosterNames.some(
+        (name) => name.toLowerCase() === trimmedName.toLowerCase()
+      )
+    ) {
+      alert("That student is already in the roster.");
+      return;
+    }
+
+    try {
+      await saveLiveRoster([...liveRosterNames, trimmedName]);
+      setManualStudentName("");
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Failed to add student.";
+
+      alert(message);
+    }
+  }
+
+  async function handleRemoveLiveStudent(studentName: string) {
+    const nextRoster = liveRosterNames.filter((name) => name !== studentName);
+
+    try {
+      await saveLiveRoster(nextRoster);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Failed to remove student.";
+
+      alert(message);
+    }
+  }
+
+  async function handleClearLiveRoster() {
+    const shouldClear = window.confirm(
+      "Remove every student from this roster?"
+    );
+
+    if (!shouldClear) return;
+
+    try {
+      await saveLiveRoster([]);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Failed to clear roster.";
+
+      alert(message);
+    }
+  }
+
   async function handleCreateSession() {
-    if (!sessionName || !className || cadets <= 0 || sectors <= 0) {
-      alert("Please complete all fields.");
+    if (
+      !sessionName ||
+      !className ||
+      uploadedPlayerNames.length === 0 ||
+      cadets <= 0 ||
+      sectors <= 0
+    ) {
+      alert("Please complete all fields and upload a student CSV.");
+      return;
+    }
+
+    if (cadets !== uploadedPlayerNames.length) {
+      alert(
+        `Cadet count must match the uploaded CSV. You entered ${cadets}, but the CSV has ${uploadedPlayerNames.length} names.`
+      );
       return;
     }
 
@@ -474,11 +837,6 @@ function TeacherHomePage() {
       alert(
         "Session name can only contain letters, numbers, spaces, hyphens, and underscores."
       );
-      return;
-    }
-
-    if (cadets > maxCadets) {
-      alert(`Maximum cadets allowed is ${maxCadets}.`);
       return;
     }
 
@@ -490,23 +848,24 @@ function TeacherHomePage() {
           className,
           cadets,
           sectors,
-          slidesLink,
+          // slidesLink,
+          playerNames: uploadedPlayerNames,
         });
 
         setSelectedSession(sessionId);
       }
 
       setShowCreateForm(false);
+      setCadetsTouched(false);
       setSessionName("");
       setClassName("");
+      setUploadedPlayerNames([]);
       setCadets(0);
       setSectors(0);
-      setSlidesLink("");
+      // setSlidesLink("");
     } catch (error) {
       const message =
-        error instanceof Error
-          ? error.message
-          : "Failed to create session.";
+        error instanceof Error ? error.message : "Failed to create session.";
 
       alert(message);
     }
@@ -515,10 +874,6 @@ function TeacherHomePage() {
   function getSessionState(session: any): string {
     return session.status || "draft";
   }
-
-  const selectedSessionData = sessions.find(
-    (session) => session.id === selectedSession
-  );
 
   return (
     <>
@@ -542,24 +897,7 @@ function TeacherHomePage() {
           </div>
 
           <div className="header-user">
-            <span className="user-badge">
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <circle
-                  cx="6"
-                  cy="3.5"
-                  r="2"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                />
-                <path
-                  d="M2 10c0-2 1.5-3 4-3s4 1 4 3"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                  strokeLinecap="round"
-                />
-              </svg>
-              {user.email}
-            </span>
+            <span className="user-badge">{user.email}</span>
             <button className="logout-btn" onClick={logout}>
               Log Out
             </button>
@@ -574,14 +912,6 @@ function TeacherHomePage() {
                 className="create-btn"
                 onClick={() => setShowCreateForm(true)}
               >
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path
-                    d="M7 2v10M2 7h10"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                  />
-                </svg>
                 Create New Session
               </button>
             </div>
@@ -613,16 +943,71 @@ function TeacherHomePage() {
                 </div>
 
                 <div className="form-field">
+                  <label className="field-label">Student Roster Template</label>
+                  <div className="template-card">
+                    <a
+                      className="template-link"
+                      href={STUDENT_TEMPLATE_URL}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Open Google Sheet Template
+                    </a>
+                    <p className="template-help">
+                      Make a copy, add student names in the first column, then
+                      download as CSV and upload it below.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="form-field">
+                  <label className="field-label">Upload Student CSV</label>
+                  <div className="upload-card">
+                    <input
+                      className="file-input"
+                      type="file"
+                      accept=".csv"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+
+                        if (file) {
+                          handleStudentCsvUpload(file);
+                        }
+                      }}
+                    />
+                    <p className="upload-help">
+                      Upload a CSV with one column of student names. The first
+                      row should be "Name".
+                    </p>
+
+                    {uploadedPlayerNames.length > 0 && (
+                      <p className="csv-status">
+                        {uploadedPlayerNames.length} students loaded from CSV.
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="form-field">
                   <label className="field-label">Number of Cadets</label>
                   <input
                     className="field-input"
                     type="number"
-                    min="1"
-                    max={maxCadets}
                     value={cadets || ""}
                     onChange={(e) => setCadets(Number(e.target.value))}
-                    placeholder={`e.g., up to ${maxCadets}`}
+                    onBlur={() => setCadetsTouched(true)}
+                    placeholder="Must match uploaded CSV count"
                   />
+
+                  {cadetsTouched &&
+                    uploadedPlayerNames.length > 0 &&
+                    cadets > 0 &&
+                    cadets !== uploadedPlayerNames.length && (
+                      <p className="field-warning">
+                        Cadet count must match the uploaded CSV count:{" "}
+                        {uploadedPlayerNames.length}.
+                      </p>
+                    )}
                 </div>
 
                 <div className="form-field">
@@ -636,6 +1021,7 @@ function TeacherHomePage() {
                   />
                 </div>
 
+                {/*
                 <div className="form-field">
                   <label className="field-label">Google Slides Link</label>
                   <input
@@ -646,6 +1032,7 @@ function TeacherHomePage() {
                     placeholder="https://docs.google.com/presentation/..."
                   />
                 </div>
+                */}
 
                 <div className="form-actions">
                   <button className="confirm-btn" onClick={handleCreateSession}>
@@ -670,7 +1057,7 @@ function TeacherHomePage() {
                     value={selectedSession}
                     onChange={(e) => setSelectedSession(e.target.value)}
                   >
-                    <option value="">— Choose a session —</option>
+                    <option value="">Choose a session</option>
                     {sessions.map((s) => (
                       <option key={s.id} value={s.id}>
                         {s.sessionName} ({getSessionState(s)})
@@ -689,12 +1076,14 @@ function TeacherHomePage() {
                             const session = sessions.find(
                               (s) => s.id === selectedSession
                             );
+
                             if (session?.start) {
                               activateSession(selectedSession, {
-                                className: session.start.class,
-                                cadets: session.start.cadets,
-                                sectors: session.start.sectors,
-                                slidesLink: session.start.slidesLink,
+                                className: getSessionClass(session),
+                                cadets: getSessionCadets(session),
+                                sectors: getSessionSectors(session),
+                                // slidesLink: session.start.slidesLink,
+                                playerNames: session.start.playerNames ?? [],
                               });
                             }
                           }}
@@ -733,59 +1122,126 @@ function TeacherHomePage() {
                         className="copy-btn"
                         onClick={() => {
                           navigator.clipboard.writeText(selectedSession);
-                          const btn =
-                            document.activeElement as HTMLButtonElement;
-                          const originalText = btn.innerHTML;
-                          btn.innerHTML =
-                            '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3 3 7-7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg> Copied!';
-                          setTimeout(() => {
-                            btn.innerHTML = originalText;
-                          }, 2000);
                         }}
                       >
-                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                          <rect
-                            x="4"
-                            y="4"
-                            width="7"
-                            height="8"
-                            rx="1"
-                            stroke="currentColor"
-                            strokeWidth="1.2"
-                          />
-                          <path
-                            d="M3 10V3a1 1 0 0 1 1-1h5"
-                            stroke="currentColor"
-                            strokeWidth="1.2"
-                            strokeLinecap="round"
-                          />
-                        </svg>
                         Copy Session ID
                       </button>
                     </div>
 
                     <div className="activity-log-divider" />
 
+                    <div className="roster-manager-card">
+                      <div className="roster-manager-header">
+                        <div>
+                          <h3 className="roster-manager-title">
+                            Manage Students
+                          </h3>
+                          <p className="roster-help">
+                            Add, remove, or replace students for this session.
+                            Changes are saved into the active session roster.
+                          </p>
+                        </div>
+
+                        <span className="roster-count-badge">
+                          {liveRosterNames.length} students
+                        </span>
+                      </div>
+
+                      <div className="roster-tools">
+                        <div className="roster-add-row">
+                          <input
+                            className="field-input"
+                            type="text"
+                            value={manualStudentName}
+                            onChange={(e) =>
+                              setManualStudentName(e.target.value)
+                            }
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                handleAddLiveStudent();
+                              }
+                            }}
+                            placeholder="Type student name"
+                          />
+                          <button
+                            className="add-student-btn"
+                            type="button"
+                            onClick={handleAddLiveStudent}
+                          >
+                            Add Student
+                          </button>
+                        </div>
+
+                        <div className="roster-file-row">
+                          <input
+                            className="file-input"
+                            type="file"
+                            accept=".csv"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+
+                              if (file) {
+                                handleReplaceLiveRosterCsv(file);
+                              }
+
+                              e.target.value = "";
+                            }}
+                          />
+
+                          <button
+                            className="clear-roster-btn"
+                            type="button"
+                            onClick={handleClearLiveRoster}
+                          >
+                            Clear Roster
+                          </button>
+                        </div>
+
+                        <p className="roster-help">
+                          Uploading a CSV here replaces the current student list
+                          for this selected session.
+                        </p>
+                      </div>
+
+                      {liveRosterNames.length > 0 ? (
+                        <div className="roster-list">
+                          {liveRosterNames.map((studentName) => (
+                            <span className="student-pill" key={studentName}>
+                              {studentName}
+                              <button
+                                className="remove-student-btn"
+                                type="button"
+                                onClick={() =>
+                                  handleRemoveLiveStudent(studentName)
+                                }
+                              >
+                                ×
+                              </button>
+                            </span>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="roster-empty">
+                          No students are currently listed for this session.
+                        </p>
+                      )}
+                    </div>
+
                     <SessionRealtimeDashboard sessionId={selectedSession} />
 
                     <div className="activity-log-divider" />
-
                     <SessionMeetingsTable sessionId={selectedSession} />
 
                     <div className="activity-log-divider" />
-
                     <JournalSubmissionChecklist sessionId={selectedSession} />
 
                     <div className="activity-log-divider" />
-
                     <SessionActivityLog sessionId={selectedSession} />
 
                     <div className="activity-log-divider" />
-
                     <JournalSubmissionViewer sessionId={selectedSession} />
 
                     <div className="activity-log-divider" />
-
                     <SessionInfectionStatusTable sessionId={selectedSession} />
                   </>
                 )}
