@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { getDatabase, ref, onValue } from "firebase/database";
+import { useEffect, useMemo, useState } from "react";
+import { useSessionJournalAnswers } from "../../hooks/useSessionJournalAnswers";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap');
@@ -228,57 +228,53 @@ interface Props {
 
 interface StudentAnswers {
   [questionId: string]: {
-    answer: string;
-    updatedAt: number;
+    answer?: string;
+    updatedAt?: number;
+    createdAt?: number;
+    [key: string]: unknown;
   };
 }
 
 function JournalSubmissionViewer({ sessionId }: Props) {
-  const db = getDatabase();
+  const { answersMap } = useSessionJournalAnswers(sessionId);
 
-  const [students, setStudents] = useState<string[]>([]);
-  const [answers, setAnswers] = useState<Record<string, Record<number, StudentAnswers>>>({});
-  const [availableRounds, setAvailableRounds] = useState<number[]>([]);
   const [selectedRound, setSelectedRound] = useState<number | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  useEffect(() => {
-    if (!sessionId) return;
+  const students = useMemo(() => Object.keys(answersMap), [answersMap]);
 
-    const answersRef = ref(db, `sessions/${sessionId}/journalAnswers`);
+  const answers = useMemo(() => {
+    const structured: Record<string, Record<number, StudentAnswers>> = {};
 
-    const unsub = onValue(answersRef, (snapshot) => {
-      const data = snapshot.val() ?? {};
+    students.forEach((student) => {
+      structured[student] = {};
 
-      const studentList = Object.keys(data);
-      setStudents(studentList);
-
-      const roundSet = new Set<number>();
-      const structured: Record<string, Record<number, StudentAnswers>> = {};
-
-      studentList.forEach((student) => {
-        structured[student] = {};
-
-        Object.keys(data[student]).forEach((roundKey) => {
-          const roundNumber = Number(roundKey);
-          roundSet.add(roundNumber);
-          structured[student][roundNumber] = data[student][roundKey];
-        });
+      Object.keys(answersMap[student] ?? {}).forEach((roundKey) => {
+        const roundNumber = Number(roundKey);
+        structured[student][roundNumber] = answersMap[student][roundKey];
       });
-
-      const sortedRounds = Array.from(roundSet).sort((a, b) => a - b);
-      setAvailableRounds(sortedRounds);
-
-      // auto-select latest round if none selected
-      if (!selectedRound && sortedRounds.length > 0) {
-        setSelectedRound(sortedRounds[sortedRounds.length - 1]);
-      }
-
-      setAnswers(structured);
     });
 
-    return () => unsub();
-  }, [sessionId, selectedRound, db]);
+    return structured;
+  }, [answersMap, students]);
+
+  const availableRounds = useMemo(() => {
+    const roundSet = new Set<number>();
+
+    students.forEach((student) => {
+      Object.keys(answersMap[student] ?? {}).forEach((roundKey) => {
+        roundSet.add(Number(roundKey));
+      });
+    });
+
+    return Array.from(roundSet).sort((a, b) => a - b);
+  }, [answersMap, students]);
+
+  useEffect(() => {
+    if (selectedRound === null && availableRounds.length > 0) {
+      setSelectedRound(availableRounds[availableRounds.length - 1]);
+    }
+  }, [availableRounds, selectedRound]);
 
   useEffect(() => {
     setCurrentIndex(0);
@@ -294,36 +290,31 @@ function JournalSubmissionViewer({ sessionId }: Props) {
           </div>
           <div className="empty-state">
             <div className="empty-state-icon">📝</div>
-            <div>No journal submissions yet. Students' answers will appear here once they save their work.</div>
+            <div>
+              No journal submissions yet. Students' answers will appear here once
+              they save their work.
+            </div>
           </div>
         </div>
       </>
     );
   }
 
-  if (!selectedRound) {
+  if (selectedRound === null) {
     return null;
   }
 
-  // Filter students who submitted this round
-  const studentsForRound = students.filter((s) => answers[s]?.[selectedRound]);
+  const studentsForRound = students.filter(
+    (student) => answers[student]?.[selectedRound]
+  );
 
   const currentStudent = studentsForRound[currentIndex];
   const currentAnswers = answers[currentStudent]?.[selectedRound] ?? {};
-
-  function nextStudent() {
-    setCurrentIndex((prev) => (prev < studentsForRound.length - 1 ? prev + 1 : prev));
-  }
-
-  function prevStudent() {
-    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : prev));
-  }
 
   return (
     <>
       <style>{styles}</style>
       <div className="journal-viewer-root">
-        
         <div className="journal-viewer-header">
           <h3 className="journal-viewer-title">Live Journal Review</h3>
           <span className="live-badge">
@@ -333,13 +324,12 @@ function JournalSubmissionViewer({ sessionId }: Props) {
         </div>
 
         <div className="journal-controls">
-          {/* Round Selector */}
           <div className="round-select-wrapper">
             <label className="round-select-label">Round</label>
             <select
               className="round-select"
               value={selectedRound}
-              onChange={(e) => setSelectedRound(Number(e.target.value))}
+              onChange={(event) => setSelectedRound(Number(event.target.value))}
             >
               {availableRounds.map((round) => (
                 <option key={round} value={round}>
@@ -349,34 +339,31 @@ function JournalSubmissionViewer({ sessionId }: Props) {
             </select>
           </div>
 
-            {/* Student Selector */}
-            {studentsForRound.length > 0 && (
+          {studentsForRound.length > 0 && (
             <div className="student-selector">
-                <label className="round-select-label">
-                Student
-                </label>
+              <label className="round-select-label">Student</label>
 
-                <select
+              <select
                 className="round-select"
                 value={currentStudent}
-                onChange={(e) => {
-                    const newIndex = studentsForRound.findIndex(
-                    (s) => s === e.target.value
-                    );
-                    setCurrentIndex(newIndex);
+                onChange={(event) => {
+                  const newIndex = studentsForRound.findIndex(
+                    (student) => student === event.target.value
+                  );
+
+                  setCurrentIndex(newIndex);
                 }}
-                >
+              >
                 {studentsForRound.map((student, index) => (
-                    <option key={student} value={student}>
+                  <option key={student} value={student}>
                     {student} ({index + 1}/{studentsForRound.length})
-                    </option>
+                  </option>
                 ))}
-                </select>
+              </select>
             </div>
-            )}
+          )}
         </div>
 
-        {/* Answers */}
         {studentsForRound.length === 0 ? (
           <div className="empty-state">
             <div className="empty-state-icon">📝</div>
@@ -387,11 +374,16 @@ function JournalSubmissionViewer({ sessionId }: Props) {
             {Object.entries(currentAnswers).length === 0 ? (
               <div className="empty-state">
                 <div className="empty-state-icon">📝</div>
-                <div>{currentStudent} hasn't submitted any answers for this round yet.</div>
+                <div>
+                  {currentStudent} hasn't submitted any answers for this round
+                  yet.
+                </div>
               </div>
             ) : (
               Object.entries(currentAnswers)
-                .sort(([a], [b]) => a.localeCompare(b))
+                .sort(([leftQuestionId], [rightQuestionId]) =>
+                  leftQuestionId.localeCompare(rightQuestionId)
+                )
                 .map(([questionId, data], index) => (
                   <div key={questionId} className="answer-item">
                     <div className="question-label">
@@ -399,14 +391,17 @@ function JournalSubmissionViewer({ sessionId }: Props) {
                       <span className="question-id">{questionId}</span>
                     </div>
                     <div className="answer-text">
-                      {data.answer || <span className="empty-answer">(No answer provided)</span>}
+                      {data.answer || (
+                        <span className="empty-answer">
+                          (No answer provided)
+                        </span>
+                      )}
                     </div>
                   </div>
                 ))
             )}
           </div>
         )}
-
       </div>
     </>
   );

@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import { useSessionActivityLog } from "../../hooks/useSessionActivityLog";
+import {
+  useSessionActivityLog,
+  type SessionActivityLogEvent,
+} from "../../hooks/useSessionActivityLog";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap');
@@ -286,12 +289,12 @@ interface Props {
   sessionId: string;
 }
 
-interface UIEvent {
+interface UIEvent extends SessionActivityLogEvent {
   id: string;
   type: string;
-  action?: string;
   userId: string;
   timestamp: string;
+  action?: string;
   details?: any;
   plotType?: string;
   round?: number;
@@ -433,18 +436,12 @@ function formatEventDescription(event: UIEvent): string {
   return type.replace(/\./g, " › ").replace(/_/g, " ");
 }
 
-function isUIEvent(event: unknown): event is UIEvent {
-  if (!event || typeof event !== "object") {
-    return false;
-  }
-
-  const candidate = event as Partial<UIEvent>;
-
+function isUIEvent(event: SessionActivityLogEvent): event is UIEvent {
   return (
-    typeof candidate.id === "string" &&
-    typeof candidate.type === "string" &&
-    typeof candidate.userId === "string" &&
-    typeof candidate.timestamp === "string"
+    typeof event.id === "string" &&
+    typeof event.type === "string" &&
+    typeof event.userId === "string" &&
+    typeof event.timestamp === "string"
   );
 }
 

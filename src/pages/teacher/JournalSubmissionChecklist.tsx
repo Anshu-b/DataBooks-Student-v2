@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
-import { getDatabase, onValue, ref } from "firebase/database";
+import { useMemo } from "react";
+import { useSessionPlayers } from "../../hooks/useSessionPlayers";
+import { useSessionJournalAnswers } from "../../hooks/useSessionJournalAnswers";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap');
@@ -141,41 +142,18 @@ interface Props {
   sessionId: string;
 }
 
-type PlayersMap = Record<string, any>;
-type JournalAnswersMap = Record<string, any>;
-
 function JournalSubmissionChecklist({ sessionId }: Props) {
-  const db = getDatabase();
-
-  const [players, setPlayers] = useState<PlayersMap>({});
-  const [journalAnswers, setJournalAnswers] = useState<JournalAnswersMap>({});
-
-  useEffect(() => {
-    if (!sessionId) return;
-
-    const playersRef = ref(db, `sessions/${sessionId}/players`);
-    const unsubPlayers = onValue(playersRef, (snap) => {
-      setPlayers(snap.val() ?? {});
-    });
-
-    const journalRef = ref(db, `sessions/${sessionId}/journalAnswers`);
-    const unsubJournals = onValue(journalRef, (snap) => {
-      setJournalAnswers(snap.val() ?? {});
-    });
-
-    return () => {
-      unsubPlayers();
-      unsubJournals();
-    };
-  }, [db, sessionId]);
+  const { players } = useSessionPlayers(sessionId);
+  const { answersMap } = useSessionJournalAnswers(sessionId);
 
   const playerIds = useMemo(() => {
-    return Object.keys(players).sort((a, b) => a.localeCompare(b));
+    return players
+      .map((player) => player.id)
+      .sort((leftId, rightId) => leftId.localeCompare(rightId));
   }, [players]);
 
   function hasRoundSubmission(studentId: string, round: 1 | 2 | 3): boolean {
-    // Lenient: considered submitted if the round node exists at all.
-    return Boolean(journalAnswers?.[studentId]?.[round]);
+    return Boolean(answersMap?.[studentId]?.[round]);
   }
 
   const totals = useMemo(() => {
@@ -186,7 +164,7 @@ function JournalSubmissionChecklist({ sessionId }: Props) {
     const r3 = playerIds.filter((id) => hasRoundSubmission(id, 3)).length;
 
     return { totalPlayers, r1, r2, r3 };
-  }, [playerIds, journalAnswers]);
+  }, [playerIds, answersMap]);
 
   if (playerIds.length === 0) {
     return (
@@ -200,7 +178,8 @@ function JournalSubmissionChecklist({ sessionId }: Props) {
           </div>
           <div className="checklist-card">
             <div className="empty-state">
-              No players found yet. This checklist will populate once players join the session.
+              No players found yet. This checklist will populate once players
+              join the session.
             </div>
           </div>
         </div>
