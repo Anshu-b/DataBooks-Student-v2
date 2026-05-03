@@ -553,7 +553,6 @@ const styles = `
   }
 
   .add-student-btn,
-  .replace-roster-btn,
   .clear-roster-btn {
     padding: 11px 16px;
     border-radius: 11px;
@@ -565,8 +564,7 @@ const styles = `
     white-space: nowrap;
   }
 
-  .add-student-btn,
-  .replace-roster-btn {
+  .add-student-btn {
     background: linear-gradient(135deg, #8b4fcf, #5b6ef5);
     border: none;
     color: white;
@@ -579,7 +577,6 @@ const styles = `
   }
 
   .add-student-btn:hover,
-  .replace-roster-btn:hover,
   .clear-roster-btn:hover {
     opacity: 0.92;
     transform: translateY(-1px);
@@ -647,6 +644,10 @@ function TeacherHomePage() {
     sessions,
     createSession,
     activateSession,
+    setSessionPlayers,
+    addSessionPlayer,
+    removeSessionPlayer,
+    clearSessionPlayers,
     stopSession,
     startMeeting,
     endMeeting,
@@ -669,42 +670,13 @@ function TeacherHomePage() {
   );
 
   useEffect(() => {
-    const names = selectedSessionData?.start?.playerNames ?? [];
-    setLiveRosterNames(Array.isArray(names) ? names : []);
+    const names = selectedSessionData?.playerNames ?? [];
+    setLiveRosterNames(names);
     setManualStudentName("");
   }, [selectedSession, selectedSessionData]);
 
   if (authLoading) return null;
   if (!user) return <Navigate to="/teacher/login" />;
-
-  function getSessionClass(session: any): string {
-    return session?.start?.className || session?.start?.class || "";
-  }
-
-  function getSessionCadets(session: any): number {
-    return Number(session?.start?.cadets || 0);
-  }
-
-  function getSessionSectors(session: any): number {
-    return Number(session?.start?.sectors || 0);
-  }
-
-  async function saveLiveRoster(nextRoster: string[]) {
-    if (!selectedSession || !selectedSessionData?.start) {
-      alert("Please select a session first.");
-      return;
-    }
-
-    await activateSession(selectedSession, {
-      className: getSessionClass(selectedSessionData),
-      cadets: nextRoster.length,
-      sectors: getSessionSectors(selectedSessionData),
-      // slidesLink: selectedSessionData.start.slidesLink,
-      playerNames: nextRoster,
-    });
-
-    setLiveRosterNames(nextRoster);
-  }
 
   function handleStudentCsvUpload(file: File) {
     const reader = new FileReader();
@@ -741,10 +713,11 @@ function TeacherHomePage() {
         `Replace the current roster with ${names.length} names from this CSV?`
       );
 
-      if (!shouldReplace) return;
+      if (!shouldReplace || !selectedSession) return;
 
       try {
-        await saveLiveRoster(names);
+        await setSessionPlayers(selectedSession, names);
+        setLiveRosterNames(names);
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "Failed to replace roster.";
@@ -758,6 +731,11 @@ function TeacherHomePage() {
 
   async function handleAddLiveStudent() {
     const trimmedName = manualStudentName.trim();
+
+    if (!selectedSession) {
+      alert("Please select a session first.");
+      return;
+    }
 
     if (!trimmedName) {
       alert("Please enter a student name.");
@@ -774,7 +752,8 @@ function TeacherHomePage() {
     }
 
     try {
-      await saveLiveRoster([...liveRosterNames, trimmedName]);
+      await addSessionPlayer(selectedSession, trimmedName);
+      setLiveRosterNames([...liveRosterNames, trimmedName]);
       setManualStudentName("");
     } catch (error) {
       const message =
@@ -785,10 +764,16 @@ function TeacherHomePage() {
   }
 
   async function handleRemoveLiveStudent(studentName: string) {
-    const nextRoster = liveRosterNames.filter((name) => name !== studentName);
+    if (!selectedSession) {
+      alert("Please select a session first.");
+      return;
+    }
 
     try {
-      await saveLiveRoster(nextRoster);
+      await removeSessionPlayer(selectedSession, studentName);
+      setLiveRosterNames(
+        liveRosterNames.filter((name) => name !== studentName)
+      );
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Failed to remove student.";
@@ -798,6 +783,11 @@ function TeacherHomePage() {
   }
 
   async function handleClearLiveRoster() {
+    if (!selectedSession) {
+      alert("Please select a session first.");
+      return;
+    }
+
     const shouldClear = window.confirm(
       "Remove every student from this roster?"
     );
@@ -805,7 +795,8 @@ function TeacherHomePage() {
     if (!shouldClear) return;
 
     try {
-      await saveLiveRoster([]);
+      await clearSessionPlayers(selectedSession);
+      setLiveRosterNames([]);
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Failed to clear roster.";
@@ -849,9 +840,9 @@ function TeacherHomePage() {
           cadets,
           sectors,
           // slidesLink,
-          playerNames: uploadedPlayerNames,
         });
 
+        await setSessionPlayers(sessionId, uploadedPlayerNames);
         setSelectedSession(sessionId);
       }
 
@@ -1079,11 +1070,10 @@ function TeacherHomePage() {
 
                             if (session?.start) {
                               activateSession(selectedSession, {
-                                className: getSessionClass(session),
-                                cadets: getSessionCadets(session),
-                                sectors: getSessionSectors(session),
+                                className: session.start.class,
+                                cadets: session.start.cadets,
+                                sectors: session.start.sectors,
                                 // slidesLink: session.start.slidesLink,
-                                playerNames: session.start.playerNames ?? [],
                               });
                             }
                           }}
@@ -1138,7 +1128,8 @@ function TeacherHomePage() {
                           </h3>
                           <p className="roster-help">
                             Add, remove, or replace students for this session.
-                            Changes are saved into the active session roster.
+                            Changes are saved under sessions/{selectedSession}
+                            /players.
                           </p>
                         </div>
 

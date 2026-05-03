@@ -352,7 +352,7 @@ function buildEntityStatuses(
     const latestStatus = latestStatuses.get(index);
     const displayName =
       prefix === "S"
-        ? PLAYER_NAMES[index] ?? `Cadet ${index + 1}`
+        ? playerNames[index] ?? `Cadet ${index + 1}`
         : `Sector ${index + 1}`;
 
     const status: EntityStatus["status"] = latestStatus
