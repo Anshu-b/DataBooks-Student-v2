@@ -471,6 +471,26 @@ function GameEntryPage() {
     return snapshot.val();
   }
 
+  async function getSessionPlayerNames(
+    sessionIdValue: string
+  ): Promise<string[]> {
+    const db = getDatabase();
+    const playersRef = ref(db, `sessions/${sessionIdValue}/players`);
+    const snapshot = await get(playersRef);
+
+    if (
+      !snapshot.exists() ||
+      typeof snapshot.val() !== "object" ||
+      snapshot.val() === null
+    ) {
+      return [];
+    }
+
+    return Object.keys(snapshot.val() as Record<string, unknown>).sort(
+      (left, right) => left.localeCompare(right)
+    );
+  }
+
   async function sessionExists(sessionIdValue: string): Promise<boolean> {
     const db = getDatabase();
     const sessionRef = ref(db, `sessions/${sessionIdValue}`);
@@ -490,9 +510,36 @@ function GameEntryPage() {
     const now = new Date().toISOString();
 
     if (!snapshot.exists()) {
-      await set(playerRef, {
+      return {
+        ok: false,
+        error:
+          "This student is not listed in the session roster. Please check with your teacher.",
+      };
+    }
+
+    const player = snapshot.val();
+
+    if (
+      typeof player !== "object" ||
+      player === null
+    ) {
+      return {
+        ok: false,
+        error:
+          "This student roster entry is invalid. Please check with your teacher.",
+      };
+    }
+
+    const playerData = player as {
+      password?: string;
+      hasChosen?: boolean;
+      createdAt?: string;
+      lastLoginAt?: string;
+    };
+
+    if (!playerData.password) {
+      await update(playerRef, {
         password: passwordValue,
-        createdAt: now,
         lastLoginAt: now,
         hasChosen: true,
       });
@@ -500,9 +547,7 @@ function GameEntryPage() {
       return { ok: true };
     }
 
-    const player = snapshot.val();
-
-    if (player.password !== passwordValue) {
+    if (playerData.password !== passwordValue) {
       return {
         ok: false,
         error:
@@ -516,6 +561,80 @@ function GameEntryPage() {
     });
 
     return { ok: true };
+  }
+
+  async function handleValidateSession() {
+    setLoading(true);
+    setError(null);
+    setSelectedPlayer(null);
+    setAllowedPlayerNames([]);
+
+    try {
+      const metadata = await getSessionMetadata(sessionId);
+
+      if (!metadata) {
+        setError("Session ID not found. Please check with your teacher.");
+        setLoading(false);
+        return;
+      }
+
+      const teacherPlayerNames = await getSessionPlayerNames(sessionId);
+
+      if (teacherPlayerNames.length === 0) {
+        setError("This session is missing a valid student roster.");
+        setLoading(false);
+        return;
+      }
+
+      setAllowedPlayerNames(teacherPlayerNames);
+      setSessionValidated(true);
+      setLoading(false);
+    } catch {
+      setError("Error validating session.");
+      setAllowedPlayerNames([]);
+      setLoading(false);
+    }
+  }
+
+  async function handleStartAdventure() {
+    if (!selectedPlayer || !sessionId || !password) {
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const exists = await sessionExists(sessionId);
+
+      if (!exists) {
+        setError("Session ID not found. Please check with your teacher.");
+        setLoading(false);
+        return;
+      }
+
+      if (!allowedPlayerNames.includes(selectedPlayer)) {
+        setError("That player slot is not available for this session.");
+        setLoading(false);
+        return;
+      }
+
+      const result = await resolvePlayer(sessionId, selectedPlayer, password);
+
+      if (!result.ok) {
+        setError(result.error);
+        setLoading(false);
+        return;
+      }
+
+      navigate(`/games/${gameId}/play`, {
+        state: { initialGameState },
+      });
+    } catch (err) {
+      console.error(err);
+      setError("Error joining session. Please try again.");
+      setLoading(false);
+    }
   }
 
   return (
@@ -562,7 +681,7 @@ function GameEntryPage() {
                 !sessionValidated &&
                 sessionId &&
                 !loading &&
-                document.getElementById("validate-btn")?.click()
+                handleValidateSession()
               }
             />
           </div>
@@ -571,42 +690,7 @@ function GameEntryPage() {
             id="validate-btn"
             className="validate-btn"
             disabled={!sessionId || loading || sessionValidated}
-            onClick={async () => {
-              setLoading(true);
-              setError(null);
-              setSelectedPlayer(null);
-              setAllowedPlayerNames([]);
-
-              try {
-                const metadata = await getSessionMetadata(sessionId);
-
-                if (!metadata) {
-                  setError("Session ID not found. Please check with your teacher.");
-                  setLoading(false);
-                  return;
-                }
-
-                const teacherPlayerNames = Array.isArray(
-                  metadata.start?.playerNames
-                )
-                  ? metadata.start.playerNames
-                  : [];
-
-                if (teacherPlayerNames.length === 0) {
-                  setError("This session is missing a valid student roster.");
-                  setLoading(false);
-                  return;
-                }
-
-                setAllowedPlayerNames(teacherPlayerNames);
-                setSessionValidated(true);
-                setLoading(false);
-              } catch {
-                setError("Error validating session.");
-                setAllowedPlayerNames([]);
-                setLoading(false);
-              }
-            }}
+            onClick={handleValidateSession}
           >
             {loading && !sessionValidated
               ? "Validating…"
@@ -725,54 +809,7 @@ function GameEntryPage() {
                     !passwordsMatch ||
                     loading
                   }
-                  onClick={async () => {
-                    if (!selectedPlayer || !sessionId || !password) {
-                      return;
-                    }
-
-                    setLoading(true);
-                    setError(null);
-
-                    try {
-                      const exists = await sessionExists(sessionId);
-
-                      if (!exists) {
-                        setError(
-                          "Session ID not found. Please check with your teacher."
-                        );
-                        setLoading(false);
-                        return;
-                      }
-
-                      if (!allowedPlayerNames.includes(selectedPlayer)) {
-                        setError(
-                          "That player slot is not available for this session."
-                        );
-                        setLoading(false);
-                        return;
-                      }
-
-                      const result = await resolvePlayer(
-                        sessionId,
-                        selectedPlayer,
-                        password
-                      );
-
-                      if (!result.ok) {
-                        setError(result.error);
-                        setLoading(false);
-                        return;
-                      }
-
-                      navigate(`/games/${game.id}/play`, {
-                        state: { initialGameState },
-                      });
-                    } catch (err) {
-                      console.error(err);
-                      setError("Error joining session. Please try again.");
-                      setLoading(false);
-                    }
-                  }}
+                  onClick={handleStartAdventure}
                 >
                   {loading ? "Checking…" : "Start Adventure →"}
                 </button>
