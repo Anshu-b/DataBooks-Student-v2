@@ -6,11 +6,24 @@
  */
 
 import type { RawReading } from "./types";
-import { aggregateTelemetry } from "./aggregateTelemetry";
+import { aggregateTelemetry, type MeetingLog } from "./aggregateTelemetry";
 
 export function loadSessionTelemetry(session: {
+  metadata: {
+    start: {
+      timestamp: string;
+      cadets: number;
+      sectors: number;
+    };
+    stop?: {
+      timestamp: string;
+    };
+  };
   readings: Record<string, RawReading>;
+  meetings?: Record<string, MeetingLog>;
 }) {
-  const readingsArray = Object.values(session.readings);
-  return aggregateTelemetry(readingsArray);
+  return aggregateTelemetry({
+    ...session,
+    meetings: session.meetings ?? {},
+  });
 }

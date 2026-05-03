@@ -20,61 +20,81 @@
         "r1": {
           "device_id": "S1",
           "infection_status": 0,
-          "proximity_mask": "[0,1,0,0,0,0, 1,0, 0]",
+          "S": [0, 1, 0, 0, 0, 0],
+          "T": [1, 0],
+          "QR": [0],
           "timestamp": "2025-07-15T10:03:00Z"
         },
         "r2": {
           "device_id": "S2",
           "infection_status": 0,
-          "proximity_mask": "[1,0,0,0,0,0, 0,1, 0]",
+          "S": [1, 0, 0, 0, 0, 0],
+          "T": [0, 1],
+          "QR": [0],
           "timestamp": "2025-07-15T10:04:30Z"
         },
         "r3": {
           "device_id": "T1",
           "infection_status": 0,
-          "proximity_mask": "[0,0,1,0,0,0, 0,0, 0]",
+          "S": [0, 0, 1, 0, 0, 0],
+          "T": [0, 0],
+          "QR": [0],
           "timestamp": "2025-07-15T10:05:10Z"
         },
         "r4": {
           "device_id": "S3",
           "infection_status": 1,
-          "proximity_mask": "[0,0,0,1,0,0, 1,0, 0]",
+          "S": [0, 0, 0, 1, 0, 0],
+          "T": [1, 0],
+          "QR": [0],
           "timestamp": "2025-07-15T10:10:30Z"
         },
         "r5": {
           "device_id": "S4",
           "infection_status": 0,
-          "proximity_mask": "[0,0,0,0,1,0, 0,1, 0]",
+          "S": [0, 0, 0, 0, 1, 0],
+          "T": [0, 1],
+          "QR": [0],
           "timestamp": "2025-07-15T10:12:45Z"
         },
         "r6": {
           "device_id": "T2",
           "infection_status": 0,
-          "proximity_mask": "[0,0,0,0,0,1, 0,0, 0]",
+          "S": [0, 0, 0, 0, 0, 1],
+          "T": [0, 0],
+          "QR": [0],
           "timestamp": "2025-07-15T10:18:00Z"
         },
         "r7": {
           "device_id": "S5",
           "infection_status": 0,
-          "proximity_mask": "[0,0,0,0,0,1, 1,0, 0]",
+          "S": [0, 0, 0, 0, 0, 1],
+          "T": [1, 0],
+          "QR": [0],
           "timestamp": "2025-07-15T10:22:20Z"
         },
         "r8": {
           "device_id": "S6",
           "infection_status": 0,
-          "proximity_mask": "[0,0,1,0,0,0, 0,1, 0]",
+          "S": [0, 0, 1, 0, 0, 0],
+          "T": [0, 1],
+          "QR": [0],
           "timestamp": "2025-07-15T10:30:10Z"
         },
         "r9": {
           "device_id": "S1",
           "infection_status": 0,
-          "proximity_mask": "[0,0,0,1,0,0, 1,0, 0]",
+          "S": [0, 0, 0, 1, 0, 0],
+          "T": [1, 0],
+          "QR": [0],
           "timestamp": "2025-07-15T10:33:00Z"
         },
         "r10": {
           "device_id": "T1",
           "infection_status": 0,
-          "proximity_mask": "[0,1,0,0,0,0, 0,0, 0]",
+          "S": [0, 1, 0, 0, 0, 0],
+          "T": [0, 0],
+          "QR": [0],
           "timestamp": "2025-07-15T10:40:00Z"
         }
       },

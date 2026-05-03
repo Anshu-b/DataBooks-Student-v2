@@ -15,6 +15,8 @@
  *  - How many meetings occurred in a time window?
  */
 
+import type { RawReading } from "./types";
+
 /**
  * aggregateTelemetry
  * ------------------
@@ -23,19 +25,12 @@
  *
  * IMPORTANT:
  * - Metadata is the source of truth for cadet/sector counts
- * - Proximity mask layout:
- *     [ cadets | sectors | quarantine ]
+ * - ESP proximity inputs are grouped by entity:
+ *     S = students/cadets, T = tables/sectors, QR = quarantine room
  * - Meetings are interval-based (start/end)
  */
 
 /* -------------------- Types (preserved naming) -------------------- */
-
-export type RawReading = {
-  device_id: string;
-  infection_status: number;
-  proximity_mask: string;
-  timestamp: string;
-};
 
 export type MeetingLog = {
   startTime: string;
