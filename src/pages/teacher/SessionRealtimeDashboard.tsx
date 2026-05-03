@@ -2,6 +2,8 @@ import { useMemo } from "react";
 import { useSessionPlayers } from "../../hooks/useSessionPlayers";
 import { useSessionJournalAnswers } from "../../hooks/useSessionJournalAnswers";
 import { useSessionMeetings } from "../../hooks/useSessionMeetings";
+import { useSessionRoster } from "../../hooks/useSessionRoster";
+import { useSessionReadings } from "../../hooks/useSessionReadings";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap');
@@ -99,6 +101,16 @@ const styles = `
     border: 1px solid rgba(91, 110, 245, 0.3);
   }
 
+  .metric-card-sectors .metric-card-icon {
+    background: rgba(40, 170, 190, 0.2);
+    border: 1px solid rgba(40, 170, 190, 0.3);
+  }
+
+  .metric-card-medbay .metric-card-icon {
+    background: rgba(245, 196, 66, 0.16);
+    border: 1px solid rgba(245, 196, 66, 0.28);
+  }
+
   .metric-card-infected .metric-card-icon {
     background: rgba(220, 60, 80, 0.2);
     border: 1px solid rgba(220, 60, 80, 0.3);
@@ -141,6 +153,14 @@ const styles = `
     color: #8ba5f5;
   }
 
+  .metric-card-sectors .metric-value {
+    color: #63d4e5;
+  }
+
+  .metric-card-medbay .metric-value {
+    color: #f5c842;
+  }
+
   .metric-card-infected .metric-value {
     color: #f08090;
   }
@@ -174,6 +194,8 @@ interface Props {
 
 interface LiveStats {
   totalPlayers: number;
+  totalSectors: number;
+  totalMedBayRooms: number;
   infectedCount: number;
   healthyCount: number;
   journalSubmissions: number;
@@ -182,14 +204,31 @@ interface LiveStats {
 
 function SessionRealtimeDashboard({ sessionId }: Props) {
   const { players, loading: playersLoading } = useSessionPlayers(sessionId);
+  const { roster, loading: rosterLoading } = useSessionRoster(sessionId);
+  const { readings, loading: readingsLoading } = useSessionReadings(sessionId);
   const { answersMap, loading: answersLoading } =
     useSessionJournalAnswers(sessionId);
   const { meetings, loading: meetingsLoading } = useSessionMeetings(sessionId);
 
-  const loading = playersLoading || answersLoading || meetingsLoading;
+  const loading =
+    playersLoading ||
+    rosterLoading ||
+    readingsLoading ||
+    answersLoading ||
+    meetingsLoading;
 
   const stats: LiveStats = useMemo(() => {
     const totalPlayers = players.length;
+    const totalSectors = roster.sectors;
+    const observedMedBayRooms = readings.reduce((maxRooms, reading) => {
+      if (!Array.isArray(reading.MB)) {
+        return maxRooms;
+      }
+
+      return Math.max(maxRooms, reading.MB.length);
+    }, 0);
+    const totalMedBayRooms =
+      roster.medBayRooms || observedMedBayRooms;
 
     const infectedCount = players.filter(
       (player) => player.infection_status === 1
@@ -201,12 +240,14 @@ function SessionRealtimeDashboard({ sessionId }: Props) {
 
     return {
       totalPlayers,
+      totalSectors,
+      totalMedBayRooms,
       infectedCount,
       healthyCount,
       journalSubmissions,
       meetingCount,
     };
-  }, [players, answersMap, meetings]);
+  }, [players, roster, readings, answersMap, meetings]);
 
   if (loading) {
     return (
@@ -217,7 +258,7 @@ function SessionRealtimeDashboard({ sessionId }: Props) {
             <h3 className="dashboard-title">Live Session Metrics</h3>
           </div>
           <div className="metrics-grid">
-            {[1, 2, 3, 4, 5].map((i) => (
+            {[1, 2, 3, 4, 5, 6, 7].map((i) => (
               <div key={i} className="metric-card loading-shimmer">
                 <div className="metric-card-icon">⏳</div>
                 <div className="metric-label">Loading...</div>
@@ -247,6 +288,18 @@ function SessionRealtimeDashboard({ sessionId }: Props) {
             <div className="metric-card-icon">👥</div>
             <div className="metric-label">Total Players</div>
             <div className="metric-value">{stats.totalPlayers}</div>
+          </div>
+
+          <div className="metric-card metric-card-sectors">
+            <div className="metric-card-icon">⌗</div>
+            <div className="metric-label">Total Sectors</div>
+            <div className="metric-value">{stats.totalSectors}</div>
+          </div>
+
+          <div className="metric-card metric-card-medbay">
+            <div className="metric-card-icon">□</div>
+            <div className="metric-label">Total MedBay Rooms</div>
+            <div className="metric-value">{stats.totalMedBayRooms}</div>
           </div>
 
           <div className="metric-card metric-card-infected">

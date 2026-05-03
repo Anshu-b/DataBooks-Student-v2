@@ -15,7 +15,7 @@ export function loadRawSession(rawSession: any): RawReading[] {
     infection_status: r.infection_status === 1 ? 1 : 0,
     S: normalizeSignalArray(r.S),
     T: normalizeSignalArray(r.T),
-    QR: normalizeSignalArray(r.QR),
+    MB: normalizeSignalArray(r.MB),
     timestamp: r.timestamp,
   }));
 }

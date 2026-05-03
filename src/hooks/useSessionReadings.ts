@@ -7,7 +7,7 @@ export type SessionReading = {
   infection_status?: number;
   S?: number[];
   T?: number[];
-  QR?: number[];
+  MB?: number[];
   timestamp?: string;
   deviceId?: string;
   playerId?: string;

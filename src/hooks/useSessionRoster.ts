@@ -5,6 +5,7 @@ export type SessionRoster = {
   playerNames: string[];
   cadets: number;
   sectors: number;
+  medBayRooms: number;
 };
 
 export function useSessionRoster(sessionId: string | null) {
@@ -12,6 +13,7 @@ export function useSessionRoster(sessionId: string | null) {
     playerNames: [],
     cadets: 0,
     sectors: 0,
+    medBayRooms: 0,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -22,6 +24,7 @@ export function useSessionRoster(sessionId: string | null) {
         playerNames: [],
         cadets: 0,
         sectors: 0,
+        medBayRooms: 0,
       });
       setLoading(false);
       setError(null);
@@ -45,6 +48,10 @@ export function useSessionRoster(sessionId: string | null) {
             : [],
           cadets: typeof value?.cadets === "number" ? value.cadets : 0,
           sectors: typeof value?.sectors === "number" ? value.sectors : 0,
+          medBayRooms:
+            typeof value?.medBayRooms === "number"
+              ? value.medBayRooms
+              : 0,
         });
 
         setLoading(false);

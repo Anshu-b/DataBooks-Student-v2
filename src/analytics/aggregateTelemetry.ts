@@ -26,7 +26,7 @@ import type { RawReading } from "./types";
  * IMPORTANT:
  * - Metadata is the source of truth for cadet/sector counts
  * - ESP proximity inputs are grouped by entity:
- *     S = students/cadets, T = tables/sectors, QR = quarantine room
+ *     S = students/cadets, T = tables/sectors, MB = MedBay room
  * - Meetings are interval-based (start/end)
  */
 

@@ -648,6 +648,8 @@ function TeacherHomePage() {
     addSessionPlayer,
     removeSessionPlayer,
     clearSessionPlayers,
+    setSessionSectors,
+    setSessionMedBayRooms,
     stopSession,
     startMeeting,
     endMeeting,
@@ -661,6 +663,9 @@ function TeacherHomePage() {
   const [uploadedPlayerNames, setUploadedPlayerNames] = useState<string[]>([]);
   const [cadets, setCadets] = useState(0);
   const [sectors, setSectors] = useState(0);
+  const [medBayRooms, setMedBayRooms] = useState(1);
+  const [liveSectorCount, setLiveSectorCount] = useState(0);
+  const [liveMedBayRoomCount, setLiveMedBayRoomCount] = useState(0);
   const [manualStudentName, setManualStudentName] = useState("");
   const [liveRosterNames, setLiveRosterNames] = useState<string[]>([]);
   // const [slidesLink, setSlidesLink] = useState("");
@@ -672,6 +677,10 @@ function TeacherHomePage() {
   useEffect(() => {
     const names = selectedSessionData?.playerNames ?? [];
     setLiveRosterNames(names);
+    setLiveSectorCount(selectedSessionData?.start?.sectors ?? 0);
+    setLiveMedBayRoomCount(
+      selectedSessionData?.start?.medBayRooms ?? 1
+    );
     setManualStudentName("");
   }, [selectedSession, selectedSessionData]);
 
@@ -805,13 +814,64 @@ function TeacherHomePage() {
     }
   }
 
+  async function handleSaveLiveSectorCount() {
+    if (!selectedSession) {
+      alert("Please select a session first.");
+      return;
+    }
+
+    if (!Number.isInteger(liveSectorCount) || liveSectorCount <= 0) {
+      alert("Sector count must be a positive whole number.");
+      return;
+    }
+
+    try {
+      await setSessionSectors(selectedSession, liveSectorCount);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Failed to update sectors.";
+
+      alert(message);
+    }
+  }
+
+  async function handleSaveLiveMedBayRoomCount() {
+    if (!selectedSession) {
+      alert("Please select a session first.");
+      return;
+    }
+
+    if (
+      !Number.isInteger(liveMedBayRoomCount) ||
+      liveMedBayRoomCount <= 0
+    ) {
+      alert("MedBay room count must be a positive whole number.");
+      return;
+    }
+
+    try {
+      await setSessionMedBayRooms(
+        selectedSession,
+        liveMedBayRoomCount
+      );
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Failed to update MedBay rooms.";
+
+      alert(message);
+    }
+  }
+
   async function handleCreateSession() {
     if (
       !sessionName ||
       !className ||
       uploadedPlayerNames.length === 0 ||
       cadets <= 0 ||
-      sectors <= 0
+      sectors <= 0 ||
+      medBayRooms <= 0
     ) {
       alert("Please complete all fields and upload a student CSV.");
       return;
@@ -839,6 +899,7 @@ function TeacherHomePage() {
           className,
           cadets,
           sectors,
+          medBayRooms,
           // slidesLink,
         });
 
@@ -853,6 +914,7 @@ function TeacherHomePage() {
       setUploadedPlayerNames([]);
       setCadets(0);
       setSectors(0);
+      setMedBayRooms(1);
       // setSlidesLink("");
     } catch (error) {
       const message =
@@ -1006,9 +1068,28 @@ function TeacherHomePage() {
                   <input
                     className="field-input"
                     type="number"
+                    min="1"
+                    step="1"
                     value={sectors || ""}
                     onChange={(e) => setSectors(Number(e.target.value))}
                     placeholder="e.g., 5"
+                  />
+                </div>
+
+                <div className="form-field">
+                  <label className="field-label">
+                    Number of MedBay Rooms
+                  </label>
+                  <input
+                    className="field-input"
+                    type="number"
+                    min="1"
+                    step="1"
+                    value={medBayRooms || ""}
+                    onChange={(e) =>
+                      setMedBayRooms(Number(e.target.value))
+                    }
+                    placeholder="e.g., 1"
                   />
                 </div>
 
@@ -1073,6 +1154,8 @@ function TeacherHomePage() {
                                 className: session.start.class,
                                 cadets: session.start.cadets,
                                 sectors: session.start.sectors,
+                                medBayRooms:
+                                  session.start.medBayRooms ?? 1,
                                 // slidesLink: session.start.slidesLink,
                               });
                             }
@@ -1216,6 +1299,98 @@ function TeacherHomePage() {
                           No students are currently listed for this session.
                         </p>
                       )}
+                    </div>
+
+                    <div className="roster-manager-card">
+                      <div className="roster-manager-header">
+                        <div>
+                          <h3 className="roster-manager-title">
+                            Manage Sectors
+                          </h3>
+                          <p className="roster-help">
+                            Change the number of sectors for this session.
+                            Changes are saved under sessions/{selectedSession}
+                            /metadata/start/sectors.
+                          </p>
+                        </div>
+
+                        <span className="roster-count-badge">
+                          {selectedSessionData?.start?.sectors ?? 0} sectors
+                        </span>
+                      </div>
+
+                      <div className="roster-add-row">
+                        <input
+                          className="field-input"
+                          type="number"
+                          min="1"
+                          step="1"
+                          value={liveSectorCount || ""}
+                          onChange={(e) =>
+                            setLiveSectorCount(Number(e.target.value))
+                          }
+                          placeholder="Number of sectors"
+                        />
+                        <button
+                          className="add-student-btn"
+                          type="button"
+                          onClick={handleSaveLiveSectorCount}
+                          disabled={
+                            liveSectorCount ===
+                            (selectedSessionData?.start?.sectors ?? 0)
+                          }
+                        >
+                          Save Sectors
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="roster-manager-card">
+                      <div className="roster-manager-header">
+                        <div>
+                          <h3 className="roster-manager-title">
+                            Manage MedBay Rooms
+                          </h3>
+                          <p className="roster-help">
+                            Change the number of MedBay rooms for this
+                            session. Changes are saved under
+                            sessions/{selectedSession}
+                            /metadata/start/medBayRooms.
+                          </p>
+                        </div>
+
+                        <span className="roster-count-badge">
+                          {selectedSessionData?.start?.medBayRooms ?? 1}{" "}
+                          MedBay rooms
+                        </span>
+                      </div>
+
+                      <div className="roster-add-row">
+                        <input
+                          className="field-input"
+                          type="number"
+                          min="1"
+                          step="1"
+                          value={liveMedBayRoomCount || ""}
+                          onChange={(e) =>
+                            setLiveMedBayRoomCount(Number(e.target.value))
+                          }
+                          placeholder="Number of MedBay rooms"
+                        />
+                        <button
+                          className="add-student-btn"
+                          type="button"
+                          onClick={handleSaveLiveMedBayRoomCount}
+                          disabled={
+                            typeof selectedSessionData?.start
+                              ?.medBayRooms === "number" &&
+                            liveMedBayRoomCount ===
+                              selectedSessionData.start.medBayRooms
+                          }
+                        >
+                          Save Rooms
+                        </button>
+                      </div>
                     </div>
 
                     <SessionRealtimeDashboard sessionId={selectedSession} />

@@ -9,7 +9,7 @@ export type RawReading = {
   infection_status: number; // 0 or 1
   S: number[]; // students/cadets
   T: number[]; // tables/sectors
-  QR: number[]; // quarantine room
+  MB: number[]; // MedBay room
   timestamp: string; // ISO string
 };
 

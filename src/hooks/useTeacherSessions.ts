@@ -22,6 +22,7 @@ export interface TeacherSession {
     class: string;
     cadets: number;
     sectors: number;
+    medBayRooms?: number;
     slidesLink?: string;
     timestamp: string;
     activatedAtMs: number;
@@ -41,6 +42,7 @@ interface ActivateSessionDetails {
   className: string;
   cadets: number;
   sectors: number;
+  medBayRooms?: number;
   slidesLink?: string;
 }
 
@@ -337,6 +339,7 @@ export function useTeacherSessions() {
         class: details.className,
         cadets: details.cadets,
         sectors: details.sectors,
+        medBayRooms: details.medBayRooms ?? 1,
         ...(details.slidesLink ? { slidesLink: details.slidesLink } : {}),
         timestamp: new Date(activatedAtMs).toISOString(),
         activatedAtMs,
@@ -451,6 +454,35 @@ export function useTeacherSessions() {
     await loadSessions();
   }
 
+  async function setSessionSectors(sessionId: string, sectorCount: number) {
+    if (!Number.isInteger(sectorCount) || sectorCount <= 0) {
+      throw new Error("Sector count must be a positive whole number.");
+    }
+
+    await update(ref(db, `sessions/${sessionId}/metadata/start`), {
+      sectors: sectorCount,
+    });
+
+    await loadSessions();
+  }
+
+  async function setSessionMedBayRooms(
+    sessionId: string,
+    medBayRoomCount: number
+  ) {
+    if (!Number.isInteger(medBayRoomCount) || medBayRoomCount <= 0) {
+      throw new Error(
+        "MedBay room count must be a positive whole number."
+      );
+    }
+
+    await update(ref(db, `sessions/${sessionId}/metadata/start`), {
+      medBayRooms: medBayRoomCount,
+    });
+
+    await loadSessions();
+  }
+
   async function stopSession(sessionId: string) {
     await update(ref(db, `sessions/${sessionId}/metadata`), {
       status: "inactive",
@@ -559,6 +591,8 @@ export function useTeacherSessions() {
     addSessionPlayer,
     removeSessionPlayer,
     clearSessionPlayers,
+    setSessionSectors,
+    setSessionMedBayRooms,
     stopSession,
     startMeeting,
     endMeeting,
