@@ -5,6 +5,7 @@ import {
   get,
   set,
   update,
+  remove,
 } from "firebase/database";
 import { useTeacherAuth } from "./useTeacherAuth";
 
@@ -14,6 +15,7 @@ export interface TeacherSession {
   gameId: string;
   status: "draft" | "active" | "inactive";
   sessionName: string;
+  playerNames: string[];
   start: null | {
     action: "start";
     teacher: string;
@@ -21,7 +23,6 @@ export interface TeacherSession {
     cadets: number;
     sectors: number;
     slidesLink?: string;
-    playerNames?: string[];
     timestamp: string;
     activatedAtMs: number;
   };
@@ -41,11 +42,18 @@ interface ActivateSessionDetails {
   cadets: number;
   sectors: number;
   slidesLink?: string;
-  playerNames?: string[];
 }
 
 type ReadingValue = {
   timestamp?: string;
+  [key: string]: unknown;
+};
+
+type PlayerValue = {
+  createdAt?: string;
+  hasChosen?: boolean;
+  lastLoginAt?: string;
+  password?: string;
   [key: string]: unknown;
 };
 
@@ -64,6 +72,10 @@ function isValidSessionName(sessionName: string): boolean {
   return /^[a-z0-9_-]+$/.test(sessionName);
 }
 
+function isValidFirebaseKey(key: string): boolean {
+  return key.trim().length > 0 && !/[.#$/[\]]/.test(key);
+}
+
 function parseIsoTimestampToMs(timestamp: unknown): number | null {
   if (typeof timestamp !== "string" || !timestamp.trim()) {
     return null;
@@ -71,6 +83,15 @@ function parseIsoTimestampToMs(timestamp: unknown): number | null {
 
   const parsedMs = Date.parse(timestamp);
   return Number.isNaN(parsedMs) ? null : parsedMs;
+}
+
+function buildNewPlayerValue(): PlayerValue {
+  return {
+    createdAt: new Date().toISOString(),
+    hasChosen: false,
+    lastLoginAt: "",
+    password: "",
+  };
 }
 
 export function useTeacherSessions() {
@@ -162,6 +183,7 @@ export function useTeacherSessions() {
         sessionIds.map(async (id) => {
           const metaSnapshot = await get(ref(db, `sessions/${id}/metadata`));
           const meetingsSnapshot = await get(ref(db, `sessions/${id}/meetings`));
+          const playersSnapshot = await get(ref(db, `sessions/${id}/players`));
 
           if (!metaSnapshot.exists()) {
             return null;
@@ -178,11 +200,24 @@ export function useTeacherSessions() {
                 >)
               : {};
 
+          const players =
+            playersSnapshot.exists() &&
+            typeof playersSnapshot.val() === "object" &&
+            playersSnapshot.val() !== null
+              ? (playersSnapshot.val() as Record<string, unknown>)
+              : {};
+
+          const playerNames = Object.keys(players).sort((left, right) =>
+            left.localeCompare(right)
+          );
+
           const activeMeetingEntry = Object.entries(meetings)
             .filter(([, meeting]) => meeting.startTime && !meeting.endTime)
             .sort((leftMeeting, rightMeeting) => {
               const leftMs = parseIsoTimestampToMs(leftMeeting[1].startTime) ?? 0;
-              const rightMs = parseIsoTimestampToMs(rightMeeting[1].startTime) ?? 0;
+              const rightMs =
+                parseIsoTimestampToMs(rightMeeting[1].startTime) ?? 0;
+
               return rightMs - leftMs;
             })[0];
 
@@ -192,6 +227,7 @@ export function useTeacherSessions() {
             gameId: metadata.gameId,
             status: metadata.status ?? "draft",
             sessionName: metadata.sessionName ?? id,
+            playerNames,
             start: metadata.start ?? null,
             stop: metadata.stop ?? null,
             activeMeeting: activeMeetingEntry
@@ -210,6 +246,7 @@ export function useTeacherSessions() {
         .sort((leftSession, rightSession) => {
           const leftMs = leftSession.start?.activatedAtMs ?? 0;
           const rightMs = rightSession.start?.activatedAtMs ?? 0;
+
           return rightMs - leftMs;
         });
 
@@ -242,7 +279,7 @@ export function useTeacherSessions() {
     return () => clearInterval(intervalId);
   }, [sessions, moveTopLevelReadingsToSession]);
 
-    async function createSession(gameId: string, rawSessionName: string) {
+  async function createSession(gameId: string, rawSessionName: string) {
     if (!user) {
       return;
     }
@@ -300,7 +337,6 @@ export function useTeacherSessions() {
         class: details.className,
         cadets: details.cadets,
         sectors: details.sectors,
-        playerNames: details.playerNames ?? [],
         ...(details.slidesLink ? { slidesLink: details.slidesLink } : {}),
         timestamp: new Date(activatedAtMs).toISOString(),
         activatedAtMs,
@@ -309,6 +345,109 @@ export function useTeacherSessions() {
     });
 
     await moveTopLevelReadingsToSession(sessionId, activatedAtMs);
+    await loadSessions();
+  }
+
+  async function setSessionPlayers(sessionId: string, playerNames: string[]) {
+    const invalidName = playerNames.find((name) => !isValidFirebaseKey(name));
+
+    if (invalidName) {
+      throw new Error(
+        `Invalid student name "${invalidName}". Names cannot contain ., #, $, /, [, or ].`
+      );
+    }
+
+    const playersRef = ref(db, `sessions/${sessionId}/players`);
+    const playersSnapshot = await get(playersRef);
+
+    const existingPlayers =
+      playersSnapshot.exists() &&
+      typeof playersSnapshot.val() === "object" &&
+      playersSnapshot.val() !== null
+        ? (playersSnapshot.val() as Record<string, PlayerValue>)
+        : {};
+
+    const nextPlayers = playerNames.reduce<Record<string, PlayerValue>>(
+      (players, rawName) => {
+        const name = rawName.trim();
+
+        if (isValidFirebaseKey(name)) {
+          players[name] = existingPlayers[name] ?? buildNewPlayerValue();
+        }
+
+        return players;
+      },
+      {}
+    );
+
+    await set(
+      playersRef,
+      Object.keys(nextPlayers).length > 0 ? nextPlayers : null
+    );
+
+    await update(ref(db, `sessions/${sessionId}/metadata/start`), {
+      cadets: Object.keys(nextPlayers).length,
+    });
+
+    await loadSessions();
+  }
+
+  async function addSessionPlayer(sessionId: string, playerName: string) {
+    const trimmedName = playerName.trim();
+
+    if (!isValidFirebaseKey(trimmedName)) {
+      throw new Error(
+        "Student name cannot be empty or contain ., #, $, /, [, or ]."
+      );
+    }
+
+    const playerRef = ref(db, `sessions/${sessionId}/players/${trimmedName}`);
+    const playerSnapshot = await get(playerRef);
+
+    if (!playerSnapshot.exists()) {
+      await set(playerRef, buildNewPlayerValue());
+    }
+
+    const playersSnapshot = await get(ref(db, `sessions/${sessionId}/players`));
+    const players =
+      playersSnapshot.exists() &&
+      typeof playersSnapshot.val() === "object" &&
+      playersSnapshot.val() !== null
+        ? (playersSnapshot.val() as Record<string, unknown>)
+        : {};
+
+    await update(ref(db, `sessions/${sessionId}/metadata/start`), {
+      cadets: Object.keys(players).length,
+    });
+
+    await loadSessions();
+  }
+
+  async function removeSessionPlayer(sessionId: string, playerName: string) {
+    await remove(ref(db, `sessions/${sessionId}/players/${playerName}`));
+
+    const playersSnapshot = await get(ref(db, `sessions/${sessionId}/players`));
+    const players =
+      playersSnapshot.exists() &&
+      typeof playersSnapshot.val() === "object" &&
+      playersSnapshot.val() !== null
+        ? (playersSnapshot.val() as Record<string, unknown>)
+        : {};
+
+    await update(ref(db, `sessions/${sessionId}/metadata/start`), {
+      cadets: Object.keys(players).length,
+    });
+
+    await loadSessions();
+  }
+
+  async function clearSessionPlayers(sessionId: string) {
+    await set(ref(db, `sessions/${sessionId}/players`), null);
+
+    await update(ref(db, `sessions/${sessionId}/metadata/start`), {
+      cadets: 0,
+    });
+
     await loadSessions();
   }
 
@@ -352,6 +491,7 @@ export function useTeacherSessions() {
     const nextMeetingNumber =
       Object.keys(meetings).reduce((maxValue, meetingId) => {
         const match = meetingId.match(/^meeting_(\d+)$/);
+
         if (!match) {
           return maxValue;
         }
@@ -359,10 +499,13 @@ export function useTeacherSessions() {
         return Math.max(maxValue, Number(match[1]));
       }, 0) + 1;
 
-    await set(ref(db, `sessions/${sessionId}/meetings/meeting_${nextMeetingNumber}`), {
-      startTime: new Date().toISOString(),
-      startedBy: user.email ?? "Unknown",
-    });
+    await set(
+      ref(db, `sessions/${sessionId}/meetings/meeting_${nextMeetingNumber}`),
+      {
+        startTime: new Date().toISOString(),
+        startedBy: user.email ?? "Unknown",
+      }
+    );
 
     await loadSessions();
   }
@@ -389,6 +532,7 @@ export function useTeacherSessions() {
       .sort((leftMeeting, rightMeeting) => {
         const leftMs = parseIsoTimestampToMs(leftMeeting[1].startTime) ?? 0;
         const rightMs = parseIsoTimestampToMs(rightMeeting[1].startTime) ?? 0;
+
         return rightMs - leftMs;
       })[0];
 
@@ -411,6 +555,10 @@ export function useTeacherSessions() {
     loading,
     createSession,
     activateSession,
+    setSessionPlayers,
+    addSessionPlayer,
+    removeSessionPlayer,
+    clearSessionPlayers,
     stopSession,
     startMeeting,
     endMeeting,
