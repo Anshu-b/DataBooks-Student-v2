@@ -201,7 +201,8 @@ Convert raw ESP readings into meaningful, plot-ready metrics.
 - Device ID
 - Timestamp
 - Infection status
-- Proximity mask
+- `S`, `T`, and `QR` proximity arrays for students/cadets, tables/sectors,
+  and quarantine room readings
 
 ### Aggregated Outputs
 
