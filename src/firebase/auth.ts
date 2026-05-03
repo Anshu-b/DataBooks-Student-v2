@@ -1,4 +1,3 @@
-import { getAuth, signInAnonymously } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 
 export const auth = getAuth();
-signInAnonymously(auth);
