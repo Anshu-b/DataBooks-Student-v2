@@ -1,9 +1,10 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSessionPlayers } from "../../hooks/useSessionPlayers";
 import { useSessionJournalAnswers } from "../../hooks/useSessionJournalAnswers";
 import { useSessionMeetings } from "../../hooks/useSessionMeetings";
 import { useSessionRoster } from "../../hooks/useSessionRoster";
 import { useSessionReadings } from "../../hooks/useSessionReadings";
+import { getDatabase, onValue, ref } from "firebase/database";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap');
@@ -101,6 +102,11 @@ const styles = `
     border: 1px solid rgba(91, 110, 245, 0.3);
   }
 
+  .metric-card-non-players .metric-card-icon {
+    background: rgba(160, 110, 230, 0.2);
+    border: 1px solid rgba(160, 110, 230, 0.3);
+  }
+
   .metric-card-sectors .metric-card-icon {
     background: rgba(40, 170, 190, 0.2);
     border: 1px solid rgba(40, 170, 190, 0.3);
@@ -153,6 +159,10 @@ const styles = `
     color: #8ba5f5;
   }
 
+  .metric-card-non-players .metric-value {
+    color: #b08ae0;
+  }
+
   .metric-card-sectors .metric-value {
     color: #63d4e5;
   }
@@ -194,6 +204,7 @@ interface Props {
 
 interface LiveStats {
   totalPlayers: number;
+  totalNonPlayerParticipants: number;
   totalSectors: number;
   totalMedBayRooms: number;
   infectedCount: number;
@@ -203,6 +214,8 @@ interface LiveStats {
 }
 
 function SessionRealtimeDashboard({ sessionId }: Props) {
+  const [nonPlayerCount, setNonPlayerCount] = useState(0);
+  const [nonPlayersLoading, setNonPlayersLoading] = useState(true);
   const { players, loading: playersLoading } = useSessionPlayers(sessionId);
   const { roster, loading: rosterLoading } = useSessionRoster(sessionId);
   const { readings, loading: readingsLoading } = useSessionReadings(sessionId);
@@ -210,7 +223,37 @@ function SessionRealtimeDashboard({ sessionId }: Props) {
     useSessionJournalAnswers(sessionId);
   const { meetings, loading: meetingsLoading } = useSessionMeetings(sessionId);
 
+  useEffect(() => {
+    if (!sessionId) {
+      setNonPlayerCount(0);
+      setNonPlayersLoading(false);
+      return;
+    }
+
+    setNonPlayersLoading(true);
+
+    const db = getDatabase();
+    const nonPlayersRef = ref(db, `sessions/${sessionId}/nonPlayers`);
+
+    return onValue(nonPlayersRef, (snapshot) => {
+      const value = snapshot.val();
+
+      if (
+        value &&
+        typeof value === "object" &&
+        !Array.isArray(value)
+      ) {
+        setNonPlayerCount(Object.keys(value).length);
+      } else {
+        setNonPlayerCount(0);
+      }
+
+      setNonPlayersLoading(false);
+    });
+  }, [sessionId]);
+
   const loading =
+    nonPlayersLoading ||
     playersLoading ||
     rosterLoading ||
     readingsLoading ||
@@ -219,6 +262,7 @@ function SessionRealtimeDashboard({ sessionId }: Props) {
 
   const stats: LiveStats = useMemo(() => {
     const totalPlayers = players.length;
+    const totalNonPlayerParticipants = nonPlayerCount;
     const totalSectors = roster.sectors;
     const observedMedBayRooms = readings.reduce((maxRooms, reading) => {
       if (!Array.isArray(reading.MB)) {
@@ -240,6 +284,7 @@ function SessionRealtimeDashboard({ sessionId }: Props) {
 
     return {
       totalPlayers,
+      totalNonPlayerParticipants,
       totalSectors,
       totalMedBayRooms,
       infectedCount,
@@ -247,7 +292,7 @@ function SessionRealtimeDashboard({ sessionId }: Props) {
       journalSubmissions,
       meetingCount,
     };
-  }, [players, roster, readings, answersMap, meetings]);
+  }, [players, nonPlayerCount, roster, readings, answersMap, meetings]);
 
   if (loading) {
     return (
@@ -258,7 +303,7 @@ function SessionRealtimeDashboard({ sessionId }: Props) {
             <h3 className="dashboard-title">Live Session Metrics</h3>
           </div>
           <div className="metrics-grid">
-            {[1, 2, 3, 4, 5, 6, 7].map((i) => (
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
               <div key={i} className="metric-card loading-shimmer">
                 <div className="metric-card-icon">⏳</div>
                 <div className="metric-label">Loading...</div>
@@ -288,6 +333,14 @@ function SessionRealtimeDashboard({ sessionId }: Props) {
             <div className="metric-card-icon">👥</div>
             <div className="metric-label">Total Players</div>
             <div className="metric-value">{stats.totalPlayers}</div>
+          </div>
+
+          <div className="metric-card metric-card-non-players">
+            <div className="metric-card-icon">🧑‍🤝‍🧑</div>
+            <div className="metric-label">Non Player Participants</div>
+            <div className="metric-value">
+              {stats.totalNonPlayerParticipants}
+            </div>
           </div>
 
           <div className="metric-card metric-card-sectors">

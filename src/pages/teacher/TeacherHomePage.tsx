@@ -543,13 +543,28 @@ const styles = `
   }
 
   .roster-add-row {
-    display: flex;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: minmax(240px, 1fr) 220px auto;
+    gap: 12px;
     align-items: center;
   }
 
   .roster-add-row .field-input {
-    flex: 1;
+    min-width: 0;
+  }
+
+  .participant-type-select {
+    width: 220px;
+  }
+
+  @media (max-width: 720px) {
+    .roster-add-row {
+      grid-template-columns: 1fr;
+    }
+
+    .participant-type-select {
+      width: 100%;
+    }
   }
 
   .add-student-btn,
@@ -619,6 +634,28 @@ const styles = `
     padding: 0;
   }
 
+
+  .participant-row {
+    display: grid;
+    grid-template-columns: 1fr 160px auto;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+    padding: 8px 10px;
+    background: rgba(102, 126, 234, 0.12);
+    border: 1px solid rgba(102, 126, 234, 0.25);
+    border-radius: 12px;
+    color: rgba(220, 225, 255, 0.92);
+    font-size: 13px;
+    font-weight: 500;
+    box-sizing: border-box;
+  }
+
+  .participant-row .session-select {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
   .roster-empty {
     margin: 14px 0 0;
     color: rgba(200, 185, 220, 0.5);
@@ -629,11 +666,50 @@ const styles = `
 const STUDENT_TEMPLATE_URL =
   "https://docs.google.com/spreadsheets/d/1s0V46jr0vAHJvpc0Yur45_xUVgGgeoDyL7otBYb6Chc/edit?usp=sharing";
 
-function parseStudentCsv(text: string): string[] {
+type ParticipantType = "player" | "nonPlayer";
+
+type SessionParticipant = {
+  name: string;
+  type: ParticipantType;
+};
+
+function parseParticipantType(rawType: string | undefined): ParticipantType {
+  const normalizedType = rawType?.trim().toLowerCase() ?? "";
+
+  return normalizedType === "player" ? "player" : "nonPlayer";
+}
+
+function parseStudentCsv(text: string): SessionParticipant[] {
   return text
     .split(/\r?\n/)
-    .map((line) => line.split(",")[0]?.trim())
-    .filter((name) => name && name.toLowerCase() !== "name");
+    .map((line) => {
+      const [rawName, rawType] = line.split(",");
+      const name = rawName?.trim();
+
+      if (!name || name.toLowerCase() === "name") {
+        return null;
+      }
+
+      return {
+        name,
+        type: parseParticipantType(rawType),
+      };
+    })
+    .filter((participant): participant is SessionParticipant =>
+      participant !== null
+    );
+}
+
+function getPlayerNames(participants: SessionParticipant[]): string[] {
+  return participants
+    .filter((participant) => participant.type === "player")
+    .map((participant) => participant.name);
+}
+
+function getNonPlayerNames(participants: SessionParticipant[]): string[] {
+  return participants
+    .filter((participant) => participant.type === "nonPlayer")
+    .map((participant) => participant.name);
 }
 
 function TeacherHomePage() {
@@ -644,30 +720,37 @@ function TeacherHomePage() {
     sessions,
     createSession,
     activateSession,
-    setSessionPlayers,
+    setSessionParticipants,
     addSessionPlayer,
-    removeSessionPlayer,
-    clearSessionPlayers,
-    setSessionSectors,
-    setSessionMedBayRooms,
+    addSessionNonPlayer,
+    moveSessionParticipant,
+    removeSessionParticipant,
+    clearSessionParticipants,
     stopSession,
     startMeeting,
     endMeeting,
   } = useTeacherSessions();
 
   const [selectedSession, setSelectedSession] = useState("");
-  const [cadetsTouched, setCadetsTouched] = useState(false);
+  const [playerCountTouched, setPlayerCountTouched] = useState(false);
+  const [nonPlayerCountTouched, setNonPlayerCountTouched] = useState(false);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [sessionName, setSessionName] = useState("");
   const [className, setClassName] = useState("");
-  const [uploadedPlayerNames, setUploadedPlayerNames] = useState<string[]>([]);
-  const [cadets, setCadets] = useState(0);
+  const [uploadedParticipants, setUploadedParticipants] = useState<
+    SessionParticipant[]
+  >([]);
+  const [playerCount, setPlayerCount] = useState(0);
+  const [nonPlayerParticipantCount, setNonPlayerParticipantCount] =
+    useState(0);
   const [sectors, setSectors] = useState(0);
   const [medBayRooms, setMedBayRooms] = useState(1);
-  const [liveSectorCount, setLiveSectorCount] = useState(0);
-  const [liveMedBayRoomCount, setLiveMedBayRoomCount] = useState(0);
-  const [manualStudentName, setManualStudentName] = useState("");
-  const [liveRosterNames, setLiveRosterNames] = useState<string[]>([]);
+  const [manualParticipantName, setManualParticipantName] = useState("");
+  const [manualParticipantType, setManualParticipantType] =
+    useState<ParticipantType>("player");
+  const [liveParticipants, setLiveParticipants] = useState<
+    SessionParticipant[]
+  >([]);
   // const [slidesLink, setSlidesLink] = useState("");
 
   const selectedSessionData = sessions.find(
@@ -675,13 +758,22 @@ function TeacherHomePage() {
   );
 
   useEffect(() => {
-    const names = selectedSessionData?.playerNames ?? [];
-    setLiveRosterNames(names);
-    setLiveSectorCount(selectedSessionData?.start?.sectors ?? 0);
-    setLiveMedBayRoomCount(
-      selectedSessionData?.start?.medBayRooms ?? 1
-    );
-    setManualStudentName("");
+    const playerNames = selectedSessionData?.playerNames ?? [];
+    const nonPlayerNames = selectedSessionData?.nonPlayerNames ?? [];
+    const participants = [
+      ...playerNames.map((name) => ({
+        name,
+        type: "player" as ParticipantType,
+      })),
+      ...nonPlayerNames.map((name) => ({
+        name,
+        type: "nonPlayer" as ParticipantType,
+      })),
+    ].sort((left, right) => left.name.localeCompare(right.name));
+
+    setLiveParticipants(participants);
+    setManualParticipantName("");
+    setManualParticipantType("player");
   }, [selectedSession, selectedSessionData]);
 
   if (authLoading) return null;
@@ -692,15 +784,16 @@ function TeacherHomePage() {
 
     reader.onload = () => {
       const text = String(reader.result ?? "");
-      const names = parseStudentCsv(text);
+      const participants = parseStudentCsv(text);
 
-      if (names.length === 0) {
-        alert("No student names found in the CSV.");
+      if (participants.length === 0) {
+        alert("No names found in the CSV.");
         return;
       }
 
-      setUploadedPlayerNames(names);
-      setCadetsTouched(false);
+      setUploadedParticipants(participants);
+      setPlayerCountTouched(false);
+      setNonPlayerCountTouched(false);
     };
 
     reader.readAsText(file);
@@ -711,25 +804,29 @@ function TeacherHomePage() {
 
     reader.onload = async () => {
       const text = String(reader.result ?? "");
-      const names = parseStudentCsv(text);
+      const participants = parseStudentCsv(text);
 
-      if (names.length === 0) {
-        alert("No student names found in the CSV.");
+      if (participants.length === 0) {
+        alert("No names found in the CSV.");
         return;
       }
 
       const shouldReplace = window.confirm(
-        `Replace the current roster with ${names.length} names from this CSV?`
+        `Replace the current name list with ${participants.length} names from this CSV?`
       );
 
       if (!shouldReplace || !selectedSession) return;
 
       try {
-        await setSessionPlayers(selectedSession, names);
-        setLiveRosterNames(names);
+        await setSessionParticipants(
+          selectedSession,
+          getPlayerNames(participants),
+          getNonPlayerNames(participants)
+        );
+        setLiveParticipants(participants);
       } catch (error) {
         const message =
-          error instanceof Error ? error.message : "Failed to replace roster.";
+          error instanceof Error ? error.message : "Failed to replace list.";
 
         alert(message);
       }
@@ -738,8 +835,8 @@ function TeacherHomePage() {
     reader.readAsText(file);
   }
 
-  async function handleAddLiveStudent() {
-    const trimmedName = manualStudentName.trim();
+  async function handleAddLiveParticipant() {
+    const trimmedName = manualParticipantName.trim();
 
     if (!selectedSession) {
       alert("Please select a session first.");
@@ -747,45 +844,83 @@ function TeacherHomePage() {
     }
 
     if (!trimmedName) {
-      alert("Please enter a student name.");
+      alert("Please enter a name.");
       return;
     }
 
     if (
-      liveRosterNames.some(
-        (name) => name.toLowerCase() === trimmedName.toLowerCase()
+      liveParticipants.some(
+        (participant) =>
+          participant.name.toLowerCase() === trimmedName.toLowerCase()
       )
     ) {
-      alert("That student is already in the roster.");
+      alert("That name is already in the list.");
       return;
     }
 
     try {
-      await addSessionPlayer(selectedSession, trimmedName);
-      setLiveRosterNames([...liveRosterNames, trimmedName]);
-      setManualStudentName("");
+      if (manualParticipantType === "player") {
+        await addSessionPlayer(selectedSession, trimmedName);
+      } else {
+        await addSessionNonPlayer(selectedSession, trimmedName);
+      }
+
+      setLiveParticipants([
+        ...liveParticipants,
+        { name: trimmedName, type: manualParticipantType },
+      ].sort((left, right) => left.name.localeCompare(right.name)));
+      setManualParticipantName("");
+      setManualParticipantType("player");
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Failed to add student.";
+        error instanceof Error ? error.message : "Failed to add name.";
 
       alert(message);
     }
   }
 
-  async function handleRemoveLiveStudent(studentName: string) {
+  async function handleUpdateParticipantType(
+    participantName: string,
+    nextType: ParticipantType
+  ) {
     if (!selectedSession) {
       alert("Please select a session first.");
       return;
     }
 
     try {
-      await removeSessionPlayer(selectedSession, studentName);
-      setLiveRosterNames(
-        liveRosterNames.filter((name) => name !== studentName)
+      await moveSessionParticipant(selectedSession, participantName, nextType);
+      setLiveParticipants(
+        liveParticipants.map((participant) =>
+          participant.name === participantName
+            ? { ...participant, type: nextType }
+            : participant
+        )
       );
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Failed to remove student.";
+        error instanceof Error ? error.message : "Failed to update type.";
+
+      alert(message);
+    }
+  }
+
+  async function handleRemoveLiveParticipant(participantName: string) {
+    if (!selectedSession) {
+      alert("Please select a session first.");
+      return;
+    }
+
+    try {
+      await removeSessionParticipant(selectedSession, participantName);
+      setLiveParticipants(
+        liveParticipants.filter(
+          (participant) => participant.name !== participantName
+        )
+      );
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Failed to remove name.";
 
       alert(message);
     }
@@ -798,67 +933,17 @@ function TeacherHomePage() {
     }
 
     const shouldClear = window.confirm(
-      "Remove every student from this roster?"
+      "Remove every name from this list?"
     );
 
     if (!shouldClear) return;
 
     try {
-      await clearSessionPlayers(selectedSession);
-      setLiveRosterNames([]);
+      await clearSessionParticipants(selectedSession);
+      setLiveParticipants([]);
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Failed to clear roster.";
-
-      alert(message);
-    }
-  }
-
-  async function handleSaveLiveSectorCount() {
-    if (!selectedSession) {
-      alert("Please select a session first.");
-      return;
-    }
-
-    if (!Number.isInteger(liveSectorCount) || liveSectorCount <= 0) {
-      alert("Sector count must be a positive whole number.");
-      return;
-    }
-
-    try {
-      await setSessionSectors(selectedSession, liveSectorCount);
-    } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "Failed to update sectors.";
-
-      alert(message);
-    }
-  }
-
-  async function handleSaveLiveMedBayRoomCount() {
-    if (!selectedSession) {
-      alert("Please select a session first.");
-      return;
-    }
-
-    if (
-      !Number.isInteger(liveMedBayRoomCount) ||
-      liveMedBayRoomCount <= 0
-    ) {
-      alert("MedBay room count must be a positive whole number.");
-      return;
-    }
-
-    try {
-      await setSessionMedBayRooms(
-        selectedSession,
-        liveMedBayRoomCount
-      );
-    } catch (error) {
-      const message =
-        error instanceof Error
-          ? error.message
-          : "Failed to update MedBay rooms.";
+        error instanceof Error ? error.message : "Failed to clear list.";
 
       alert(message);
     }
@@ -868,8 +953,9 @@ function TeacherHomePage() {
     if (
       !sessionName ||
       !className ||
-      uploadedPlayerNames.length === 0 ||
-      cadets <= 0 ||
+      uploadedParticipants.length === 0 ||
+      playerCount < 0 ||
+      nonPlayerParticipantCount < 0 ||
       sectors <= 0 ||
       medBayRooms <= 0
     ) {
@@ -877,9 +963,28 @@ function TeacherHomePage() {
       return;
     }
 
-    if (cadets !== uploadedPlayerNames.length) {
+    const uploadedPlayerCount = getPlayerNames(uploadedParticipants).length;
+    const uploadedNonPlayerCount = getNonPlayerNames(
+      uploadedParticipants
+    ).length;
+
+    if (playerCount !== uploadedPlayerCount) {
       alert(
-        `Cadet count must match the uploaded CSV. You entered ${cadets}, but the CSV has ${uploadedPlayerNames.length} names.`
+        `Player count must match the CSV. You entered ${playerCount}, but the CSV has ${uploadedPlayerCount} players.`
+      );
+      return;
+    }
+
+    if (nonPlayerParticipantCount !== uploadedNonPlayerCount) {
+      alert(
+        `Non player participant count must match the CSV. You entered ${nonPlayerParticipantCount}, but the CSV has ${uploadedNonPlayerCount} non player participants.`
+      );
+      return;
+    }
+
+    if (playerCount + nonPlayerParticipantCount !== uploadedParticipants.length) {
+      alert(
+        "Player count and non player participant count must add up to the total number of names in the CSV."
       );
       return;
     }
@@ -897,22 +1002,28 @@ function TeacherHomePage() {
       if (sessionId) {
         await activateSession(sessionId, {
           className,
-          cadets,
+          cadets: playerCount,
           sectors,
           medBayRooms,
           // slidesLink,
         });
 
-        await setSessionPlayers(sessionId, uploadedPlayerNames);
+        await setSessionParticipants(
+          sessionId,
+          getPlayerNames(uploadedParticipants),
+          getNonPlayerNames(uploadedParticipants)
+        );
         setSelectedSession(sessionId);
       }
 
       setShowCreateForm(false);
-      setCadetsTouched(false);
+      setPlayerCountTouched(false);
+      setNonPlayerCountTouched(false);
       setSessionName("");
       setClassName("");
-      setUploadedPlayerNames([]);
-      setCadets(0);
+      setUploadedParticipants([]);
+      setPlayerCount(0);
+      setNonPlayerParticipantCount(0);
       setSectors(0);
       setMedBayRooms(1);
       // setSlidesLink("");
@@ -996,7 +1107,7 @@ function TeacherHomePage() {
                 </div>
 
                 <div className="form-field">
-                  <label className="field-label">Student Roster Template</label>
+                  <label className="field-label">Name List Template</label>
                   <div className="template-card">
                     <a
                       className="template-link"
@@ -1014,7 +1125,7 @@ function TeacherHomePage() {
                 </div>
 
                 <div className="form-field">
-                  <label className="field-label">Upload Student CSV</label>
+                  <label className="field-label">Upload Name List CSV</label>
                   <div className="upload-card">
                     <input
                       className="file-input"
@@ -1029,36 +1140,74 @@ function TeacherHomePage() {
                       }}
                     />
                     <p className="upload-help">
-                      Upload a CSV with one column of student names. The first
-                      row should be "Name".
+                      Upload a CSV with names in the first column. The optional
+                      second column is Type. Only "player" saves as a player.
+                      Anything else saves as a non player participant.
                     </p>
 
-                    {uploadedPlayerNames.length > 0 && (
+                    {uploadedParticipants.length > 0 && (
                       <p className="csv-status">
-                        {uploadedPlayerNames.length} students loaded from CSV.
+                        {uploadedParticipants.length} names loaded from CSV.
+                        {" "}
+                        {getPlayerNames(uploadedParticipants).length} players,
+                        {" "}
+                        {getNonPlayerNames(uploadedParticipants).length} non player participants.
                       </p>
                     )}
                   </div>
                 </div>
 
                 <div className="form-field">
-                  <label className="field-label">Number of Cadets</label>
+                  <label className="field-label">Number of Players</label>
                   <input
                     className="field-input"
                     type="number"
-                    value={cadets || ""}
-                    onChange={(e) => setCadets(Number(e.target.value))}
-                    onBlur={() => setCadetsTouched(true)}
-                    placeholder="Must match uploaded CSV count"
+                    min="0"
+                    step="1"
+                    value={playerCount}
+                    onChange={(e) =>
+                      setPlayerCount(Number(e.target.value))
+                    }
+                    onBlur={() => setPlayerCountTouched(true)}
+                    placeholder="Must match CSV player count"
                   />
 
-                  {cadetsTouched &&
-                    uploadedPlayerNames.length > 0 &&
-                    cadets > 0 &&
-                    cadets !== uploadedPlayerNames.length && (
+                  {playerCountTouched &&
+                    uploadedParticipants.length > 0 &&
+                    playerCount !==
+                      getPlayerNames(uploadedParticipants).length && (
                       <p className="field-warning">
-                        Cadet count must match the uploaded CSV count:{" "}
-                        {uploadedPlayerNames.length}.
+                        Player count must match the CSV player count:{" "}
+                        {getPlayerNames(uploadedParticipants).length}.
+                      </p>
+                    )}
+                </div>
+
+                <div className="form-field">
+                  <label className="field-label">
+                    Number of Non Player Participants
+                  </label>
+                  <input
+                    className="field-input"
+                    type="number"
+                    min="0"
+                    step="1"
+                    value={nonPlayerParticipantCount}
+                    onChange={(e) =>
+                      setNonPlayerParticipantCount(Number(e.target.value))
+                    }
+                    onBlur={() => setNonPlayerCountTouched(true)}
+                    placeholder="Must match CSV non player participant count"
+                  />
+
+                  {nonPlayerCountTouched &&
+                    uploadedParticipants.length > 0 &&
+                    nonPlayerParticipantCount !==
+                      getNonPlayerNames(uploadedParticipants).length && (
+                      <p className="field-warning">
+                        Non player participant count must match the CSV non
+                        player participant count:{" "}
+                        {getNonPlayerNames(uploadedParticipants).length}.
                       </p>
                     )}
                 </div>
@@ -1207,17 +1356,18 @@ function TeacherHomePage() {
                       <div className="roster-manager-header">
                         <div>
                           <h3 className="roster-manager-title">
-                            Manage Students
+                            Manage Name List
                           </h3>
                           <p className="roster-help">
-                            Add, remove, or replace students for this session.
-                            Changes are saved under sessions/{selectedSession}
-                            /players.
+                            Add, remove, or replace players and non player
+                            participants for this session.
                           </p>
                         </div>
 
                         <span className="roster-count-badge">
-                          {liveRosterNames.length} students
+                          {getPlayerNames(liveParticipants).length} players /{" "}
+                          {getNonPlayerNames(liveParticipants).length}{" "}
+                          non player participants
                         </span>
                       </div>
 
@@ -1226,23 +1376,35 @@ function TeacherHomePage() {
                           <input
                             className="field-input"
                             type="text"
-                            value={manualStudentName}
+                            value={manualParticipantName}
                             onChange={(e) =>
-                              setManualStudentName(e.target.value)
+                              setManualParticipantName(e.target.value)
                             }
                             onKeyDown={(e) => {
                               if (e.key === "Enter") {
-                                handleAddLiveStudent();
+                                handleAddLiveParticipant();
                               }
                             }}
-                            placeholder="Type student name"
+                            placeholder="Type name"
                           />
+                          <select
+                            className="session-select participant-type-select"
+                            value={manualParticipantType}
+                            onChange={(e) =>
+                              setManualParticipantType(
+                                e.target.value as ParticipantType
+                              )
+                            }
+                          >
+                            <option value="player">Player</option>
+                            <option value="nonPlayer">Non Player Participant</option>
+                          </select>
                           <button
                             className="add-student-btn"
                             type="button"
-                            onClick={handleAddLiveStudent}
+                            onClick={handleAddLiveParticipant}
                           >
-                            Add Student
+                            Add Name
                           </button>
                         </div>
 
@@ -1272,125 +1434,49 @@ function TeacherHomePage() {
                         </div>
 
                         <p className="roster-help">
-                          Uploading a CSV here replaces the current student list
+                          Uploading a CSV here replaces the current name list
                           for this selected session.
                         </p>
                       </div>
 
-                      {liveRosterNames.length > 0 ? (
+                      {liveParticipants.length > 0 ? (
                         <div className="roster-list">
-                          {liveRosterNames.map((studentName) => (
-                            <span className="student-pill" key={studentName}>
-                              {studentName}
+                          {liveParticipants.map((participant) => (
+                            <div
+                              className="participant-row"
+                              key={participant.name}
+                            >
+                              <span>{participant.name}</span>
+                              <select
+                                className="session-select"
+                                value={participant.type}
+                                onChange={(e) =>
+                                  handleUpdateParticipantType(
+                                    participant.name,
+                                    e.target.value as ParticipantType
+                                  )
+                                }
+                              >
+                                <option value="player">Player</option>
+                                <option value="nonPlayer">Non Player Participant</option>
+                              </select>
                               <button
                                 className="remove-student-btn"
                                 type="button"
                                 onClick={() =>
-                                  handleRemoveLiveStudent(studentName)
+                                  handleRemoveLiveParticipant(participant.name)
                                 }
                               >
                                 ×
                               </button>
-                            </span>
+                            </div>
                           ))}
                         </div>
                       ) : (
                         <p className="roster-empty">
-                          No students are currently listed for this session.
+                          No names are currently listed for this session.
                         </p>
                       )}
-                    </div>
-
-                    <div className="roster-manager-card">
-                      <div className="roster-manager-header">
-                        <div>
-                          <h3 className="roster-manager-title">
-                            Manage Sectors
-                          </h3>
-                          <p className="roster-help">
-                            Change the number of sectors for this session.
-                            Changes are saved under sessions/{selectedSession}
-                            /metadata/start/sectors.
-                          </p>
-                        </div>
-
-                        <span className="roster-count-badge">
-                          {selectedSessionData?.start?.sectors ?? 0} sectors
-                        </span>
-                      </div>
-
-                      <div className="roster-add-row">
-                        <input
-                          className="field-input"
-                          type="number"
-                          min="1"
-                          step="1"
-                          value={liveSectorCount || ""}
-                          onChange={(e) =>
-                            setLiveSectorCount(Number(e.target.value))
-                          }
-                          placeholder="Number of sectors"
-                        />
-                        <button
-                          className="add-student-btn"
-                          type="button"
-                          onClick={handleSaveLiveSectorCount}
-                          disabled={
-                            liveSectorCount ===
-                            (selectedSessionData?.start?.sectors ?? 0)
-                          }
-                        >
-                          Save Sectors
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="roster-manager-card">
-                      <div className="roster-manager-header">
-                        <div>
-                          <h3 className="roster-manager-title">
-                            Manage MedBay Rooms
-                          </h3>
-                          <p className="roster-help">
-                            Change the number of MedBay rooms for this
-                            session. Changes are saved under
-                            sessions/{selectedSession}
-                            /metadata/start/medBayRooms.
-                          </p>
-                        </div>
-
-                        <span className="roster-count-badge">
-                          {selectedSessionData?.start?.medBayRooms ?? 1}{" "}
-                          MedBay rooms
-                        </span>
-                      </div>
-
-                      <div className="roster-add-row">
-                        <input
-                          className="field-input"
-                          type="number"
-                          min="1"
-                          step="1"
-                          value={liveMedBayRoomCount || ""}
-                          onChange={(e) =>
-                            setLiveMedBayRoomCount(Number(e.target.value))
-                          }
-                          placeholder="Number of MedBay rooms"
-                        />
-                        <button
-                          className="add-student-btn"
-                          type="button"
-                          onClick={handleSaveLiveMedBayRoomCount}
-                          disabled={
-                            typeof selectedSessionData?.start
-                              ?.medBayRooms === "number" &&
-                            liveMedBayRoomCount ===
-                              selectedSessionData.start.medBayRooms
-                          }
-                        >
-                          Save Rooms
-                        </button>
-                      </div>
                     </div>
 
                     <SessionRealtimeDashboard sessionId={selectedSession} />

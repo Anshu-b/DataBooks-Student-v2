@@ -16,6 +16,7 @@ export interface TeacherSession {
   status: "draft" | "active" | "inactive";
   sessionName: string;
   playerNames: string[];
+  nonPlayerNames: string[];
   start: null | {
     action: "start";
     teacher: string;
@@ -87,7 +88,7 @@ function parseIsoTimestampToMs(timestamp: unknown): number | null {
   return Number.isNaN(parsedMs) ? null : parsedMs;
 }
 
-function buildNewPlayerValue(): PlayerValue {
+function buildNewParticipantValue(): PlayerValue {
   return {
     createdAt: new Date().toISOString(),
     hasChosen: false,
@@ -186,6 +187,7 @@ export function useTeacherSessions() {
           const metaSnapshot = await get(ref(db, `sessions/${id}/metadata`));
           const meetingsSnapshot = await get(ref(db, `sessions/${id}/meetings`));
           const playersSnapshot = await get(ref(db, `sessions/${id}/players`));
+          const nonPlayersSnapshot = await get(ref(db, `sessions/${id}/nonPlayers`));
 
           if (!metaSnapshot.exists()) {
             return null;
@@ -209,7 +211,18 @@ export function useTeacherSessions() {
               ? (playersSnapshot.val() as Record<string, unknown>)
               : {};
 
+          const nonPlayers =
+            nonPlayersSnapshot.exists() &&
+            typeof nonPlayersSnapshot.val() === "object" &&
+            nonPlayersSnapshot.val() !== null
+              ? (nonPlayersSnapshot.val() as Record<string, unknown>)
+              : {};
+
           const playerNames = Object.keys(players).sort((left, right) =>
+            left.localeCompare(right)
+          );
+
+          const nonPlayerNames = Object.keys(nonPlayers).sort((left, right) =>
             left.localeCompare(right)
           );
 
@@ -230,6 +243,7 @@ export function useTeacherSessions() {
             status: metadata.status ?? "draft",
             sessionName: metadata.sessionName ?? id,
             playerNames,
+            nonPlayerNames,
             start: metadata.start ?? null,
             stop: metadata.stop ?? null,
             activeMeeting: activeMeetingEntry
@@ -339,7 +353,6 @@ export function useTeacherSessions() {
         class: details.className,
         cadets: details.cadets,
         sectors: details.sectors,
-        medBayRooms: details.medBayRooms ?? 1,
         ...(details.slidesLink ? { slidesLink: details.slidesLink } : {}),
         timestamp: new Date(activatedAtMs).toISOString(),
         activatedAtMs,
@@ -375,7 +388,7 @@ export function useTeacherSessions() {
         const name = rawName.trim();
 
         if (isValidFirebaseKey(name)) {
-          players[name] = existingPlayers[name] ?? buildNewPlayerValue();
+          players[name] = existingPlayers[name] ?? buildNewParticipantValue();
         }
 
         return players;
@@ -408,7 +421,7 @@ export function useTeacherSessions() {
     const playerSnapshot = await get(playerRef);
 
     if (!playerSnapshot.exists()) {
-      await set(playerRef, buildNewPlayerValue());
+      await set(playerRef, buildNewParticipantValue());
     }
 
     const playersSnapshot = await get(ref(db, `sessions/${sessionId}/players`));
@@ -446,6 +459,169 @@ export function useTeacherSessions() {
 
   async function clearSessionPlayers(sessionId: string) {
     await set(ref(db, `sessions/${sessionId}/players`), null);
+
+    await update(ref(db, `sessions/${sessionId}/metadata/start`), {
+      cadets: 0,
+    });
+
+    await loadSessions();
+  }
+
+
+  async function setSessionNonPlayers(
+    sessionId: string,
+    nonPlayerNames: string[]
+  ) {
+    const invalidName = nonPlayerNames.find((name) =>
+      !isValidFirebaseKey(name)
+    );
+
+    if (invalidName) {
+      throw new Error(
+        `Invalid non player name "${invalidName}". Names cannot contain ., #, $, /, [, or ].`
+      );
+    }
+
+    const nonPlayersRef = ref(db, `sessions/${sessionId}/nonPlayers`);
+    const nonPlayersSnapshot = await get(nonPlayersRef);
+
+    const existingNonPlayers =
+      nonPlayersSnapshot.exists() &&
+      typeof nonPlayersSnapshot.val() === "object" &&
+      nonPlayersSnapshot.val() !== null
+        ? (nonPlayersSnapshot.val() as Record<string, PlayerValue>)
+        : {};
+
+    const nextNonPlayers = nonPlayerNames.reduce<Record<string, PlayerValue>>(
+      (nonPlayers, rawName) => {
+        const name = rawName.trim();
+
+        if (isValidFirebaseKey(name)) {
+          nonPlayers[name] =
+            existingNonPlayers[name] ?? buildNewParticipantValue();
+        }
+
+        return nonPlayers;
+      },
+      {}
+    );
+
+    await set(
+      nonPlayersRef,
+      Object.keys(nextNonPlayers).length > 0 ? nextNonPlayers : null
+    );
+
+    await loadSessions();
+  }
+
+  async function setSessionParticipants(
+    sessionId: string,
+    playerNames: string[],
+    nonPlayerNames: string[]
+  ) {
+    await setSessionPlayers(sessionId, playerNames);
+    await setSessionNonPlayers(sessionId, nonPlayerNames);
+    await loadSessions();
+  }
+
+  async function addSessionNonPlayer(sessionId: string, nonPlayerName: string) {
+    const trimmedName = nonPlayerName.trim();
+
+    if (!isValidFirebaseKey(trimmedName)) {
+      throw new Error(
+        "Non player name cannot be empty or contain ., #, $, /, [, or ]."
+      );
+    }
+
+    const nonPlayerRef = ref(
+      db,
+      `sessions/${sessionId}/nonPlayers/${trimmedName}`
+    );
+    const nonPlayerSnapshot = await get(nonPlayerRef);
+
+    if (!nonPlayerSnapshot.exists()) {
+      await set(nonPlayerRef, buildNewParticipantValue());
+    }
+
+    await loadSessions();
+  }
+
+  async function moveSessionParticipant(
+    sessionId: string,
+    participantName: string,
+    targetType: "player" | "nonPlayer"
+  ) {
+    const trimmedName = participantName.trim();
+
+    if (!isValidFirebaseKey(trimmedName)) {
+      throw new Error(
+        "Participant name cannot be empty or contain ., #, $, /, [, or ]."
+      );
+    }
+
+    const playerRef = ref(db, `sessions/${sessionId}/players/${trimmedName}`);
+    const nonPlayerRef = ref(
+      db,
+      `sessions/${sessionId}/nonPlayers/${trimmedName}`
+    );
+
+    const playerSnapshot = await get(playerRef);
+    const nonPlayerSnapshot = await get(nonPlayerRef);
+    const existingValue =
+      playerSnapshot.val() ??
+      nonPlayerSnapshot.val() ??
+      buildNewParticipantValue();
+
+    if (targetType === "player") {
+      await set(playerRef, existingValue);
+      await remove(nonPlayerRef);
+    } else {
+      await set(nonPlayerRef, existingValue);
+      await remove(playerRef);
+    }
+
+    const playersSnapshot = await get(ref(db, `sessions/${sessionId}/players`));
+    const players =
+      playersSnapshot.exists() &&
+      typeof playersSnapshot.val() === "object" &&
+      playersSnapshot.val() !== null
+        ? (playersSnapshot.val() as Record<string, unknown>)
+        : {};
+
+    await update(ref(db, `sessions/${sessionId}/metadata/start`), {
+      cadets: Object.keys(players).length,
+    });
+
+    await loadSessions();
+  }
+
+  async function removeSessionParticipant(
+    sessionId: string,
+    participantName: string
+  ) {
+    await remove(ref(db, `sessions/${sessionId}/players/${participantName}`));
+    await remove(
+      ref(db, `sessions/${sessionId}/nonPlayers/${participantName}`)
+    );
+
+    const playersSnapshot = await get(ref(db, `sessions/${sessionId}/players`));
+    const players =
+      playersSnapshot.exists() &&
+      typeof playersSnapshot.val() === "object" &&
+      playersSnapshot.val() !== null
+        ? (playersSnapshot.val() as Record<string, unknown>)
+        : {};
+
+    await update(ref(db, `sessions/${sessionId}/metadata/start`), {
+      cadets: Object.keys(players).length,
+    });
+
+    await loadSessions();
+  }
+
+  async function clearSessionParticipants(sessionId: string) {
+    await set(ref(db, `sessions/${sessionId}/players`), null);
+    await set(ref(db, `sessions/${sessionId}/nonPlayers`), null);
 
     await update(ref(db, `sessions/${sessionId}/metadata/start`), {
       cadets: 0,
@@ -588,9 +764,15 @@ export function useTeacherSessions() {
     createSession,
     activateSession,
     setSessionPlayers,
+    setSessionNonPlayers,
+    setSessionParticipants,
     addSessionPlayer,
+    addSessionNonPlayer,
+    moveSessionParticipant,
     removeSessionPlayer,
+    removeSessionParticipant,
     clearSessionPlayers,
+    clearSessionParticipants,
     setSessionSectors,
     setSessionMedBayRooms,
     stopSession,
