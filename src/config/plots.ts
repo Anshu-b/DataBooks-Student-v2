@@ -56,7 +56,7 @@ export const PLOT_TYPES: PlotType[] = [
     id: "line",
     label: "Line Plot",
     roles: {
-      x: ["temporal", "ordinal"],
+      x: ["temporal"],
       y: ["quantitative"],
     },
   },

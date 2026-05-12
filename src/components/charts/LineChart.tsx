@@ -22,6 +22,7 @@ type LineChartProps = {
   xFormat?: string;
   xLegend?: string;
   yLegend?: string;
+  meetingMarkers?: Date[];
 };
 
 const NICE_TICK_STEPS = [
@@ -75,7 +76,8 @@ function LineChart({
   data, 
   xScaleType = "linear", 
   xLegend = "X", 
-  yLegend = "Y" 
+  yLegend = "Y",
+  meetingMarkers = [],
 }: LineChartProps) {
   const series = data.flatMap((entry) => entry.data);
   const linearXValues =
@@ -122,6 +124,22 @@ function LineChart({
         }}
         
         colors={{ scheme: "category10" }}
+        markers={
+          xScaleType === "time"
+            ? (meetingMarkers.map((markerTime, index) => ({
+                axis: "x",
+                value: markerTime,
+                lineStyle: {
+                  stroke: "#5b5b75",
+                  strokeWidth: 2,
+                  strokeDasharray: "6 6",
+                },
+                legend: index === 0 ? "Meeting" : undefined,
+                legendOrientation: "vertical",
+                legendPosition: "top-left",
+              })) as any)
+            : undefined
+        }
         pointSize={8}
         useMesh
         enableSlices="x"

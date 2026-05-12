@@ -272,11 +272,13 @@ function DataPlotsPanel() {
   const sessionId = gameState.sessionId;
 
   const [telemetry, setTelemetry] = useState<any[]>([]);
+  const [meetingMarkers, setMeetingMarkers] = useState<Date[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!sessionId) return;
     setLoading(true);
+    setMeetingMarkers([]);
 
     const db = getDatabase();
     const sessionParts: SessionData = {
@@ -326,6 +328,12 @@ function DataPlotsPanel() {
         value && typeof value === "object" && !Array.isArray(value)
           ? (value as Record<string, MeetingLog>)
           : {};
+      setMeetingMarkers(
+        Object.values(sessionParts.meetings)
+          .map((meeting) => new Date(meeting.startTime))
+          .filter((date) => !Number.isNaN(date.getTime()))
+          .sort((left, right) => left.getTime() - right.getTime())
+      );
       loaded.meetings = true;
       refreshTelemetry();
     });
@@ -515,6 +523,7 @@ function DataPlotsPanel() {
               xScaleType={isTimeAxis ? "time" : "linear"}
               xLegend={xLabel}
               yLegend={yLabel}
+              meetingMarkers={meetingMarkers}
             />
           )}
           {plotType === "scatter" && xVar && yVar && (

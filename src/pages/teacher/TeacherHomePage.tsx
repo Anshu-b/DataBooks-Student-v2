@@ -1390,6 +1390,8 @@ function TeacherHomePage() {
                       </button>
                     </div>
 
+                    <div className="activity-log-divider" />
+
 
                     <div className="roster-manager-card">
                       <div className="roster-manager-header">
@@ -1523,7 +1525,7 @@ function TeacherHomePage() {
                       )}
                     </div>
 
-                                        <div className="activity-log-divider" />
+                  <div className="activity-log-divider" />
 
                     <div className="roster-manager-card">
                       <div className="roster-manager-header">
