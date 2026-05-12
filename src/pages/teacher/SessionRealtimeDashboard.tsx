@@ -213,6 +213,20 @@ interface LiveStats {
   meetingCount: number;
 }
 
+function getDeviceIndex(deviceId: unknown): number | null {
+  if (typeof deviceId !== "string") {
+    return null;
+  }
+
+  const numericPortion = Number.parseInt(deviceId.slice(1), 10);
+
+  if (Number.isNaN(numericPortion) || numericPortion <= 0) {
+    return null;
+  }
+
+  return numericPortion - 1;
+}
+
 function SessionRealtimeDashboard({ sessionId }: Props) {
   const [nonPlayerCount, setNonPlayerCount] = useState(0);
   const [nonPlayersLoading, setNonPlayersLoading] = useState(true);
@@ -279,8 +293,34 @@ function SessionRealtimeDashboard({ sessionId }: Props) {
     const totalMedBayRooms =
       roster.medBayRooms || observedMedBayRooms;
 
-    const infectedCount = players.filter(
-      (player) => player.infection_status === 1
+    const cadetStatuses = new Map<number, number>();
+
+    readings
+      .filter((reading) => typeof reading.device_id === "string")
+      .sort((left, right) => {
+        const leftMs = Date.parse(left.timestamp ?? "");
+        const rightMs = Date.parse(right.timestamp ?? "");
+
+        return leftMs - rightMs;
+      })
+      .forEach((reading) => {
+        const deviceId = reading.device_id ?? "";
+        const entityIndex = getDeviceIndex(deviceId);
+
+        if (
+          entityIndex !== null &&
+          deviceId.startsWith("S") &&
+          entityIndex < totalPlayers
+        ) {
+          cadetStatuses.set(
+            entityIndex,
+            reading.infection_status === 1 ? 1 : 0
+          );
+        }
+      });
+
+    const infectedCount = Array.from(cadetStatuses.values()).filter(
+      (status) => status === 1
     ).length;
 
     const healthyCount = totalPlayers - infectedCount;
