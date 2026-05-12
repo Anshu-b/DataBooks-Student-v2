@@ -1,8 +1,22 @@
 import { useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { GAMES } from "../config/games";
-import { getDatabase, ref, get, set, update } from "firebase/database";
-import { useSessionPlayers } from "../hooks/useSessionPlayers";
+import { getDatabase, ref, get, update } from "firebase/database";
+import { useSessionParticipants } from "../hooks/useSessionParticipants";
+import type { ParticipantType } from "../types/gameState";
+
+type AllowedParticipant = {
+  id: string;
+  type: ParticipantType;
+};
+
+function getParticipantKey(participant: AllowedParticipant): string {
+  return `${participant.type}:${participant.id}`;
+}
+
+function getParticipantTypeLabel(type: ParticipantType): string {
+  return type === "player" ? "Cadet" : "Bridge Crew";
+}
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap');
@@ -275,6 +289,18 @@ const styles = `
     justify-content: center;
     gap: 6px;
     width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .participant-type-pill {
+    border-radius: 100px;
+    padding: 2px 7px;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(220, 228, 255, 0.72);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    flex-shrink: 0;
   }
 
   .player-used-dot {
@@ -424,7 +450,9 @@ function GameEntryPage() {
   const { gameId } = useParams<{ gameId: string }>();
   const navigate = useNavigate();
 
-  const [selectedPlayer, setSelectedPlayer] = useState<string | null>(null);
+  const [selectedParticipantKey, setSelectedParticipantKey] = useState<
+    string | null
+  >(null);
   const [sessionId, setSessionId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -432,32 +460,38 @@ function GameEntryPage() {
   const [sessionValidated, setSessionValidated] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [allowedPlayerNames, setAllowedPlayerNames] = useState<string[]>([]);
+  const [allowedParticipants, setAllowedParticipants] = useState<
+    AllowedParticipant[]
+  >([]);
 
   const game = GAMES.find((g) => g.id === gameId);
   const passwordsMatch = password.length > 0 && password === confirmPassword;
 
-  const { players } = useSessionPlayers(
+  const { participants } = useSessionParticipants(
     sessionValidated && sessionId ? sessionId : null
   );
 
-  const chosenPlayers = useMemo(() => {
-    return players
-      .filter((player) => player.hasChosen === true)
-      .map((player) => player.id);
-  }, [players]);
+  const chosenParticipantKeys = useMemo(() => {
+    return participants
+      .filter((participant) => participant.hasChosen === true)
+      .map(getParticipantKey);
+  }, [participants]);
+
+  const selectedParticipant = useMemo(() => {
+    if (!selectedParticipantKey) {
+      return null;
+    }
+
+    return (
+      allowedParticipants.find(
+        (participant) => getParticipantKey(participant) === selectedParticipantKey
+      ) ?? null
+    );
+  }, [allowedParticipants, selectedParticipantKey]);
 
   if (!game) {
     return <p style={{ padding: "2rem", color: "#f0ece8" }}>Game not found.</p>;
   }
-
-  const initialGameState = {
-    gameId: game.id,
-    sessionId,
-    player: { name: selectedPlayer },
-    currentRound: 1,
-    rounds: { 1: { roundNumber: 1, journalAnswers: {} } },
-  };
 
   async function getSessionMetadata(sessionIdValue: string) {
     const db = getDatabase();
@@ -471,24 +505,42 @@ function GameEntryPage() {
     return snapshot.val();
   }
 
-  async function getSessionPlayerNames(
+  async function getSessionParticipants(
     sessionIdValue: string
-  ): Promise<string[]> {
+  ): Promise<AllowedParticipant[]> {
     const db = getDatabase();
     const playersRef = ref(db, `sessions/${sessionIdValue}/players`);
-    const snapshot = await get(playersRef);
+    const nonPlayersRef = ref(db, `sessions/${sessionIdValue}/nonPlayers`);
+    const [playersSnapshot, nonPlayersSnapshot] = await Promise.all([
+      get(playersRef),
+      get(nonPlayersRef),
+    ]);
 
-    if (
-      !snapshot.exists() ||
-      typeof snapshot.val() !== "object" ||
-      snapshot.val() === null
-    ) {
-      return [];
-    }
+    const players =
+      playersSnapshot.exists() &&
+      typeof playersSnapshot.val() === "object" &&
+      playersSnapshot.val() !== null
+        ? Object.keys(playersSnapshot.val() as Record<string, unknown>).map(
+            (id) => ({ id, type: "player" as ParticipantType })
+          )
+        : [];
 
-    return Object.keys(snapshot.val() as Record<string, unknown>).sort(
-      (left, right) => left.localeCompare(right)
-    );
+    const nonPlayers =
+      nonPlayersSnapshot.exists() &&
+      typeof nonPlayersSnapshot.val() === "object" &&
+      nonPlayersSnapshot.val() !== null
+        ? Object.keys(nonPlayersSnapshot.val() as Record<string, unknown>).map(
+            (id) => ({ id, type: "nonPlayer" as ParticipantType })
+          )
+        : [];
+
+    return [...players, ...nonPlayers].sort((left, right) => {
+      if (left.type !== right.type) {
+        return left.type === "player" ? -1 : 1;
+      }
+
+      return left.id.localeCompare(right.id);
+    });
   }
 
   async function sessionExists(sessionIdValue: string): Promise<boolean> {
@@ -499,21 +551,26 @@ function GameEntryPage() {
     return snapshot.exists();
   }
 
-  async function resolvePlayer(
+  async function resolveParticipant(
     sessionIdValue: string,
-    username: string,
+    participant: AllowedParticipant,
     passwordValue: string
   ): Promise<{ ok: true } | { ok: false; error: string }> {
     const db = getDatabase();
-    const playerRef = ref(db, `sessions/${sessionIdValue}/players/${username}`);
-    const snapshot = await get(playerRef);
+    const participantCollection =
+      participant.type === "player" ? "players" : "nonPlayers";
+    const participantRef = ref(
+      db,
+      `sessions/${sessionIdValue}/${participantCollection}/${participant.id}`
+    );
+    const snapshot = await get(participantRef);
     const now = new Date().toISOString();
 
     if (!snapshot.exists()) {
       return {
         ok: false,
         error:
-          "This student is not listed in the session roster. Please check with your teacher.",
+          "This participant is not listed in the session roster. Please check with your teacher.",
       };
     }
 
@@ -526,7 +583,7 @@ function GameEntryPage() {
       return {
         ok: false,
         error:
-          "This student roster entry is invalid. Please check with your teacher.",
+          "This participant roster entry is invalid. Please check with your teacher.",
       };
     }
 
@@ -538,7 +595,7 @@ function GameEntryPage() {
     };
 
     if (!playerData.password) {
-      await update(playerRef, {
+      await update(participantRef, {
         password: passwordValue,
         lastLoginAt: now,
         hasChosen: true,
@@ -551,11 +608,11 @@ function GameEntryPage() {
       return {
         ok: false,
         error:
-          "Incorrect password for this username. Please check with your teacher if you forgot it.",
+          "Incorrect password for this participant. Please check with your teacher if you forgot it.",
       };
     }
 
-    await update(playerRef, {
+    await update(participantRef, {
       lastLoginAt: now,
       hasChosen: true,
     });
@@ -566,8 +623,8 @@ function GameEntryPage() {
   async function handleValidateSession() {
     setLoading(true);
     setError(null);
-    setSelectedPlayer(null);
-    setAllowedPlayerNames([]);
+    setSelectedParticipantKey(null);
+    setAllowedParticipants([]);
 
     try {
       const metadata = await getSessionMetadata(sessionId);
@@ -578,26 +635,26 @@ function GameEntryPage() {
         return;
       }
 
-      const teacherPlayerNames = await getSessionPlayerNames(sessionId);
+      const teacherParticipants = await getSessionParticipants(sessionId);
 
-      if (teacherPlayerNames.length === 0) {
-        setError("This session is missing a valid student roster.");
+      if (teacherParticipants.length === 0) {
+        setError("This session is missing a valid participant roster.");
         setLoading(false);
         return;
       }
 
-      setAllowedPlayerNames(teacherPlayerNames);
+      setAllowedParticipants(teacherParticipants);
       setSessionValidated(true);
       setLoading(false);
     } catch {
       setError("Error validating session.");
-      setAllowedPlayerNames([]);
+      setAllowedParticipants([]);
       setLoading(false);
     }
   }
 
   async function handleStartAdventure() {
-    if (!selectedPlayer || !sessionId || !password) {
+    if (!selectedParticipant || !sessionId || !password) {
       return;
     }
 
@@ -613,13 +670,23 @@ function GameEntryPage() {
         return;
       }
 
-      if (!allowedPlayerNames.includes(selectedPlayer)) {
-        setError("That player slot is not available for this session.");
+      if (
+        !allowedParticipants.some(
+          (participant) =>
+            getParticipantKey(participant) ===
+            getParticipantKey(selectedParticipant)
+        )
+      ) {
+        setError("That participant slot is not available for this session.");
         setLoading(false);
         return;
       }
 
-      const result = await resolvePlayer(sessionId, selectedPlayer, password);
+      const result = await resolveParticipant(
+        sessionId,
+        selectedParticipant,
+        password
+      );
 
       if (!result.ok) {
         setError(result.error);
@@ -628,7 +695,16 @@ function GameEntryPage() {
       }
 
       navigate(`/games/${gameId}/play`, {
-        state: { initialGameState },
+        state: {
+          initialGameState: {
+            gameId: game.id,
+            sessionId,
+            player: { name: selectedParticipant.id },
+            participantType: selectedParticipant.type,
+            currentRound: 1,
+            rounds: { 1: { roundNumber: 1, journalAnswers: {} } },
+          },
+        },
       });
     } catch (err) {
       console.error(err);
@@ -709,23 +785,29 @@ function GameEntryPage() {
 
               <p className="section-label">Identity</p>
               <label className="field-label" style={{ marginBottom: 12 }}>
-                Choose your data explorer
+                Choose your mission identity
               </label>
 
               <div className="player-grid">
-                {allowedPlayerNames.map((name) => {
-                  const isChosen = chosenPlayers.includes(name);
+                {allowedParticipants.map((participant) => {
+                  const participantKey = getParticipantKey(participant);
+                  const isChosen = chosenParticipantKeys.includes(participantKey);
 
                   return (
                     <button
-                      key={name}
+                      key={participantKey}
                       className={`player-btn${
-                        selectedPlayer === name ? " player-btn-selected" : ""
+                        selectedParticipantKey === participantKey
+                          ? " player-btn-selected"
+                          : ""
                       }${isChosen ? " player-btn-used" : ""}`}
-                      onClick={() => setSelectedPlayer(name)}
+                      onClick={() => setSelectedParticipantKey(participantKey)}
                     >
                       <span className="player-name-wrap">
-                        <span>{name}</span>
+                        <span>{participant.id}</span>
+                        <span className="participant-type-pill">
+                          {getParticipantTypeLabel(participant.type)}
+                        </span>
                         {isChosen && (
                           <>
                             <span className="player-used-dot" />
@@ -747,7 +829,7 @@ function GameEntryPage() {
                   Password
                 </label>
                 <p className="field-hint">
-                  Protects your work from other students in this class.
+                  Protects your work from other participants in this class.
                 </p>
                 <input
                   id="password"
@@ -804,7 +886,7 @@ function GameEntryPage() {
                 <button
                   className="start-btn"
                   disabled={
-                    !selectedPlayer ||
+                    !selectedParticipant ||
                     !sessionValidated ||
                     !passwordsMatch ||
                     loading

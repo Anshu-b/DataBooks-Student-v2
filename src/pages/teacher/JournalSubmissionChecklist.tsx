@@ -1,6 +1,7 @@
-import { useMemo } from "react";
-import { useSessionPlayers } from "../../hooks/useSessionPlayers";
+import { useCallback, useMemo } from "react";
 import { useSessionJournalAnswers } from "../../hooks/useSessionJournalAnswers";
+import { useSessionParticipants } from "../../hooks/useSessionParticipants";
+import type { ParticipantType } from "../../types/gameState";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap');
@@ -143,43 +144,75 @@ interface Props {
 }
 
 function JournalSubmissionChecklist({ sessionId }: Props) {
-  const { players } = useSessionPlayers(sessionId);
-  const { answersMap } = useSessionJournalAnswers(sessionId);
+  const { participants } = useSessionParticipants(sessionId);
+  const { answersMap: journalAnswersMap } = useSessionJournalAnswers(sessionId);
+  const { answersMap: bridgeCrewAnswersMap } = useSessionJournalAnswers(
+    sessionId,
+    "bridgeCrewLogAnswers"
+  );
 
-  const playerIds = useMemo(() => {
-    return players
-      .map((player) => player.id)
-      .sort((leftId, rightId) => leftId.localeCompare(rightId));
-  }, [players]);
+  const participantRows = useMemo(() => {
+    return participants
+      .map((participant) => ({
+        id: participant.id,
+        type: participant.type,
+      }))
+      .sort((left, right) => {
+        if (left.type !== right.type) {
+          return left.type === "player" ? -1 : 1;
+        }
 
-  function hasRoundSubmission(studentId: string, round: 1 | 2 | 3): boolean {
-    return Boolean(answersMap?.[studentId]?.[round]);
-  }
+        return left.id.localeCompare(right.id);
+      });
+  }, [participants]);
+
+  const getAnswersMap = useCallback(
+    (type: ParticipantType) =>
+      type === "player" ? journalAnswersMap : bridgeCrewAnswersMap,
+    [journalAnswersMap, bridgeCrewAnswersMap]
+  );
+
+  const hasRoundSubmission = useCallback(
+    (
+      participantId: string,
+      participantType: ParticipantType,
+      round: 1 | 2 | 3
+    ): boolean => {
+      return Boolean(getAnswersMap(participantType)?.[participantId]?.[round]);
+    },
+    [getAnswersMap]
+  );
 
   const totals = useMemo(() => {
-    const totalPlayers = playerIds.length;
+    const totalParticipants = participantRows.length;
 
-    const r1 = playerIds.filter((id) => hasRoundSubmission(id, 1)).length;
-    const r2 = playerIds.filter((id) => hasRoundSubmission(id, 2)).length;
-    const r3 = playerIds.filter((id) => hasRoundSubmission(id, 3)).length;
+    const r1 = participantRows.filter((participant) =>
+      hasRoundSubmission(participant.id, participant.type, 1)
+    ).length;
+    const r2 = participantRows.filter((participant) =>
+      hasRoundSubmission(participant.id, participant.type, 2)
+    ).length;
+    const r3 = participantRows.filter((participant) =>
+      hasRoundSubmission(participant.id, participant.type, 3)
+    ).length;
 
-    return { totalPlayers, r1, r2, r3 };
-  }, [playerIds, answersMap]);
+    return { totalParticipants, r1, r2, r3 };
+  }, [participantRows, hasRoundSubmission]);
 
-  if (playerIds.length === 0) {
+  if (participantRows.length === 0) {
     return (
       <>
         <style>{styles}</style>
         <div className="checklist-root">
           <div className="checklist-header">
             <div className="checklist-title-wrap">
-              <h3 className="checklist-title">Journal Submission Checklist</h3>
+              <h3 className="checklist-title">Round Log Submission Checklist</h3>
             </div>
           </div>
           <div className="checklist-card">
             <div className="empty-state">
-              No players found yet. This checklist will populate once players
-              join the session.
+              No participants found yet. This checklist will populate once the
+              roster is ready.
             </div>
           </div>
         </div>
@@ -193,7 +226,7 @@ function JournalSubmissionChecklist({ sessionId }: Props) {
       <div className="checklist-root">
         <div className="checklist-header">
           <div className="checklist-title-wrap">
-            <h3 className="checklist-title">Journal Submission Checklist</h3>
+            <h3 className="checklist-title">Round Log Submission Checklist</h3>
             <span className="checklist-badge">
               <span className="checklist-badge-dot" />
               Live
@@ -204,16 +237,16 @@ function JournalSubmissionChecklist({ sessionId }: Props) {
         <div className="checklist-card">
           <div className="checklist-summary">
             <div className="summary-pill">
-              {totals.totalPlayers} <span>players</span>
+              {totals.totalParticipants} <span>participants</span>
             </div>
             <div className="summary-pill">
-              {totals.r1}/{totals.totalPlayers} <span>Round 1</span>
+              {totals.r1}/{totals.totalParticipants} <span>Round 1</span>
             </div>
             <div className="summary-pill">
-              {totals.r2}/{totals.totalPlayers} <span>Round 2</span>
+              {totals.r2}/{totals.totalParticipants} <span>Round 2</span>
             </div>
             <div className="summary-pill">
-              {totals.r3}/{totals.totalPlayers} <span>Round 3</span>
+              {totals.r3}/{totals.totalParticipants} <span>Round 3</span>
             </div>
           </div>
 
@@ -221,21 +254,39 @@ function JournalSubmissionChecklist({ sessionId }: Props) {
             <table>
               <thead>
                 <tr>
-                  <th>Player</th>
+                  <th>Participant</th>
+                  <th>Type</th>
                   <th>Round 1</th>
                   <th>Round 2</th>
                   <th>Round 3</th>
                 </tr>
               </thead>
               <tbody>
-                {playerIds.map((playerId) => {
-                  const r1 = hasRoundSubmission(playerId, 1);
-                  const r2 = hasRoundSubmission(playerId, 2);
-                  const r3 = hasRoundSubmission(playerId, 3);
+                {participantRows.map((participant) => {
+                  const r1 = hasRoundSubmission(
+                    participant.id,
+                    participant.type,
+                    1
+                  );
+                  const r2 = hasRoundSubmission(
+                    participant.id,
+                    participant.type,
+                    2
+                  );
+                  const r3 = hasRoundSubmission(
+                    participant.id,
+                    participant.type,
+                    3
+                  );
 
                   return (
-                    <tr key={playerId}>
-                      <td>{playerId}</td>
+                    <tr key={`${participant.type}-${participant.id}`}>
+                      <td>{participant.id}</td>
+                      <td>
+                        {participant.type === "player"
+                          ? "Cadet"
+                          : "Bridge Crew"}
+                      </td>
                       <td className="status-cell">
                         {r1 ? (
                           <span className="status-yes">✅ Submitted</span>

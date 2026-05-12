@@ -24,6 +24,11 @@ export type UserInteractionEvent =
       | JournalInputCommitted
       | JournalRoundNavigation
       | JournalRoundSubmission
+      | CrewLogResponseEdited
+      | CrewLogInputFocused
+      | CrewLogInputCommitted
+      | CrewLogRoundNavigation
+      | CrewLogRoundSubmission
     );
 
 
@@ -80,6 +85,10 @@ export type JournalResponseEdited = {
   };
 };
 
+export type CrewLogResponseEdited = Omit<JournalResponseEdited, "type"> & {
+  type: "crew_log.response_edited";
+};
+
 export type JournalInputFocused = {
   type: "journal.input";
   action: "answer_focused";
@@ -87,6 +96,10 @@ export type JournalInputFocused = {
     round: number;
     questionIndex: number;
   };
+};
+
+export type CrewLogInputFocused = Omit<JournalInputFocused, "type"> & {
+  type: "crew_log.input";
 };
 
 export type JournalInputCommitted = {
@@ -99,6 +112,10 @@ export type JournalInputCommitted = {
   };
 };
 
+export type CrewLogInputCommitted = Omit<JournalInputCommitted, "type"> & {
+  type: "crew_log.input";
+};
+
 export type JournalRoundNavigation = {
   type: "journal.round_navigation";
   action: "round_viewed";
@@ -106,6 +123,10 @@ export type JournalRoundNavigation = {
     fromRound: number;
     toRound: number;
   };
+};
+
+export type CrewLogRoundNavigation = Omit<JournalRoundNavigation, "type"> & {
+  type: "crew_log.round_navigation";
 };
 
 export type JournalRoundSubmission = {
@@ -120,4 +141,8 @@ export type JournalRoundSubmission = {
     }>;
     answerCount: number;
   };
+};
+
+export type CrewLogRoundSubmission = Omit<JournalRoundSubmission, "type"> & {
+  type: "crew_log.round_submission";
 };

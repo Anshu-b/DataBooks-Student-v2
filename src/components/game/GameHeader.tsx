@@ -198,6 +198,7 @@ type Props = {
   playerName: string;
   sessionId: string;
   sessionStatus: "active" | "paused" | "inactive";
+  logLabel: string;
   screenMode: ScreenMode;
   onToggleMode: () => void;
   activePanel: "journal" | "plots";
@@ -209,6 +210,7 @@ function GameHeader({
   playerName,
   sessionId,
   sessionStatus,
+  logLabel,
   screenMode,
   onToggleMode,
   activePanel,
@@ -258,7 +260,7 @@ function GameHeader({
                 onClick={() => onSelectPanel("journal")}
                 disabled={activePanel === "journal"}
               >
-                📔 Journal
+                📔 {logLabel}
               </button>
               <button
                 className="panel-toggle-btn"

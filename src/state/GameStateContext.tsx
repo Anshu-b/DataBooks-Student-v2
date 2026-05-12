@@ -12,6 +12,11 @@ import type { GameState, JournalAnswer } from "../types/gameState";
 import { saveJournalRound } from "../firebase/saveJournalRound";
 import { loadJournalAnswers } from "../firebase/loadJournalAnswers";
 
+function getAnswersPath(participantType: GameState["participantType"]) {
+  return participantType === "nonPlayer"
+    ? "bridgeCrewLogAnswers"
+    : "journalAnswers";
+}
 
 type GameStateContextValue = {
   gameState: GameState;
@@ -38,6 +43,7 @@ export function GameStateProvider({ initialGameState, children }: Props) {
       const saved = await loadJournalAnswers({
         sessionId: initialGameState.sessionId,
         playerName: initialGameState.player.name,
+        answersPath: getAnswersPath(initialGameState.participantType),
       });
 
       // console.log("🟡 loadJournalAnswers returned:", saved);
@@ -122,6 +128,7 @@ export function GameStateProvider({ initialGameState, children }: Props) {
     return saveJournalRound({
       sessionId: gameState.sessionId,
       playerName: gameState.player.name,
+      answersPath: getAnswersPath(gameState.participantType),
       round,
       answers,
     });

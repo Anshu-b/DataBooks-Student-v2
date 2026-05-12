@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSessionJournalAnswers } from "../../hooks/useSessionJournalAnswers";
+import type { SessionAnswersPath } from "../../hooks/useSessionJournalAnswers";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap');
@@ -236,10 +237,24 @@ interface StudentAnswers {
 }
 
 function JournalSubmissionViewer({ sessionId }: Props) {
-  const { answersMap } = useSessionJournalAnswers(sessionId);
+  const [selectedAnswersPath, setSelectedAnswersPath] =
+    useState<SessionAnswersPath>("journalAnswers");
+  const { answersMap: journalAnswersMap } = useSessionJournalAnswers(sessionId);
+  const { answersMap: bridgeCrewAnswersMap } = useSessionJournalAnswers(
+    sessionId,
+    "bridgeCrewLogAnswers"
+  );
 
   const [selectedRound, setSelectedRound] = useState<number | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const answersMap =
+    selectedAnswersPath === "journalAnswers"
+      ? journalAnswersMap
+      : bridgeCrewAnswersMap;
+  const selectedLogLabel =
+    selectedAnswersPath === "journalAnswers" ? "Journal" : "Bridge Crew Log";
+  const selectedParticipantLabel =
+    selectedAnswersPath === "journalAnswers" ? "Student" : "Bridge Crew";
 
   const students = useMemo(() => Object.keys(answersMap), [answersMap]);
 
@@ -278,7 +293,11 @@ function JournalSubmissionViewer({ sessionId }: Props) {
 
   useEffect(() => {
     setCurrentIndex(0);
-  }, [selectedRound]);
+  }, [selectedRound, selectedAnswersPath]);
+
+  useEffect(() => {
+    setSelectedRound(null);
+  }, [selectedAnswersPath]);
 
   if (availableRounds.length === 0) {
     return (
@@ -286,13 +305,28 @@ function JournalSubmissionViewer({ sessionId }: Props) {
         <style>{styles}</style>
         <div className="journal-viewer-root">
           <div className="journal-viewer-header">
-            <h3 className="journal-viewer-title">Live Journal Review</h3>
+            <h3 className="journal-viewer-title">Live Round Log Review</h3>
+          </div>
+          <div className="journal-controls">
+            <div className="round-select-wrapper">
+              <label className="round-select-label">Log</label>
+              <select
+                className="round-select"
+                value={selectedAnswersPath}
+                onChange={(event) =>
+                  setSelectedAnswersPath(event.target.value as SessionAnswersPath)
+                }
+              >
+                <option value="journalAnswers">Cadet Journals</option>
+                <option value="bridgeCrewLogAnswers">Bridge Crew Logs</option>
+              </select>
+            </div>
           </div>
           <div className="empty-state">
             <div className="empty-state-icon">📝</div>
             <div>
-              No journal submissions yet. Students' answers will appear here once
-              they save their work.
+              No {selectedLogLabel.toLowerCase()} submissions yet. Answers will
+              appear here once participants save their work.
             </div>
           </div>
         </div>
@@ -316,7 +350,7 @@ function JournalSubmissionViewer({ sessionId }: Props) {
       <style>{styles}</style>
       <div className="journal-viewer-root">
         <div className="journal-viewer-header">
-          <h3 className="journal-viewer-title">Live Journal Review</h3>
+          <h3 className="journal-viewer-title">Live Round Log Review</h3>
           <span className="live-badge">
             <span className="live-badge-dot" />
             Live
@@ -324,6 +358,20 @@ function JournalSubmissionViewer({ sessionId }: Props) {
         </div>
 
         <div className="journal-controls">
+          <div className="round-select-wrapper">
+            <label className="round-select-label">Log</label>
+            <select
+              className="round-select"
+              value={selectedAnswersPath}
+              onChange={(event) =>
+                setSelectedAnswersPath(event.target.value as SessionAnswersPath)
+              }
+            >
+              <option value="journalAnswers">Cadet Journals</option>
+              <option value="bridgeCrewLogAnswers">Bridge Crew Logs</option>
+            </select>
+          </div>
+
           <div className="round-select-wrapper">
             <label className="round-select-label">Round</label>
             <select
@@ -341,7 +389,9 @@ function JournalSubmissionViewer({ sessionId }: Props) {
 
           {studentsForRound.length > 0 && (
             <div className="student-selector">
-              <label className="round-select-label">Student</label>
+              <label className="round-select-label">
+                {selectedParticipantLabel}
+              </label>
 
               <select
                 className="round-select"
@@ -367,7 +417,10 @@ function JournalSubmissionViewer({ sessionId }: Props) {
         {studentsForRound.length === 0 ? (
           <div className="empty-state">
             <div className="empty-state-icon">📝</div>
-            <div>No submissions for Round {selectedRound} yet.</div>
+            <div>
+              No {selectedLogLabel.toLowerCase()} submissions for Round{" "}
+              {selectedRound} yet.
+            </div>
           </div>
         ) : (
           <div className="answers-card">

@@ -18,6 +18,7 @@
 
 import { useState } from "react";
 import { JOURNAL_ROUNDS } from "../../config/journal";
+import { BRIDGE_CREW_LOG_ROUNDS } from "../../config/bridgeCrewLog";
 import { useGameState } from "../../hooks/useGameState";
 import { useLogger } from "../../logging/LoggingProvider";
 
@@ -315,15 +316,26 @@ const styles = `
 function JournalPanel() {
   const { gameState, setJournalAnswer, getJournalAnswersForRound, saveJournalRoundAnswers } = useGameState();
   const logger = useLogger();
+  const isBridgeCrew = gameState.participantType === "nonPlayer";
+  const logRounds = isBridgeCrew ? BRIDGE_CREW_LOG_ROUNDS : JOURNAL_ROUNDS;
+  const logTitle = isBridgeCrew ? "Bridge Crew Log" : "Journal";
+  const logNoun = isBridgeCrew ? "bridge crew log" : "journal";
+  const logIcon = isBridgeCrew ? "🛰️" : "📔";
+  const roundNavigationEventType = isBridgeCrew
+    ? "crew_log.round_navigation"
+    : "journal.round_navigation";
+  const roundSubmissionEventType = isBridgeCrew
+    ? "crew_log.round_submission"
+    : "journal.round_submission";
 
   const currentRound = gameState.currentRound;
   const [viewedRound, setViewedRound] = useState(currentRound);
-  const roundConfig = JOURNAL_ROUNDS.find((r) => r.roundNumber === viewedRound);
+  const roundConfig = logRounds.find((r) => r.roundNumber === viewedRound);
 
   if (!roundConfig) {
     return (
       <div style={{ padding: "2rem", textAlign: "center", color: "rgba(100, 70, 20, 0.5)", fontSize: "1rem", fontFamily: "'DM Sans', sans-serif" }}>
-        No journal questions for this round.
+        No {logNoun} questions for this round.
       </div>
     );
   }
@@ -335,14 +347,14 @@ function JournalPanel() {
 
         {/* Round navigation tabs */}
         <div className="round-tabs">
-          {JOURNAL_ROUNDS.map((r) => (
+          {logRounds.map((r) => (
             <button
               key={r.roundNumber}
               className={`round-tab${viewedRound === r.roundNumber ? " round-tab-active" : ""}`}
               onClick={() => {
                 if (viewedRound !== r.roundNumber) {
                   logger.log({
-                    type: "journal.round_navigation",
+                    type: roundNavigationEventType,
                     action: "round_viewed",
                     userId: gameState.player.name,
                     sessionId: gameState.sessionId,
@@ -359,9 +371,9 @@ function JournalPanel() {
 
         {/* Header */}
         <div className="journal-header">
-          <div className="journal-icon">📔</div>
+          <div className="journal-icon">{logIcon}</div>
           <div>
-            <h2 className="journal-title">Journal</h2>
+            <h2 className="journal-title">{logTitle}</h2>
             <p className="journal-subtitle">Round {viewedRound} Questions</p>
           </div>
         </div>
@@ -375,7 +387,11 @@ function JournalPanel() {
           <ul className="tips-list">
             <li>Use evidence from the data plots to support your answers</li>
             <li>Explain your reasoning clearly</li>
-            <li>Think like a scientist — what patterns do you notice?</li>
+            <li>
+              {isBridgeCrew
+                ? "Think like mission control: what patterns should the crew notice?"
+                : "Think like a scientist — what patterns do you notice?"}
+            </li>
           </ul>
         </div>
 
@@ -430,7 +446,7 @@ function JournalPanel() {
               const answers = getJournalAnswersForRound(viewedRound);
               await saveJournalRoundAnswers(viewedRound);
               logger.log({
-                type: "journal.round_submission",
+                type: roundSubmissionEventType,
                 action: "round_saved",
                 userId: gameState.player.name,
                 sessionId: gameState.sessionId,
