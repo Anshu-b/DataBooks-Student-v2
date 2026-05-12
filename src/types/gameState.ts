@@ -29,6 +29,7 @@ export type Player = {
     sessionId: string;
     player: Player;
     participantType: ParticipantType;
+    slidesLink?: string;
     currentRound: number;
     rounds: Record<number, RoundState>;
   };

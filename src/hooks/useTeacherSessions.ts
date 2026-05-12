@@ -19,6 +19,7 @@ export interface TeacherSession {
   sessionName: string;
   playerNames: string[];
   nonPlayerNames: string[];
+  slidesLink?: string;
   start: null | {
     action: "start";
     teacher: string;
@@ -248,6 +249,7 @@ export function useTeacherSessions() {
             sessionName: metadata.sessionName ?? id,
             playerNames,
             nonPlayerNames,
+            slidesLink: metadata.slidesLink ?? metadata.start?.slidesLink ?? "",
             start: metadata.start ?? null,
             stop: metadata.stop ?? null,
             activeMeeting: activeMeetingEntry
@@ -348,9 +350,11 @@ export function useTeacherSessions() {
     }
 
     const activatedAtMs = Date.now();
+    const slidesLink = details.slidesLink?.trim();
 
     await update(ref(db, `sessions/${sessionId}/metadata`), {
       status: "active",
+      slidesLink: slidesLink || null,
       start: {
         action: "start",
         teacher: user.email ?? "Unknown",
@@ -358,7 +362,7 @@ export function useTeacherSessions() {
         cadets: details.cadets,
         sectors: details.sectors,
         medBayRooms: details.medBayRooms,
-        ...(details.slidesLink ? { slidesLink: details.slidesLink } : {}),
+        ...(slidesLink ? { slidesLink } : {}),
         timestamp: new Date(activatedAtMs).toISOString(),
         activatedAtMs,
       },
@@ -663,6 +667,30 @@ export function useTeacherSessions() {
     await loadSessions();
   }
 
+  async function setSessionSlidesLink(sessionId: string, rawSlidesLink: string) {
+    const slidesLink = rawSlidesLink.trim();
+
+    if (slidesLink) {
+      try {
+        new URL(slidesLink);
+      } catch {
+        throw new Error("Google Slides link must be a valid URL.");
+      }
+    }
+
+    const nextValue = slidesLink || null;
+
+    await update(ref(db, `sessions/${sessionId}/metadata`), {
+      slidesLink: nextValue,
+    });
+
+    await update(ref(db, `sessions/${sessionId}/metadata/start`), {
+      slidesLink: nextValue,
+    });
+
+    await loadSessions();
+  }
+
   async function stopSession(sessionId: string) {
     await update(ref(db, `sessions/${sessionId}/metadata`), {
       status: "inactive",
@@ -779,6 +807,7 @@ export function useTeacherSessions() {
     clearSessionParticipants,
     setSessionSectors,
     setSessionMedBayRooms,
+    setSessionSlidesLink,
     stopSession,
     startMeeting,
     endMeeting,

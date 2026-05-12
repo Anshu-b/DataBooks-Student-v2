@@ -340,7 +340,7 @@ function DataPlotsPanel() {
   useEffect(() => {
     const valid = isValidPlotSelection({ plotTypeId: plotType, xVar, yVar, valueVar });
     if (!valid) {
-      if (plotType === "histogram") {
+      if (plotType === "histogram" || plotType === "pie") {
         setValueVar(validValueVars[0]?.id);
         setXVar(undefined);
         setYVar(undefined);

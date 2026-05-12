@@ -191,6 +191,25 @@ const styles = `
   .header-mode-btn:active {
     transform: translateY(0);
   }
+
+  .header-slides-link {
+    padding: 7px 14px;
+    background: rgba(14, 165, 233, 0.14);
+    border: 1px solid rgba(14, 165, 233, 0.32);
+    border-radius: 100px;
+    color: #bae6fd;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s, transform 0.15s;
+  }
+
+  .header-slides-link:hover {
+    background: rgba(14, 165, 233, 0.22);
+    color: #f0fbff;
+    transform: translateY(-1px);
+  }
 `;
 
 type Props = {
@@ -199,6 +218,7 @@ type Props = {
   sessionId: string;
   sessionStatus: "active" | "paused" | "inactive";
   logLabel: string;
+  slidesLink?: string;
   screenMode: ScreenMode;
   onToggleMode: () => void;
   activePanel: "journal" | "plots";
@@ -211,6 +231,7 @@ function GameHeader({
   sessionId,
   sessionStatus,
   logLabel,
+  slidesLink,
   screenMode,
   onToggleMode,
   activePanel,
@@ -253,6 +274,17 @@ function GameHeader({
 
         {/* Right section */}
         <div className="header-right">
+          {slidesLink && (
+            <a
+              className="header-slides-link"
+              href={slidesLink}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Slides
+            </a>
+          )}
+
           {screenMode === "single" && (
             <div className="panel-toggle-group">
               <button

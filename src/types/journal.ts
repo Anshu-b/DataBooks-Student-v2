@@ -21,9 +21,11 @@ export type JournalQuestion = {
    * This allows the UI to enforce constraints without hardcoding.
    */
   plotConstraints?: {
-    plotType?: "line";
+    plotType?: "line" | "scatter" | "histogram" | "pie";
     xOptions?: string[];
     yOptions?: string[];
+    valueOptions?: string[];
+    populationOptions?: Array<"cadets" | "sectors">;
   };
 };
 

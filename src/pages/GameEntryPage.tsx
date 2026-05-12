@@ -12,12 +12,30 @@ type AllowedParticipant = {
   type: ParticipantType;
 };
 
+type SessionMetadataValue = {
+  slidesLink?: string;
+  start?: {
+    slidesLink?: string;
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+};
+
 function getParticipantKey(participant: AllowedParticipant): string {
   return `${participant.type}:${participant.id}`;
 }
 
 function getParticipantTypeLabel(type: ParticipantType): string {
   return type === "player" ? "Cadet" : "Bridge Crew";
+}
+
+function getSlidesLinkFromMetadata(metadata: unknown): string {
+  if (!metadata || typeof metadata !== "object") {
+    return "";
+  }
+
+  const value = metadata as SessionMetadataValue;
+  return value.slidesLink || value.start?.slidesLink || "";
 }
 
 async function ensureStudentAuth() {
@@ -454,6 +472,42 @@ const styles = `
     background: #70d4a0;
     box-shadow: 0 0 5px #70d4a0;
   }
+
+  .slides-card {
+    background: rgba(14, 165, 233, 0.1);
+    border: 1px solid rgba(14, 165, 233, 0.22);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 4px;
+  }
+
+  .slides-card-title {
+    margin: 0 0 8px;
+    color: #9bdcf8;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  .slides-card-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 13px;
+    border-radius: 100px;
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.35), rgba(14, 165, 233, 0.35));
+    border: 1px solid rgba(125, 211, 252, 0.32);
+    color: #e0fbff;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+
+  .slides-card-link:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
 `;
 
 function GameEntryPage() {
@@ -473,6 +527,7 @@ function GameEntryPage() {
   const [allowedParticipants, setAllowedParticipants] = useState<
     AllowedParticipant[]
   >([]);
+  const [sessionSlidesLink, setSessionSlidesLink] = useState("");
 
   const game = GAMES.find((g) => g.id === gameId);
   const passwordsMatch = password.length > 0 && password === confirmPassword;
@@ -638,10 +693,11 @@ function GameEntryPage() {
     setError(null);
     setSelectedParticipantKey(null);
     setAllowedParticipants([]);
+    setSessionSlidesLink("");
 
     try {
       await ensureStudentFirebaseAccess();
-      const metadata = await getSessionMetadata(sessionId);
+      const metadata = await getSessionMetadata(cleanSessionId);
 
       if (!metadata) {
         setError("Session ID not found. Please check with your teacher.");
@@ -658,6 +714,7 @@ function GameEntryPage() {
       }
 
       setSessionId(cleanSessionId);
+      setSessionSlidesLink(getSlidesLinkFromMetadata(metadata));
       setAllowedParticipants(teacherParticipants);
       setSessionValidated(true);
       setLoading(false);
@@ -665,6 +722,7 @@ function GameEntryPage() {
       console.error(error);
       setError("Error validating session.");
       setAllowedParticipants([]);
+      setSessionSlidesLink("");
       setLoading(false);
     }
   }
@@ -681,7 +739,7 @@ function GameEntryPage() {
 
     try {
       await ensureStudentFirebaseAccess();
-      const exists = await sessionExists(sessionId);
+      const exists = await sessionExists(cleanSessionId);
 
       if (!exists) {
         setError("Session ID not found. Please check with your teacher.");
@@ -720,6 +778,7 @@ function GameEntryPage() {
             sessionId: cleanSessionId,
             player: { name: selectedParticipant.id },
             participantType: selectedParticipant.type,
+            slidesLink: sessionSlidesLink,
             currentRound: 1,
             rounds: { 1: { roundNumber: 1, journalAnswers: {} } },
           },
@@ -801,6 +860,25 @@ function GameEntryPage() {
           {sessionValidated && (
             <>
               <div className="card-divider" />
+
+              {sessionSlidesLink && (
+                <>
+                  <p className="section-label">Class Materials</p>
+                  <div className="slides-card">
+                    <p className="slides-card-title">Mission Slides</p>
+                    <a
+                      className="slides-card-link"
+                      href={sessionSlidesLink}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Open Google Slides
+                    </a>
+                  </div>
+
+                  <div className="card-divider" />
+                </>
+              )}
 
               <p className="section-label">Identity</p>
               <label className="field-label" style={{ marginBottom: 12 }}>

@@ -731,6 +731,7 @@ function TeacherHomePage() {
     moveSessionParticipant,
     removeSessionParticipant,
     clearSessionParticipants,
+    setSessionSlidesLink,
     stopSession,
     startMeeting,
     endMeeting,
@@ -756,7 +757,8 @@ function TeacherHomePage() {
   const [liveParticipants, setLiveParticipants] = useState<
     SessionParticipant[]
   >([]);
-  // const [slidesLink, setSlidesLink] = useState("");
+  const [slidesLink, setSlidesLink] = useState("");
+  const [selectedSlidesLink, setSelectedSlidesLink] = useState("");
 
   const selectedSessionData = sessions.find(
     (session) => session.id === selectedSession
@@ -780,6 +782,7 @@ function TeacherHomePage() {
     setLiveParticipants(participants);
     setManualParticipantName("");
     setManualParticipantType("player");
+    setSelectedSlidesLink(selectedSessionData?.slidesLink ?? "");
   }, [selectedSession, selectedSessionData]);
 
   if (authLoading) return null;
@@ -955,6 +958,25 @@ function TeacherHomePage() {
     }
   }
 
+  async function handleUpdateSelectedSlidesLink() {
+    if (!selectedSession) {
+      alert("Please select a session first.");
+      return;
+    }
+
+    try {
+      await setSessionSlidesLink(selectedSession, selectedSlidesLink);
+      alert("Google Slides link updated.");
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Failed to update Google Slides link.";
+
+      alert(message);
+    }
+  }
+
   async function handleCreateSession() {
     if (
       !sessionName ||
@@ -1004,6 +1026,15 @@ function TeacherHomePage() {
       return;
     }
 
+    if (slidesLink.trim()) {
+      try {
+        new URL(slidesLink.trim());
+      } catch {
+        alert("Google Slides link must be a valid URL.");
+        return;
+      }
+    }
+
     try {
       const sessionId = await createSession("alien-invasion", sessionName);
 
@@ -1013,7 +1044,7 @@ function TeacherHomePage() {
           cadets: playerCount,
           sectors,
           medBayRooms,
-          // slidesLink,
+          slidesLink: slidesLink.trim(),
         });
 
         await setSessionParticipants(
@@ -1034,7 +1065,7 @@ function TeacherHomePage() {
       setNonPlayerParticipantCount(0);
       setSectors(0);
       setMedBayRooms(1);
-      // setSlidesLink("");
+      setSlidesLink("");
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Failed to create session.";
@@ -1253,7 +1284,6 @@ function TeacherHomePage() {
                   />
                 </div>
 
-                {/*
                 <div className="form-field">
                   <label className="field-label">Google Slides Link</label>
                   <input
@@ -1264,7 +1294,6 @@ function TeacherHomePage() {
                     placeholder="https://docs.google.com/presentation/..."
                   />
                 </div>
-                */}
 
                 <div className="form-actions">
                   <button className="confirm-btn" onClick={handleCreateSession}>
@@ -1316,7 +1345,7 @@ function TeacherHomePage() {
                                 sectors: session.start.sectors,
                                 medBayRooms:
                                   session.start.medBayRooms ?? 1,
-                                // slidesLink: session.start.slidesLink,
+                                slidesLink: session.slidesLink,
                               });
                             }
                           }}
@@ -1361,7 +1390,6 @@ function TeacherHomePage() {
                       </button>
                     </div>
 
-                    <div className="activity-log-divider" />
 
                     <div className="roster-manager-card">
                       <div className="roster-manager-header">
@@ -1493,6 +1521,41 @@ function TeacherHomePage() {
                           No names are currently listed for this session.
                         </p>
                       )}
+                    </div>
+
+                                        <div className="activity-log-divider" />
+
+                    <div className="roster-manager-card">
+                      <div className="roster-manager-header">
+                        <div>
+                          <h3 className="roster-manager-title">
+                            Session Slides
+                          </h3>
+                          <p className="roster-help">
+                            Add, update, or clear the Google Slides link shown
+                            to participants.
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="roster-add-row">
+                        <input
+                          className="field-input"
+                          type="url"
+                          value={selectedSlidesLink}
+                          onChange={(e) =>
+                            setSelectedSlidesLink(e.target.value)
+                          }
+                          placeholder="https://docs.google.com/presentation/..."
+                        />
+                        <button
+                          className="add-student-btn"
+                          type="button"
+                          onClick={handleUpdateSelectedSlidesLink}
+                        >
+                          Save Link
+                        </button>
+                      </div>
                     </div>
 
                     <SessionRealtimeDashboard sessionId={selectedSession} />

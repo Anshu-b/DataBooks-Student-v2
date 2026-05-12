@@ -543,7 +543,7 @@ function JournalPanel() {
                 <p className="question-prompt">{q.prompt}</p>
               </div>
 
-              {q.type === "text" && (
+              {(q.type === "text" || q.type === "plot-required") && (
                 <textarea
                   className="question-textarea"
                   value={existingAnswer}
