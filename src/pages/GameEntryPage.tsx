@@ -4,6 +4,7 @@ import { GAMES } from "../config/games";
 import { getDatabase, ref, get, update } from "firebase/database";
 import { useSessionParticipants } from "../hooks/useSessionParticipants";
 import type { ParticipantType } from "../types/gameState";
+import { ensureStudentFirebaseAccess } from "../firebase/ensureStudentFirebaseAccess";
 
 type AllowedParticipant = {
   id: string;
@@ -627,6 +628,7 @@ function GameEntryPage() {
     setAllowedParticipants([]);
 
     try {
+      await ensureStudentFirebaseAccess();
       const metadata = await getSessionMetadata(sessionId);
 
       if (!metadata) {
@@ -662,6 +664,7 @@ function GameEntryPage() {
     setError(null);
 
     try {
+      await ensureStudentFirebaseAccess();
       const exists = await sessionExists(sessionId);
 
       if (!exists) {

@@ -30,8 +30,8 @@ import { buildScatterPlotData } from "../../utils/buildScatterPlotData";
 import { buildHistogramPlotData } from "../../utils/buildHistogramPlotData";
 import { useLogger } from "../../logging/LoggingProvider";
 import { useGameStateContext } from "../../state/GameStateContext";
-import { onValue } from "firebase/database";
-import { getSessionRef } from "../../firebase/getSessionRef";
+import { getDatabase, onValue, ref } from "firebase/database";
+import type { MeetingLog, SessionData } from "../../analytics/aggregateTelemetry";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
@@ -277,13 +277,64 @@ function DataPlotsPanel() {
   useEffect(() => {
     if (!sessionId) return;
     setLoading(true);
-    const sessionRef = getSessionRef(sessionId);
-    const unsubscribe = onValue(sessionRef, (snapshot) => {
-      if (!snapshot.exists()) { setTelemetry([]); setLoading(false); return; }
-      setTelemetry(aggregateTelemetry(snapshot.val()));
+
+    const db = getDatabase();
+    const sessionParts: SessionData = {
+      metadata: { start: { timestamp: "", cadets: 0, sectors: 0 } },
+      readings: {},
+      meetings: {},
+    };
+    const loaded = {
+      metadata: false,
+      readings: false,
+      meetings: false,
+    };
+
+    function refreshTelemetry() {
+      if (!loaded.metadata || !loaded.readings || !loaded.meetings) {
+        return;
+      }
+
+      setTelemetry(aggregateTelemetry(sessionParts));
       setLoading(false);
+    }
+
+    const unsubscribeMetadata = onValue(ref(db, `sessions/${sessionId}/metadata/start`), (snapshot) => {
+      const value = snapshot.val();
+      sessionParts.metadata.start = {
+        timestamp: typeof value?.timestamp === "string" ? value.timestamp : "",
+        cadets: typeof value?.cadets === "number" ? value.cadets : 0,
+        sectors: typeof value?.sectors === "number" ? value.sectors : 0,
+      };
+      loaded.metadata = true;
+      refreshTelemetry();
     });
-    return () => unsubscribe();
+
+    const unsubscribeReadings = onValue(ref(db, `sessions/${sessionId}/readings`), (snapshot) => {
+      const value = snapshot.val();
+      sessionParts.readings =
+        value && typeof value === "object" && !Array.isArray(value)
+          ? value
+          : {};
+      loaded.readings = true;
+      refreshTelemetry();
+    });
+
+    const unsubscribeMeetings = onValue(ref(db, `sessions/${sessionId}/meetings`), (snapshot) => {
+      const value = snapshot.val();
+      sessionParts.meetings =
+        value && typeof value === "object" && !Array.isArray(value)
+          ? (value as Record<string, MeetingLog>)
+          : {};
+      loaded.meetings = true;
+      refreshTelemetry();
+    });
+
+    return () => {
+      unsubscribeMetadata();
+      unsubscribeReadings();
+      unsubscribeMeetings();
+    };
   }, [sessionId]);
 
   useEffect(() => {
