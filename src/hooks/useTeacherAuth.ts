@@ -21,7 +21,7 @@ export function useTeacherAuth() {
 
   useEffect(() => {
     return onAuthStateChanged(auth, (firebaseUser) => {
-      setUser(firebaseUser);
+      setUser(firebaseUser && !firebaseUser.isAnonymous ? firebaseUser : null);
       setLoading(false);
     });
   }, []);

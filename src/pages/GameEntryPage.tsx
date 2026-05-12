@@ -5,6 +5,7 @@ import { getDatabase, ref, get, update } from "firebase/database";
 import { getAuth, signInAnonymously } from "firebase/auth";
 import { useSessionParticipants } from "../hooks/useSessionParticipants";
 import type { ParticipantType } from "../types/gameState";
+import { ensureStudentFirebaseAccess } from "../firebase/ensureStudentFirebaseAccess";
 
 type AllowedParticipant = {
   id: string;
@@ -639,9 +640,8 @@ function GameEntryPage() {
     setAllowedParticipants([]);
 
     try {
-      await ensureStudentAuth();
-
-      const metadata = await getSessionMetadata(cleanSessionId);
+      await ensureStudentFirebaseAccess();
+      const metadata = await getSessionMetadata(sessionId);
 
       if (!metadata) {
         setError("Session ID not found. Please check with your teacher.");
@@ -680,9 +680,8 @@ function GameEntryPage() {
     setError(null);
 
     try {
-      await ensureStudentAuth();
-
-      const exists = await sessionExists(cleanSessionId);
+      await ensureStudentFirebaseAccess();
+      const exists = await sessionExists(sessionId);
 
       if (!exists) {
         setError("Session ID not found. Please check with your teacher.");

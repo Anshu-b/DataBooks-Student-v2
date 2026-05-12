@@ -311,6 +311,128 @@ const styles = `
     transform: translateY(0);
     opacity: 0.8;
   }
+
+  /* ── Bridge crew variant ── */
+  .bridge-log-root {
+    background: #eefaf8;
+    background-image:
+      radial-gradient(ellipse at 12% 20%, rgba(20, 184, 166, 0.13) 0%, transparent 55%),
+      radial-gradient(ellipse at 88% 12%, rgba(14, 165, 233, 0.11) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 96%, rgba(16, 185, 129, 0.09) 0%, transparent 50%);
+  }
+
+  .bridge-log-root::before {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%230f766e' fill-opacity='0.045'%3E%3Cpath d='M30 8l4 8 8 4-8 4-4 8-4-8-8-4 8-4 4-8zm0 28l3 6 6 3-6 3-3 6-3-6-6-3 6-3 3-6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  .bridge-log-root .round-tab {
+    border-color: rgba(20, 184, 166, 0.25);
+    background: rgba(20, 184, 166, 0.08);
+    color: #0f766e;
+  }
+
+  .bridge-log-root .round-tab:hover {
+    background: rgba(20, 184, 166, 0.16);
+    border-color: rgba(14, 165, 233, 0.42);
+    color: #075985;
+  }
+
+  .bridge-log-root .round-tab-active {
+    background: linear-gradient(135deg, #14b8a6, #0ea5e9);
+    border-color: #0ea5e9;
+    color: #f8ffff;
+    box-shadow: 0 2px 12px rgba(14, 165, 233, 0.28);
+  }
+
+  .bridge-log-root .journal-icon {
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.5), rgba(14, 165, 233, 0.45));
+    border-color: rgba(20, 184, 166, 0.42);
+    box-shadow: 0 4px 16px rgba(14, 165, 233, 0.2);
+  }
+
+  .bridge-log-root .journal-title {
+    color: #073b3a;
+  }
+
+  .bridge-log-root .journal-subtitle {
+    color: rgba(15, 118, 110, 0.72);
+  }
+
+  .bridge-log-root .tips-panel {
+    background: rgba(20, 184, 166, 0.08);
+    border-color: rgba(20, 184, 166, 0.2);
+  }
+
+  .bridge-log-root .tips-panel-title,
+  .bridge-log-root .tips-list {
+    color: #0f766e;
+  }
+
+  .bridge-log-root .warning-panel {
+    background: rgba(14, 165, 233, 0.07);
+    border-color: rgba(14, 165, 233, 0.2);
+  }
+
+  .bridge-log-root .warning-title {
+    color: #0369a1;
+  }
+
+  .bridge-log-root .warning-text {
+    color: rgba(3, 105, 161, 0.78);
+  }
+
+  .bridge-log-root .warning-icon circle,
+  .bridge-log-root .warning-icon path {
+    stroke: #0369a1;
+  }
+
+  .bridge-log-root .warning-icon circle:last-child {
+    fill: #0369a1;
+    stroke: none;
+  }
+
+  .bridge-log-root .question-card {
+    border-color: rgba(20, 184, 166, 0.18);
+    box-shadow: 0 4px 20px rgba(15, 118, 110, 0.07);
+  }
+
+  .bridge-log-root .question-card:hover {
+    border-color: rgba(14, 165, 233, 0.3);
+  }
+
+  .bridge-log-root .question-number {
+    background: linear-gradient(135deg, #14b8a6, #0ea5e9);
+  }
+
+  .bridge-log-root .question-prompt,
+  .bridge-log-root .question-textarea {
+    color: #073b3a;
+  }
+
+  .bridge-log-root .question-textarea {
+    background: rgba(240, 253, 250, 0.92);
+    border-color: rgba(20, 184, 166, 0.25);
+  }
+
+  .bridge-log-root .question-textarea::placeholder {
+    color: rgba(15, 118, 110, 0.38);
+  }
+
+  .bridge-log-root .question-textarea:focus {
+    border-color: rgba(14, 165, 233, 0.55);
+    background: #f8fffe;
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.12);
+  }
+
+  .bridge-log-root .save-btn {
+    background: linear-gradient(135deg, #14b8a6, #0ea5e9);
+    color: #f8ffff;
+    box-shadow: 0 4px 20px rgba(14, 165, 233, 0.32);
+  }
+
+  .bridge-log-root .save-btn:hover {
+    box-shadow: 0 8px 28px rgba(14, 165, 233, 0.4);
+  }
 `;
 
 function JournalPanel() {
@@ -343,7 +465,7 @@ function JournalPanel() {
   return (
     <>
       <style>{styles}</style>
-      <div className="journal-root">
+      <div className={`journal-root${isBridgeCrew ? " bridge-log-root" : ""}`}>
 
         {/* Round navigation tabs */}
         <div className="round-tabs">
