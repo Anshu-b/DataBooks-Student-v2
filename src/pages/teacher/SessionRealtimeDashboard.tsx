@@ -331,13 +331,13 @@ function SessionRealtimeDashboard({ sessionId }: Props) {
         <div className="metrics-grid">
           <div className="metric-card metric-card-players">
             <div className="metric-card-icon">👥</div>
-            <div className="metric-label">Total Players</div>
+            <div className="metric-label">Total Cadets</div>
             <div className="metric-value">{stats.totalPlayers}</div>
           </div>
 
           <div className="metric-card metric-card-non-players">
             <div className="metric-card-icon">🧑‍🤝‍🧑</div>
-            <div className="metric-label">Non Player Participants</div>
+            <div className="metric-label">Bridge Crew</div>
             <div className="metric-value">
               {stats.totalNonPlayerParticipants}
             </div>
@@ -357,13 +357,13 @@ function SessionRealtimeDashboard({ sessionId }: Props) {
 
           <div className="metric-card metric-card-infected">
             <div className="metric-card-icon">🦠</div>
-            <div className="metric-label">Infected Players</div>
+            <div className="metric-label">Infected Cadets</div>
             <div className="metric-value">{stats.infectedCount}</div>
           </div>
 
           <div className="metric-card metric-card-healthy">
             <div className="metric-card-icon">✅</div>
-            <div className="metric-label">Healthy Players</div>
+            <div className="metric-label">Healthy Cadets</div>
             <div className="metric-value">{stats.healthyCount}</div>
           </div>
 

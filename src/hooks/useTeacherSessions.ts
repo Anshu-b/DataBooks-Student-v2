@@ -9,6 +9,8 @@ import {
 } from "firebase/database";
 import { useTeacherAuth } from "./useTeacherAuth";
 
+type ParticipantType = "player" | "nonPlayerParticipant";
+
 export interface TeacherSession {
   id: string;
   teacherId: string;
@@ -187,7 +189,9 @@ export function useTeacherSessions() {
           const metaSnapshot = await get(ref(db, `sessions/${id}/metadata`));
           const meetingsSnapshot = await get(ref(db, `sessions/${id}/meetings`));
           const playersSnapshot = await get(ref(db, `sessions/${id}/players`));
-          const nonPlayersSnapshot = await get(ref(db, `sessions/${id}/nonPlayers`));
+          const nonPlayersSnapshot = await get(
+            ref(db, `sessions/${id}/nonPlayers`)
+          );
 
           if (!metaSnapshot.exists()) {
             return null;
@@ -353,6 +357,7 @@ export function useTeacherSessions() {
         class: details.className,
         cadets: details.cadets,
         sectors: details.sectors,
+        medBayRooms: details.medBayRooms,
         ...(details.slidesLink ? { slidesLink: details.slidesLink } : {}),
         timestamp: new Date(activatedAtMs).toISOString(),
         activatedAtMs,
@@ -467,7 +472,6 @@ export function useTeacherSessions() {
     await loadSessions();
   }
 
-
   async function setSessionNonPlayers(
     sessionId: string,
     nonPlayerNames: string[]
@@ -478,7 +482,7 @@ export function useTeacherSessions() {
 
     if (invalidName) {
       throw new Error(
-        `Invalid non player name "${invalidName}". Names cannot contain ., #, $, /, [, or ].`
+        `Invalid non player participant name "${invalidName}". Names cannot contain ., #, $, /, [, or ].`
       );
     }
 
@@ -529,7 +533,7 @@ export function useTeacherSessions() {
 
     if (!isValidFirebaseKey(trimmedName)) {
       throw new Error(
-        "Non player name cannot be empty or contain ., #, $, /, [, or ]."
+        "Non player participant name cannot be empty or contain ., #, $, /, [, or ]."
       );
     }
 
@@ -549,7 +553,7 @@ export function useTeacherSessions() {
   async function moveSessionParticipant(
     sessionId: string,
     participantName: string,
-    targetType: "player" | "nonPlayer"
+    targetType: ParticipantType
   ) {
     const trimmedName = participantName.trim();
 

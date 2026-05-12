@@ -634,7 +634,6 @@ const styles = `
     padding: 0;
   }
 
-
   .participant-row {
     display: grid;
     grid-template-columns: 1fr 160px auto;
@@ -666,7 +665,7 @@ const styles = `
 const STUDENT_TEMPLATE_URL =
   "https://docs.google.com/spreadsheets/d/1s0V46jr0vAHJvpc0Yur45_xUVgGgeoDyL7otBYb6Chc/edit?usp=sharing";
 
-type ParticipantType = "player" | "nonPlayer";
+type ParticipantType = "player" | "nonPlayerParticipant";
 
 type SessionParticipant = {
   name: string;
@@ -674,9 +673,13 @@ type SessionParticipant = {
 };
 
 function parseParticipantType(rawType: string | undefined): ParticipantType {
-  const normalizedType = rawType?.trim().toLowerCase() ?? "";
+  const normalizedType = rawType?.trim() ?? "";
 
-  return normalizedType === "player" ? "player" : "nonPlayer";
+  if (/^(player|cadet)$/i.test(normalizedType)) {
+    return "player";
+  }
+
+  return "nonPlayerParticipant";
 }
 
 function parseStudentCsv(text: string): SessionParticipant[] {
@@ -706,9 +709,11 @@ function getPlayerNames(participants: SessionParticipant[]): string[] {
     .map((participant) => participant.name);
 }
 
-function getNonPlayerNames(participants: SessionParticipant[]): string[] {
+function getNonPlayerParticipantNames(
+  participants: SessionParticipant[]
+): string[] {
   return participants
-    .filter((participant) => participant.type === "nonPlayer")
+    .filter((participant) => participant.type === "nonPlayerParticipant")
     .map((participant) => participant.name);
 }
 
@@ -759,15 +764,16 @@ function TeacherHomePage() {
 
   useEffect(() => {
     const playerNames = selectedSessionData?.playerNames ?? [];
-    const nonPlayerNames = selectedSessionData?.nonPlayerNames ?? [];
+    const nonPlayerParticipantNames =
+      selectedSessionData?.nonPlayerNames ?? [];
     const participants = [
       ...playerNames.map((name) => ({
         name,
         type: "player" as ParticipantType,
       })),
-      ...nonPlayerNames.map((name) => ({
+      ...nonPlayerParticipantNames.map((name) => ({
         name,
-        type: "nonPlayer" as ParticipantType,
+        type: "nonPlayerParticipant" as ParticipantType,
       })),
     ].sort((left, right) => left.name.localeCompare(right.name));
 
@@ -821,7 +827,7 @@ function TeacherHomePage() {
         await setSessionParticipants(
           selectedSession,
           getPlayerNames(participants),
-          getNonPlayerNames(participants)
+          getNonPlayerParticipantNames(participants)
         );
         setLiveParticipants(participants);
       } catch (error) {
@@ -959,32 +965,34 @@ function TeacherHomePage() {
       sectors <= 0 ||
       medBayRooms <= 0
     ) {
-      alert("Please complete all fields and upload a student CSV.");
+      alert("Please complete all fields and upload a name list CSV.");
       return;
     }
 
     const uploadedPlayerCount = getPlayerNames(uploadedParticipants).length;
-    const uploadedNonPlayerCount = getNonPlayerNames(
-      uploadedParticipants
-    ).length;
+    const uploadedNonPlayerParticipantCount =
+      getNonPlayerParticipantNames(uploadedParticipants).length;
 
     if (playerCount !== uploadedPlayerCount) {
       alert(
-        `Player count must match the CSV. You entered ${playerCount}, but the CSV has ${uploadedPlayerCount} players.`
+        `Cadet count must match the CSV. You entered ${playerCount}, but the CSV has ${uploadedPlayerCount} cadets.`
       );
       return;
     }
 
-    if (nonPlayerParticipantCount !== uploadedNonPlayerCount) {
+    if (nonPlayerParticipantCount !== uploadedNonPlayerParticipantCount) {
       alert(
-        `Non player participant count must match the CSV. You entered ${nonPlayerParticipantCount}, but the CSV has ${uploadedNonPlayerCount} non player participants.`
+        `Bridge Crew count must match the CSV. You entered ${nonPlayerParticipantCount}, but the CSV has ${uploadedNonPlayerParticipantCount} Bridge Crew members.`
       );
       return;
     }
 
-    if (playerCount + nonPlayerParticipantCount !== uploadedParticipants.length) {
+    if (
+      playerCount + nonPlayerParticipantCount !==
+      uploadedParticipants.length
+    ) {
       alert(
-        "Player count and non player participant count must add up to the total number of names in the CSV."
+        "Cadet count and Bridge Crew count must add up to the total number of names in the CSV."
       );
       return;
     }
@@ -1011,7 +1019,7 @@ function TeacherHomePage() {
         await setSessionParticipants(
           sessionId,
           getPlayerNames(uploadedParticipants),
-          getNonPlayerNames(uploadedParticipants)
+          getNonPlayerParticipantNames(uploadedParticipants)
         );
         setSelectedSession(sessionId);
       }
@@ -1118,8 +1126,8 @@ function TeacherHomePage() {
                       Open Google Sheet Template
                     </a>
                     <p className="template-help">
-                      Make a copy, add student names in the first column, then
-                      download as CSV and upload it below.
+                      Make a copy, add names in the first column, then download
+                      as CSV and upload it below.
                     </p>
                   </div>
                 </div>
@@ -1141,24 +1149,26 @@ function TeacherHomePage() {
                     />
                     <p className="upload-help">
                       Upload a CSV with names in the first column. The optional
-                      second column is Type. Only "player" saves as a player.
-                      Anything else saves as a non player participant.
+                      second column is Type. Only "player" saves as a Cadet.
+                      Anything else saves as Bridge Crew.
                     </p>
 
                     {uploadedParticipants.length > 0 && (
                       <p className="csv-status">
                         {uploadedParticipants.length} names loaded from CSV.
                         {" "}
-                        {getPlayerNames(uploadedParticipants).length} players,
+                        {getPlayerNames(uploadedParticipants).length} cadets,
                         {" "}
-                        {getNonPlayerNames(uploadedParticipants).length} non player participants.
+                        {getNonPlayerParticipantNames(uploadedParticipants)
+                          .length}{" "}
+                        Bridge Crew members.
                       </p>
                     )}
                   </div>
                 </div>
 
                 <div className="form-field">
-                  <label className="field-label">Number of Players</label>
+                  <label className="field-label">Number of Cadets</label>
                   <input
                     className="field-input"
                     type="number"
@@ -1169,7 +1179,7 @@ function TeacherHomePage() {
                       setPlayerCount(Number(e.target.value))
                     }
                     onBlur={() => setPlayerCountTouched(true)}
-                    placeholder="Must match CSV player count"
+                    placeholder="Must match CSV cadet count"
                   />
 
                   {playerCountTouched &&
@@ -1177,7 +1187,7 @@ function TeacherHomePage() {
                     playerCount !==
                       getPlayerNames(uploadedParticipants).length && (
                       <p className="field-warning">
-                        Player count must match the CSV player count:{" "}
+                        Cadet count must match the CSV cadet count:{" "}
                         {getPlayerNames(uploadedParticipants).length}.
                       </p>
                     )}
@@ -1185,7 +1195,7 @@ function TeacherHomePage() {
 
                 <div className="form-field">
                   <label className="field-label">
-                    Number of Non Player Participants
+                    Number of Bridge Crew
                   </label>
                   <input
                     className="field-input"
@@ -1197,17 +1207,18 @@ function TeacherHomePage() {
                       setNonPlayerParticipantCount(Number(e.target.value))
                     }
                     onBlur={() => setNonPlayerCountTouched(true)}
-                    placeholder="Must match CSV non player participant count"
+                    placeholder="Must match CSV Bridge Crew count"
                   />
 
                   {nonPlayerCountTouched &&
                     uploadedParticipants.length > 0 &&
                     nonPlayerParticipantCount !==
-                      getNonPlayerNames(uploadedParticipants).length && (
+                      getNonPlayerParticipantNames(uploadedParticipants)
+                        .length && (
                       <p className="field-warning">
-                        Non player participant count must match the CSV non
-                        player participant count:{" "}
-                        {getNonPlayerNames(uploadedParticipants).length}.
+                        Bridge Crew count must match the CSV Bridge Crew count:{" "}
+                        {getNonPlayerParticipantNames(uploadedParticipants)
+                          .length}.
                       </p>
                     )}
                 </div>
@@ -1359,15 +1370,16 @@ function TeacherHomePage() {
                             Manage Name List
                           </h3>
                           <p className="roster-help">
-                            Add, remove, or replace players and non player
-                            participants for this session.
+                            Add, remove, or replace Cadets and Bridge Crew for
+                            this session.
                           </p>
                         </div>
 
                         <span className="roster-count-badge">
-                          {getPlayerNames(liveParticipants).length} players /{" "}
-                          {getNonPlayerNames(liveParticipants).length}{" "}
-                          non player participants
+                          {getPlayerNames(liveParticipants).length} cadets /{" "}
+                          {getNonPlayerParticipantNames(liveParticipants)
+                            .length}{" "}
+                          Bridge Crew
                         </span>
                       </div>
 
@@ -1396,8 +1408,10 @@ function TeacherHomePage() {
                               )
                             }
                           >
-                            <option value="player">Player</option>
-                            <option value="nonPlayer">Non Player Participant</option>
+                            <option value="player">Cadet</option>
+                            <option value="nonPlayerParticipant">
+                              Bridge Crew
+                            </option>
                           </select>
                           <button
                             className="add-student-btn"
@@ -1457,8 +1471,10 @@ function TeacherHomePage() {
                                   )
                                 }
                               >
-                                <option value="player">Player</option>
-                                <option value="nonPlayer">Non Player Participant</option>
+                                <option value="player">Cadet</option>
+                                <option value="nonPlayerParticipant">
+                                  Bridge Crew
+                                </option>
                               </select>
                               <button
                                 className="remove-student-btn"
