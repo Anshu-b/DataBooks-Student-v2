@@ -346,11 +346,12 @@ function formatEventDescription(event: UIEvent): string {
     return `Switched from ${from} to ${to}`;
   }
 
-  if (type === "journal.round_navigation") {
-    return `Opened Round ${details?.toRound || "?"} journal questions`;
+  if (type === "journal.round_navigation" || type === "crew_log.round_navigation") {
+    const logLabel = type === "crew_log.round_navigation" ? "bridge crew log" : "journal";
+    return `Opened Round ${details?.toRound || "?"} ${logLabel} questions`;
   }
 
-  if (type === "journal.round_submission") {
+  if (type === "journal.round_submission" || type === "crew_log.round_submission") {
     const round = details?.round || "?";
     const count = details?.answerCount || 0;
 
@@ -361,7 +362,7 @@ function formatEventDescription(event: UIEvent): string {
     return `Saved ${count} answer${count !== 1 ? "s" : ""} for Round ${round}`;
   }
 
-  if (type === "journal.response_edited") {
+  if (type === "journal.response_edited" || type === "crew_log.response_edited") {
     const questionNum = (details?.questionIndex || 0) + 1;
     const length = details?.length || 0;
 
@@ -372,7 +373,7 @@ function formatEventDescription(event: UIEvent): string {
     return `Edited answer for Question ${questionNum} (${length} characters)`;
   }
 
-  if (type === "journal.input") {
+  if (type === "journal.input" || type === "crew_log.input") {
     const round = details?.round || "?";
     const questionNum = (details?.questionIndex || 0) + 1;
 

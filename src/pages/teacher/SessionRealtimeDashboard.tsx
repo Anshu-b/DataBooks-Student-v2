@@ -219,8 +219,12 @@ function SessionRealtimeDashboard({ sessionId }: Props) {
   const { players, loading: playersLoading } = useSessionPlayers(sessionId);
   const { roster, loading: rosterLoading } = useSessionRoster(sessionId);
   const { readings, loading: readingsLoading } = useSessionReadings(sessionId);
-  const { answersMap, loading: answersLoading } =
+  const { answersMap: journalAnswersMap, loading: answersLoading } =
     useSessionJournalAnswers(sessionId);
+  const {
+    answersMap: bridgeCrewAnswersMap,
+    loading: bridgeCrewAnswersLoading,
+  } = useSessionJournalAnswers(sessionId, "bridgeCrewLogAnswers");
   const { meetings, loading: meetingsLoading } = useSessionMeetings(sessionId);
 
   useEffect(() => {
@@ -258,6 +262,7 @@ function SessionRealtimeDashboard({ sessionId }: Props) {
     rosterLoading ||
     readingsLoading ||
     answersLoading ||
+    bridgeCrewAnswersLoading ||
     meetingsLoading;
 
   const stats: LiveStats = useMemo(() => {
@@ -279,7 +284,9 @@ function SessionRealtimeDashboard({ sessionId }: Props) {
     ).length;
 
     const healthyCount = totalPlayers - infectedCount;
-    const journalSubmissions = Object.keys(answersMap).length;
+    const journalSubmissions =
+      Object.keys(journalAnswersMap).length +
+      Object.keys(bridgeCrewAnswersMap).length;
     const meetingCount = meetings.length;
 
     return {
@@ -292,7 +299,15 @@ function SessionRealtimeDashboard({ sessionId }: Props) {
       journalSubmissions,
       meetingCount,
     };
-  }, [players, nonPlayerCount, roster, readings, answersMap, meetings]);
+  }, [
+    players,
+    nonPlayerCount,
+    roster,
+    readings,
+    journalAnswersMap,
+    bridgeCrewAnswersMap,
+    meetings,
+  ]);
 
   if (loading) {
     return (
@@ -369,7 +384,7 @@ function SessionRealtimeDashboard({ sessionId }: Props) {
 
           <div className="metric-card metric-card-journal">
             <div className="metric-card-icon">📝</div>
-            <div className="metric-label">Journal Submissions</div>
+            <div className="metric-label">Log Submissions</div>
             <div className="metric-value">{stats.journalSubmissions}</div>
           </div>
 

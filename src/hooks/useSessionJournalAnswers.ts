@@ -24,7 +24,12 @@ export type SessionJournalAnswer = {
   [key: string]: unknown;
 };
 
-export function useSessionJournalAnswers(sessionId: string | null) {
+export type SessionAnswersPath = "journalAnswers" | "bridgeCrewLogAnswers";
+
+export function useSessionJournalAnswers(
+  sessionId: string | null,
+  answersPath: SessionAnswersPath = "journalAnswers"
+) {
   const [answersMap, setAnswersMap] = useState<SessionJournalAnswersMap>({});
   const [answers, setAnswers] = useState<SessionJournalAnswer[]>([]);
   const [loading, setLoading] = useState(false);
@@ -43,7 +48,7 @@ export function useSessionJournalAnswers(sessionId: string | null) {
     setError(null);
 
     const db = getDatabase();
-    const answersRef = ref(db, `sessions/${sessionId}/journalAnswers`);
+    const answersRef = ref(db, `sessions/${sessionId}/${answersPath}`);
 
     const unsubscribe = onValue(
       answersRef,
@@ -85,7 +90,7 @@ export function useSessionJournalAnswers(sessionId: string | null) {
     );
 
     return () => unsubscribe();
-  }, [sessionId]);
+  }, [sessionId, answersPath]);
 
   return {
     answersMap,

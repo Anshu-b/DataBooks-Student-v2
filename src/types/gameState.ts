@@ -8,6 +8,8 @@
  * multiplayer logic.
  */
 
+export type ParticipantType = "player" | "nonPlayer";
+
 export type Player = {
     name: string;
   };
@@ -26,6 +28,7 @@ export type Player = {
     gameId: string;
     sessionId: string;
     player: Player;
+    participantType: ParticipantType;
     currentRound: number;
     rounds: Record<number, RoundState>;
   };

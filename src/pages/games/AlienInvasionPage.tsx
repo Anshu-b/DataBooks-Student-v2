@@ -42,6 +42,10 @@ function AlienInvasionPage() {
   const sessionId = initialGameState.sessionId;
   const game = GAMES.find((g) => g.id === initialGameState.gameId);
   const logger = useLogger();
+  const logLabel =
+    initialGameState.participantType === "nonPlayer"
+      ? "Bridge Crew Log"
+      : "Journal";
 
   const [screenMode, setScreenMode] = useState<ScreenMode>("single");
   const [activePanel, setActivePanel] =
@@ -100,6 +104,7 @@ function AlienInvasionPage() {
         playerName={playerName}
         sessionId={initialGameState.sessionId}
         sessionStatus={sessionStatus}
+        logLabel={logLabel}
         screenMode={screenMode}
         onToggleMode={handleToggleMode}
         activePanel={activePanel}
