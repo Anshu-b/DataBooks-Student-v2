@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { GAMES } from "../config/games";
 import { getDatabase, ref, get, update } from "firebase/database";
+import { getAuth, signInAnonymously } from "firebase/auth";
 import { useSessionParticipants } from "../hooks/useSessionParticipants";
 import type { ParticipantType } from "../types/gameState";
 import { ensureStudentFirebaseAccess } from "../firebase/ensureStudentFirebaseAccess";
@@ -17,6 +18,14 @@ function getParticipantKey(participant: AllowedParticipant): string {
 
 function getParticipantTypeLabel(type: ParticipantType): string {
   return type === "player" ? "Cadet" : "Bridge Crew";
+}
+
+async function ensureStudentAuth() {
+  const auth = getAuth();
+
+  if (!auth.currentUser) {
+    await signInAnonymously(auth);
+  }
 }
 
 const styles = `
@@ -485,7 +494,8 @@ function GameEntryPage() {
 
     return (
       allowedParticipants.find(
-        (participant) => getParticipantKey(participant) === selectedParticipantKey
+        (participant) =>
+          getParticipantKey(participant) === selectedParticipantKey
       ) ?? null
     );
   }, [allowedParticipants, selectedParticipantKey]);
@@ -622,6 +632,8 @@ function GameEntryPage() {
   }
 
   async function handleValidateSession() {
+    const cleanSessionId = sessionId.trim();
+
     setLoading(true);
     setError(null);
     setSelectedParticipantKey(null);
@@ -637,7 +649,7 @@ function GameEntryPage() {
         return;
       }
 
-      const teacherParticipants = await getSessionParticipants(sessionId);
+      const teacherParticipants = await getSessionParticipants(cleanSessionId);
 
       if (teacherParticipants.length === 0) {
         setError("This session is missing a valid participant roster.");
@@ -645,10 +657,12 @@ function GameEntryPage() {
         return;
       }
 
+      setSessionId(cleanSessionId);
       setAllowedParticipants(teacherParticipants);
       setSessionValidated(true);
       setLoading(false);
-    } catch {
+    } catch (error) {
+      console.error(error);
       setError("Error validating session.");
       setAllowedParticipants([]);
       setLoading(false);
@@ -656,7 +670,9 @@ function GameEntryPage() {
   }
 
   async function handleStartAdventure() {
-    if (!selectedParticipant || !sessionId || !password) {
+    const cleanSessionId = sessionId.trim();
+
+    if (!selectedParticipant || !cleanSessionId || !password) {
       return;
     }
 
@@ -686,7 +702,7 @@ function GameEntryPage() {
       }
 
       const result = await resolveParticipant(
-        sessionId,
+        cleanSessionId,
         selectedParticipant,
         password
       );
@@ -701,7 +717,7 @@ function GameEntryPage() {
         state: {
           initialGameState: {
             gameId: game.id,
-            sessionId,
+            sessionId: cleanSessionId,
             player: { name: selectedParticipant.id },
             participantType: selectedParticipant.type,
             currentRound: 1,
