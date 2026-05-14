@@ -722,20 +722,18 @@ function TeacherHomePage() {
   const { user, loading: authLoading, logout } = useTeacherAuth();
 
   const {
-    sessions,
-    createSession,
-    activateSession,
-    setSessionParticipants,
-    addSessionPlayer,
-    addSessionNonPlayer,
-    moveSessionParticipant,
-    removeSessionParticipant,
-    clearSessionParticipants,
-    setSessionSlidesLink,
-    stopSession,
-    startMeeting,
-    endMeeting,
-  } = useTeacherSessions();
+  sessions,
+  createSession,
+  activateSession,
+  setSessionParticipants,
+  addSessionPlayer,
+  addSessionNonPlayer,
+  moveSessionParticipant,
+  removeSessionParticipant,
+  clearSessionParticipants,
+  setSessionSlidesLink,
+  stopSession,
+} = useTeacherSessions();
 
   const [selectedSession, setSelectedSession] = useState("");
   const [playerCountTouched, setPlayerCountTouched] = useState(false);
@@ -1361,25 +1359,6 @@ function TeacherHomePage() {
                         </button>
                       )}
 
-                      {selectedSessionData?.status === "active" && (
-                        <button
-                          className={`meeting-btn ${
-                            selectedSessionData.activeMeeting
-                              ? "meeting-btn-end"
-                              : "meeting-btn-start"
-                          }`}
-                          onClick={() =>
-                            selectedSessionData.activeMeeting
-                              ? endMeeting(selectedSession)
-                              : startMeeting(selectedSession)
-                          }
-                        >
-                          {selectedSessionData.activeMeeting
-                            ? "End Meeting"
-                            : "Start Meeting"}
-                        </button>
-                      )}
-
                       <button
                         className="copy-btn"
                         onClick={() => {
@@ -1563,6 +1542,9 @@ function TeacherHomePage() {
                     <SessionRealtimeDashboard sessionId={selectedSession} />
 
                     <div className="activity-log-divider" />
+                    <SessionInfectionStatusTable sessionId={selectedSession} />
+
+                    <div className="activity-log-divider" />
                     <SessionMeetingsTable sessionId={selectedSession} />
 
                     <div className="activity-log-divider" />
@@ -1573,9 +1555,6 @@ function TeacherHomePage() {
 
                     <div className="activity-log-divider" />
                     <JournalSubmissionViewer sessionId={selectedSession} />
-
-                    <div className="activity-log-divider" />
-                    <SessionInfectionStatusTable sessionId={selectedSession} />
                   </>
                 )}
               </>

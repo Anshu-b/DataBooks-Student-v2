@@ -1,402 +1,1341 @@
-import { useMemo } from "react";
-import { useSessionRoster } from "../../hooks/useSessionRoster";
-import { useSessionReadings } from "../../hooks/useSessionReadings";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+
+import {
+  getDatabase,
+  ref,
+  set,
+  get,
+  update,
+  onValue,
+} from "firebase/database";
+
+import { useSessionReadings }
+  from "../../hooks/useSessionReadings";
+
+import { useTeacherAuth }
+  from "../../hooks/useTeacherAuth";
 
 const styles = `
-  .infection-table-root {
-    margin-top: 32px;
-    font-family: 'DM Sans', sans-serif;
-  }
+.game-controls-root {
+  margin-top: 28px;
+}
 
-  .infection-table-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-  }
+.game-controls-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 22px;
+  padding: 28px;
+  backdrop-filter: blur(18px);
+}
 
-  .infection-table-title {
-    margin: 0;
-    font-size: 18px;
-    font-weight: 600;
-    color: #f0ece8;
-  }
+.game-controls-title {
+  margin: 0 0 26px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #f0ece8;
+}
 
-  .infection-table-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 10px;
-    border-radius: 999px;
-    border: 1px solid rgba(72, 187, 120, 0.28);
-    background: rgba(72, 187, 120, 0.12);
-    color: #86e0ae;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
+.controls-section-title {
+  margin: 0 0 14px;
+  color: rgba(220,210,235,0.92);
+  font-size: 18px;
+  font-weight: 600;
+}
 
-  .infection-table-badge-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #86e0ae;
-    box-shadow: 0 0 10px rgba(134, 224, 174, 0.8);
-  }
+.controls-row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
 
-  .infection-table-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-  }
+.control-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 
-  .infection-table-card {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 18px;
-    overflow: hidden;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.16);
-  }
+  min-height: 52px;
 
-  .infection-table-card-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 18px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    background: rgba(255, 255, 255, 0.03);
-  }
+  padding: 13px 20px;
 
-  .infection-table-card-title {
-    margin: 0;
-    color: #f0ece8;
-    font-size: 15px;
-    font-weight: 600;
-  }
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.12);
 
-  .infection-table-card-meta {
-    color: rgba(200, 185, 220, 0.72);
-    font-size: 12px;
-    font-weight: 500;
-  }
+  background: rgba(255,255,255,0.05);
 
-  .infection-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
+  color: #f0ece8;
 
-  .infection-table th,
-  .infection-table td {
-    text-align: left;
-    padding: 12px 18px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    vertical-align: middle;
-  }
+  font-size: 15px;
+  font-weight: 600;
 
-  .infection-table th {
-    color: rgba(200, 185, 220, 0.64);
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
+  cursor: pointer;
 
-  .infection-table td {
-    color: #f0ece8;
-    font-size: 13px;
-  }
+  transition: 0.18s;
+}
 
-  .infection-table tr:last-child td {
-    border-bottom: none;
-  }
+.control-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: rgba(255,255,255,0.08);
+}
 
-  .infection-entity-name {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-  }
+.control-button:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+  transform: none;
+}
 
-  .infection-entity-primary {
-    font-weight: 600;
-  }
+.control-start {
+  border-color: rgba(72,187,120,0.28);
+  color: #86e0ae;
+}
 
-  .infection-entity-secondary {
-    color: rgba(200, 185, 220, 0.62);
-    font-size: 12px;
-  }
+.control-meeting {
+  border-color: rgba(160,110,230,0.28);
+  color: #caa7ff;
+}
 
-  .infection-status-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    min-width: 102px;
-    padding: 6px 10px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
+.control-reset {
+  border-color: rgba(255,100,120,0.28);
+  color: #ff9cab;
+}
 
-  .infection-status-pill::before {
-    content: '';
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: currentColor;
-  }
+.control-force {
+  border-color: rgba(80,160,255,0.28);
+  color: #9bc6ff;
+}
 
-  .infection-status-infected {
-    color: #ff8e9c;
-    background: rgba(220, 60, 80, 0.16);
-    border: 1px solid rgba(220, 60, 80, 0.28);
-  }
+.control-cancel {
+  border-color: rgba(255,170,60,0.28);
+  color: #ffcf7a;
+}
 
-  .infection-status-healthy {
-    color: #86e0ae;
-    background: rgba(72, 187, 120, 0.14);
-    border: 1px solid rgba(72, 187, 120, 0.25);
-  }
+.control-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.08);
+  margin: 28px 0;
+}
 
-  .infection-status-unknown {
-    color: #d0c4dd;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-  }
+.infect-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  flex-wrap: wrap;
+}
 
-  .infection-empty-state {
-    padding: 20px 18px;
-    color: rgba(200, 185, 220, 0.72);
-    font-size: 13px;
-  }
+.infect-select {
+  flex: 1;
+  min-width: 260px;
+
+  height: 52px;
+
+  padding: 0 16px;
+
+  background: rgba(255,255,255,0.05);
+
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+
+  color: #f0ece8;
+
+  font-size: 15px;
+
+  outline: none;
+}
+
+.infect-select option {
+  background: #2f2943;
+  color: #f0ece8;
+}
+
+.infect-help {
+  margin-top: 10px;
+
+  color: rgba(210,200,225,0.72);
+
+  font-size: 13px;
+}
+
+.status-pill-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+
+  margin-top: 24px;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  min-height: 42px;
+
+  padding: 0 16px;
+
+  border-radius: 999px;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.status-neutral {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(240,236,232,0.92);
+}
+
+.status-gold {
+  background: rgba(243,156,18,0.14);
+  border: 1px solid rgba(243,156,18,0.32);
+  color: #f5c842;
+}
+
+.status-purple {
+  background: rgba(160,110,230,0.14);
+  border: 1px solid rgba(160,110,230,0.32);
+  color: #caa7ff;
+}
+
+.status-red {
+  background: rgba(220,60,80,0.14);
+  border: 1px solid rgba(220,60,80,0.32);
+  color: #ff9cab;
+}
+
+.telemetry-section {
+  margin-top: 30px;
+}
+
+.telemetry-title {
+  margin: 0 0 18px;
+  color: #f0ece8;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.telemetry-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.telemetry-row {
+  display: grid;
+
+  grid-template-columns:
+    100px
+    1fr
+    210px;
+
+  gap: 18px;
+
+  align-items: center;
+
+  padding: 18px;
+
+  border-radius: 16px;
+
+  background: rgba(255,255,255,0.04);
+
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.telemetry-id {
+  font-family: monospace;
+  font-size: 18px;
+  font-weight: 700;
+  color: #d8d4ff;
+}
+
+.telemetry-bar-shell {
+  position: relative;
+
+  height: 30px;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background: rgba(255,255,255,0.08);
+}
+
+.telemetry-bar-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+
+  border-radius: 999px;
+
+  transition:
+    width 0.2s ease,
+    background 0.2s ease;
+}
+
+.telemetry-label {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 2;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  color: white;
+
+  text-shadow:
+    0 0 6px rgba(0,0,0,0.6);
+}
+
+.telemetry-time {
+  color: rgba(220,210,235,0.72);
+  font-size: 13px;
+  text-align: right;
+}
 `;
 
 interface Props {
   sessionId: string;
 }
 
-type EntityStatus = {
-  id: string;
-  name: string;
-  secondaryLabel: string;
-  status: "infected" | "healthy" | "unknown";
-  updatedAt: string;
-};
+function SessionInfectionStatusTable({
+  sessionId,
+}: Props) {
 
-function SessionInfectionStatusTable({ sessionId }: Props) {
-  const { roster } = useSessionRoster(sessionId);
-  const { readings } = useSessionReadings(sessionId);
+  const { user } =
+    useTeacherAuth();
 
-  const statusSnapshot = useMemo(() => {
-    const cadetStatuses = new Map<number, { status: 0 | 1; timestamp: string }>();
-    const sectorStatuses = new Map<number, { status: 0 | 1; timestamp: string }>();
+  const { readings } =
+    useSessionReadings(sessionId);
 
-    const sortedReadings = readings
-      .filter((reading) => typeof reading.device_id === "string")
-      .sort((left, right) => {
-        const leftMs = Date.parse(left.timestamp ?? "");
-        const rightMs = Date.parse(right.timestamp ?? "");
+  const db =
+    getDatabase();
 
-        return leftMs - rightMs;
-      });
+  const pollKilledRef =
+    useRef(false);
 
-    sortedReadings.forEach((reading) => {
-      const deviceId = reading.device_id ?? "";
-      const entityIndex = getDeviceIndex(deviceId);
+  const [
+    infectTarget,
+    setInfectTarget,
+  ] = useState("");
 
-      if (entityIndex === null) {
+  const [
+    meetingActive,
+    setMeetingActive,
+  ] = useState(false);
+
+  const [
+    meetingCooldown,
+    setMeetingCooldown,
+  ] = useState(false);
+
+  const [
+    roundCooldown,
+    setRoundCooldown,
+  ] = useState(false);
+
+  const [
+    currentCommand,
+    setCurrentCommand,
+  ] = useState("resume");
+
+  const [
+    resetPolling,
+    setResetPolling,
+  ] = useState(false);
+
+  const [
+    infectPolling,
+    setInfectPolling,
+  ] = useState(false);
+
+  const [
+    pollCount,
+    setPollCount,
+  ] = useState(0);
+
+  const [
+    pollTarget,
+    setPollTarget,
+  ] = useState(0);
+
+  useEffect(() => {
+
+    const commandRef = ref(
+      db,
+      "control/command"
+    );
+
+    const unsubscribe =
+      onValue(
+        commandRef,
+        (snapshot) => {
+
+          const value =
+            snapshot.val();
+
+          if (
+            typeof value ===
+            "string"
+          ) {
+
+            setCurrentCommand(
+              value
+            );
+          }
+        }
+      );
+
+    return () => unsubscribe();
+
+  }, [db]);
+
+  useEffect(() => {
+
+    async function
+      loadMeetingState() {
+
+      const meetingsSnapshot =
+        await get(
+          ref(
+            db,
+            `sessions/${sessionId}/meetings`
+          )
+        );
+
+      if (
+        !meetingsSnapshot.exists()
+      ) {
+
+        setMeetingActive(
+          false
+        );
+
         return;
       }
 
-      const payload = {
-        status: reading.infection_status === 1 ? 1 : 0,
-        timestamp: reading.timestamp ?? "",
-      } as const;
+      const meetings =
+        meetingsSnapshot.val();
 
-      if (deviceId.startsWith("S") && entityIndex < roster.cadets) {
-        cadetStatuses.set(entityIndex, payload);
+      const hasActiveMeeting =
+        Object.values(
+          meetings
+        ).some(
+          (meeting: any) =>
+            meeting.startTime &&
+            !meeting.endTime
+        );
+
+      setMeetingActive(
+        hasActiveMeeting
+      );
+    }
+
+    loadMeetingState();
+
+  }, [db, sessionId]);
+
+  async function setCommand(
+    command: string,
+    target?: string
+  ) {
+
+    await set(
+      ref(
+        db,
+        "control/command"
+      ),
+      command
+    );
+
+    if (target) {
+
+      await set(
+        ref(
+          db,
+          "control/target"
+        ),
+        target
+      );
+
+    } else {
+
+      await set(
+        ref(
+          db,
+          "control/target"
+        ),
+        null
+      );
+    }
+  }
+
+  const deviceRows =
+    useMemo(() => {
+
+      const map =
+        new Map();
+
+      readings
+        .sort((a, b) => {
+
+          return (
+            Date.parse(
+              b.timestamp ??
+              ""
+            ) -
+            Date.parse(
+              a.timestamp ??
+              ""
+            )
+          );
+        })
+        .forEach(
+          (reading) => {
+
+            const id =
+              reading.device_id;
+
+            if (
+              !id ||
+              map.has(id)
+            ) {
+              return;
+            }
+
+            map.set(id, {
+              id,
+
+              infection:
+                reading.infection_status ??
+                0,
+
+              updated:
+                reading.timestamp ??
+                "Unknown",
+            });
+          }
+        );
+
+      return Array.from(
+        map.values()
+      ).sort((a, b) =>
+        a.id.localeCompare(
+          b.id
+        )
+      );
+
+    }, [readings]);
+
+  async function startRound() {
+
+    if (
+      roundCooldown ||
+      resetPolling ||
+      infectPolling
+    ) {
+      return;
+    }
+
+    setRoundCooldown(
+      true
+    );
+
+    await setCommand(
+      "resume"
+    );
+
+    setTimeout(() => {
+
+      setRoundCooldown(
+        false
+      );
+
+    }, 3000);
+  }
+
+  async function startMeeting() {
+
+    if (
+      !user ||
+      meetingCooldown ||
+      resetPolling ||
+      infectPolling
+    ) {
+      return;
+    }
+
+    setMeetingCooldown(
+      true
+    );
+
+    await setCommand(
+      "pause"
+    );
+
+    const meetingsRef =
+      ref(
+        db,
+        `sessions/${sessionId}/meetings`
+      );
+
+    const meetingsSnapshot =
+      await get(
+        meetingsRef
+      );
+
+    const meetings =
+      meetingsSnapshot.exists()
+        ? meetingsSnapshot.val()
+        : {};
+
+    const nextMeetingNumber =
+      Object.keys(
+        meetings
+      ).reduce(
+        (
+          maxValue,
+          meetingId
+        ) => {
+
+          const match =
+            meetingId.match(
+              /^meeting_(\d+)$/
+            );
+
+          if (!match) {
+            return maxValue;
+          }
+
+          return Math.max(
+            maxValue,
+            Number(
+              match[1]
+            )
+          );
+
+        },
+        0
+      ) + 1;
+
+    await set(
+      ref(
+        db,
+        `sessions/${sessionId}/meetings/meeting_${nextMeetingNumber}`
+      ),
+      {
+        startTime:
+          new Date()
+            .toISOString(),
+
+        startedBy:
+          user.email ??
+          "Unknown",
+      }
+    );
+
+    setMeetingActive(
+      true
+    );
+
+    setTimeout(() => {
+
+      setMeetingCooldown(
+        false
+      );
+
+    }, 3000);
+  }
+
+  async function endMeeting() {
+
+    if (
+      meetingCooldown ||
+      resetPolling ||
+      infectPolling
+    ) {
+      return;
+    }
+
+    setMeetingCooldown(
+      true
+    );
+
+    const meetingsSnapshot =
+      await get(
+        ref(
+          db,
+          `sessions/${sessionId}/meetings`
+        )
+      );
+
+    if (
+      !meetingsSnapshot.exists()
+    ) {
+      return;
+    }
+
+    const meetings =
+      meetingsSnapshot.val();
+
+    const activeMeetingEntry =
+      Object.entries(
+        meetings
+      ).find(
+        ([, meeting]: any) =>
+          meeting.startTime &&
+          !meeting.endTime
+      );
+
+    if (
+      !activeMeetingEntry
+    ) {
+      return;
+    }
+
+    const [meetingId] =
+      activeMeetingEntry;
+
+    await update(
+      ref(
+        db,
+        `sessions/${sessionId}/meetings/${meetingId}`
+      ),
+      {
+        endTime:
+          new Date()
+            .toISOString(),
+
+        endedBy:
+          user?.email ??
+          "Unknown",
+      }
+    );
+
+    setMeetingActive(
+      false
+    );
+
+    await setCommand(
+      "pause"
+    );
+
+    setTimeout(() => {
+
+      setMeetingCooldown(
+        false
+      );
+
+    }, 3000);
+  }
+
+  async function
+    resetAllDevices() {
+
+    if (
+      resetPolling ||
+      infectPolling
+    ) {
+      return;
+    }
+
+    pollKilledRef.current =
+      false;
+
+    setResetPolling(
+      true
+    );
+
+    setPollCount(0);
+
+    setPollTarget(0);
+
+    await setCommand(
+      "reset_all"
+    );
+
+    async function
+      pollLoop() {
+
+      if (
+        pollKilledRef.current
+      ) {
+
+        setResetPolling(
+          false
+        );
+
+        return;
       }
 
-      if (deviceId.startsWith("T") && entityIndex < roster.sectors) {
-        sectorStatuses.set(entityIndex, payload);
+      const latestSnapshot =
+        await get(
+          ref(
+            db,
+            `sessions/${sessionId}/readings`
+          )
+        );
+
+      if (
+        !latestSnapshot.exists()
+      ) {
+
+        setTimeout(
+          pollLoop,
+          1000
+        );
+
+        return;
       }
-    });
 
-    return {
-      cadets: buildEntityStatuses(
-        roster.cadets,
-        "S",
-        cadetStatuses,
-        roster.playerNames
-      ),
-      sectors: buildEntityStatuses(
-        roster.sectors,
-        "T",
-        sectorStatuses,
-        roster.playerNames
-      ),
-    };
-  }, [readings, roster]);
+      const readingsValue =
+        latestSnapshot.val();
 
-  const totals = useMemo(() => {
-    const infectedCadets = statusSnapshot.cadets.filter(
-      (entity) => entity.status === "infected"
-    ).length;
-    const infectedSectors = statusSnapshot.sectors.filter(
-      (entity) => entity.status === "infected"
-    ).length;
+      const newestMap =
+        new Map();
 
-    return {
-      infectedCadets,
-      infectedSectors,
-    };
-  }, [statusSnapshot]);
+      Object.values(
+        readingsValue
+      ).forEach(
+        (reading: any) => {
+
+          const id =
+            reading.device_id;
+
+          if (!id) {
+            return;
+          }
+
+          const timestampMs =
+            Date.parse(
+              reading.timestamp ??
+              ""
+            );
+
+          if (
+            Number.isNaN(
+              timestampMs
+            )
+          ) {
+            return;
+          }
+
+          const alive =
+            Date.now() -
+              timestampMs <
+            10000;
+
+          if (!alive) {
+            return;
+          }
+
+          newestMap.set(
+            id,
+            reading.infection_status ??
+              0
+          );
+        }
+      );
+
+      const activeIds =
+        Array.from(
+          newestMap.keys()
+        );
+
+      setPollTarget(
+        activeIds.length
+      );
+
+      let healthyCount =
+        0;
+
+      activeIds.forEach(
+        (deviceId) => {
+
+          if (
+            newestMap.get(
+              deviceId
+            ) === 0
+          ) {
+
+            healthyCount += 1;
+          }
+        }
+      );
+
+      setPollCount(
+        healthyCount
+      );
+
+      const allHealthy =
+        activeIds.length > 0 &&
+        healthyCount ===
+          activeIds.length;
+
+      if (
+        allHealthy
+      ) {
+
+        await setCommand(
+          "pause"
+        );
+
+        setResetPolling(
+          false
+        );
+
+        return;
+      }
+
+      setTimeout(
+        pollLoop,
+        1000
+      );
+    }
+
+    pollLoop();
+  }
+
+  async function
+    infectSector() {
+
+    if (
+      infectPolling ||
+      resetPolling ||
+      infectTarget.length ===
+        0
+    ) {
+      return;
+    }
+
+    pollKilledRef.current =
+      false;
+
+    setInfectPolling(
+      true
+    );
+
+    await setCommand(
+      "infect",
+      infectTarget
+    );
+
+    async function
+      pollLoop() {
+
+      if (
+        pollKilledRef.current
+      ) {
+
+        setInfectPolling(
+          false
+        );
+
+        return;
+      }
+
+      const latestSnapshot =
+        await get(
+          ref(
+            db,
+            `sessions/${sessionId}/readings`
+          )
+        );
+
+      if (
+        !latestSnapshot.exists()
+      ) {
+
+        setTimeout(
+          pollLoop,
+          1000
+        );
+
+        return;
+      }
+
+      const readingsValue =
+        latestSnapshot.val();
+
+      const targetReading =
+        Object.values(
+          readingsValue
+        ).find(
+          (reading: any) =>
+            reading.device_id ===
+            infectTarget
+        ) as any;
+
+      if (
+        targetReading &&
+        (targetReading.infection_status ??
+          0) > 0
+      ) {
+
+        await setCommand(
+          "pause"
+        );
+
+        setInfectPolling(
+          false
+        );
+
+        return;
+      }
+
+      setTimeout(
+        pollLoop,
+        1000
+      );
+    }
+
+    pollLoop();
+  }
+
+  async function
+    killAllPolling() {
+
+    pollKilledRef.current =
+      true;
+
+    setResetPolling(
+      false
+    );
+
+    setInfectPolling(
+      false
+    );
+
+    setPollCount(0);
+
+    setPollTarget(0);
+
+    await setCommand(
+      "resume"
+    );
+  }
+
+  async function
+    cancelInfect() {
+
+    pollKilledRef.current =
+      true;
+
+    setInfectPolling(
+      false
+    );
+
+    await setCommand(
+      "pause"
+    );
+  }
+
+  const sectorOptions =
+    deviceRows.map(
+      (row) => row.id
+    );
 
   return (
     <>
-      <style>{styles}</style>
-      <div className="infection-table-root">
-        <div className="infection-table-header">
-          <h3 className="infection-table-title">Live Infection Status</h3>
-          <div className="infection-table-badge">
-            <span className="infection-table-badge-dot" />
-            Live Updates
+      <style>
+        {styles}
+      </style>
+
+      <div className="game-controls-root">
+
+        <div className="game-controls-card">
+
+          <h2 className="game-controls-title">
+            Game Controls
+          </h2>
+
+          <h3 className="controls-section-title">
+            Round and meeting
+          </h3>
+
+          <div className="controls-row">
+
+            <button
+              className="control-button control-start"
+              disabled={
+                roundCooldown ||
+                resetPolling ||
+                infectPolling
+              }
+              onClick={() =>
+                startRound()
+              }
+            >
+              ▶ Start round
+            </button>
+
+            <button
+              className="control-button control-meeting"
+              disabled={
+                meetingCooldown ||
+                resetPolling ||
+                infectPolling
+              }
+              onClick={() =>
+                meetingActive
+                  ? endMeeting()
+                  : startMeeting()
+              }
+            >
+              {meetingActive
+                ? "◉ End meeting"
+                : "◎ Start meeting"}
+            </button>
+
+            <button
+              className="control-button control-reset"
+              disabled={
+                resetPolling ||
+                infectPolling
+              }
+              onClick={() =>
+                resetAllDevices()
+              }
+            >
+              ↺ Reset all
+            </button>
+
+            <button
+              className="control-button control-force"
+              onClick={() =>
+                killAllPolling()
+              }
+            >
+              ▷ Force start
+            </button>
+
           </div>
+
+          <div className="control-divider" />
+
+          <h3 className="controls-section-title">
+            Infect a sector
+          </h3>
+
+          <div className="infect-row">
+
+            <select
+              className="infect-select"
+              value={
+                infectTarget
+              }
+              onChange={(event) =>
+                setInfectTarget(
+                  event.target.value
+                )
+              }
+            >
+
+              <option value="">
+                Select sector...
+              </option>
+
+              {sectorOptions.map(
+                (sector) => (
+                  <option
+                    key={sector}
+                    value={sector}
+                  >
+                    {sector}
+                  </option>
+                )
+              )}
+
+            </select>
+
+            <button
+              className="control-button control-reset"
+              disabled={
+                infectPolling ||
+                resetPolling ||
+                infectTarget.length ===
+                  0
+              }
+              onClick={() =>
+                infectSector()
+              }
+            >
+              ☣ Infect sector
+            </button>
+
+            {infectPolling && (
+              <button
+                className="control-button control-cancel"
+                onClick={() =>
+                  cancelInfect()
+                }
+              >
+                ✕ Cancel infect
+              </button>
+            )}
+
+          </div>
+
+          <div className="infect-help">
+            Safe to infect while paused —
+            spread only begins when
+            Start round is hit.
+          </div>
+
+          <div className="status-pill-row">
+
+            <div className="status-pill status-neutral">
+              Command:
+              {" "}
+              {currentCommand}
+            </div>
+
+            {currentCommand ===
+              "infect" && (
+              <div className="status-pill status-neutral">
+                Target:
+                {" "}
+                {infectTarget}
+              </div>
+            )}
+
+            <div className="status-pill status-purple">
+              Meeting:
+              {" "}
+              {meetingActive
+                ? "active"
+                : "inactive"}
+            </div>
+
+            <div className="status-pill status-gold">
+              Spread:
+              {" "}
+              {currentCommand ===
+              "pause"
+                ? "paused"
+                : "active"}
+            </div>
+
+            {resetPolling && (
+              <div className="status-pill status-red">
+                Reset poll:
+                {" "}
+                {pollCount}/
+                {pollTarget}
+                {" "}
+                devices healthy
+              </div>
+            )}
+
+          </div>
+
+          <div className="telemetry-section">
+
+            <h3 className="telemetry-title">
+              Live infection telemetry
+            </h3>
+
+            <div className="telemetry-grid">
+
+              {deviceRows.map(
+                (row) => {
+
+                  const clamped =
+                    Math.max(
+                      0,
+                      Math.min(
+                        1,
+                        row.infection
+                      )
+                    );
+
+                  const percent =
+                    clamped * 100;
+
+                  let color =
+                    "#38d66b";
+
+                  if (
+                    clamped >= 1
+                  ) {
+
+                    color =
+                      "#ff2f45";
+
+                  } else if (
+                    clamped >= 0.5
+                  ) {
+
+                    color =
+                      "#ff5c70";
+
+                  } else if (
+                    clamped > 0
+                  ) {
+
+                    color =
+                      "#ffb347";
+                  }
+
+                  return (
+                    <div
+                      className="telemetry-row"
+                      key={row.id}
+                    >
+
+                      <div className="telemetry-id">
+                        {row.id}
+                      </div>
+
+                      <div className="telemetry-bar-shell">
+
+                        <div
+                          className="telemetry-bar-fill"
+                          style={{
+                            width:
+                              `${percent}%`,
+                            background:
+                              color,
+                          }}
+                        />
+
+                        <div className="telemetry-label">
+                          {row.infection.toFixed(
+                            2
+                          )}
+                        </div>
+
+                      </div>
+
+                      <div className="telemetry-time">
+                        {row.updated}
+                      </div>
+
+                    </div>
+                  );
+                }
+              )}
+
+            </div>
+
+          </div>
+
         </div>
 
-        <div className="infection-table-grid">
-          <StatusTableCard
-            title="Sectors"
-            meta={`${totals.infectedSectors} infected`}
-            rows={statusSnapshot.sectors}
-          />
-          <StatusTableCard
-            title="Cadets"
-            meta={`${totals.infectedCadets} infected`}
-            rows={statusSnapshot.cadets}
-          />
-        </div>
       </div>
+
     </>
   );
-}
-
-function StatusTableCard({
-  title,
-  meta,
-  rows,
-}: {
-  title: string;
-  meta: string;
-  rows: EntityStatus[];
-}) {
-  return (
-    <div className="infection-table-card">
-      <div className="infection-table-card-header">
-        <h4 className="infection-table-card-title">{title}</h4>
-        <span className="infection-table-card-meta">{meta}</span>
-      </div>
-
-      {rows.length === 0 ? (
-        <div className="infection-empty-state">No live data available yet.</div>
-      ) : (
-        <table className="infection-table">
-          <thead>
-            <tr>
-              <th>Entity</th>
-              <th>Status</th>
-              <th>Updated</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row) => (
-              <tr key={row.id}>
-                <td>
-                  <div className="infection-entity-name">
-                    <span className="infection-entity-primary">
-                      {row.name}
-                    </span>
-                    <span className="infection-entity-secondary">
-                      {row.secondaryLabel}
-                    </span>
-                  </div>
-                </td>
-                <td>
-                  <span
-                    className={`infection-status-pill infection-status-${row.status}`}
-                  >
-                    {row.status}
-                  </span>
-                </td>
-                <td>{row.updatedAt}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-    </div>
-  );
-}
-
-function buildEntityStatuses(
-  count: number,
-  prefix: "S" | "T",
-  latestStatuses: Map<number, { status: 0 | 1; timestamp: string }>,
-  playerNames: string[]
-): EntityStatus[] {
-  return Array.from({ length: count }, (_, index): EntityStatus => {
-    const entityId = `${prefix}${index + 1}`;
-    const latestStatus = latestStatuses.get(index);
-    const displayName =
-      prefix === "S"
-        ? playerNames[index] ?? `Cadet ${index + 1}`
-        : `Sector ${index + 1}`;
-
-    const status: EntityStatus["status"] = latestStatus
-      ? latestStatus.status === 1
-        ? "infected"
-        : "healthy"
-      : "unknown";
-
-    return {
-      id: entityId,
-      name: displayName,
-      secondaryLabel: prefix === "S" ? entityId : `Telemetry ${entityId}`,
-      status,
-      updatedAt: formatTimestamp(latestStatus?.timestamp),
-    };
-  }).filter((entity) => entity.status !== "unknown");
-}
-
-function getDeviceIndex(deviceId: string): number | null {
-  const numericPortion = Number.parseInt(deviceId.slice(1), 10);
-
-  if (Number.isNaN(numericPortion) || numericPortion <= 0) {
-    return null;
-  }
-
-  return numericPortion - 1;
-}
-
-function formatTimestamp(timestamp?: string): string {
-  if (!timestamp) {
-    return "No reading yet";
-  }
-
-  const date = new Date(timestamp);
-
-  if (Number.isNaN(date.getTime())) {
-    return "Invalid timestamp";
-  }
-
-  return date.toLocaleTimeString([], {
-    hour: "numeric",
-    minute: "2-digit",
-    second: "2-digit",
-  });
 }
 
 export default SessionInfectionStatusTable;
