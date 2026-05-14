@@ -369,6 +369,16 @@ function SessionInfectionStatusTable({
     setPollTarget,
   ] = useState(0);
 
+  const [
+    resetMinimumRemaining,
+    setResetMinimumRemaining,
+  ] = useState(45);
+
+  const [
+    infectMinimumRemaining,
+    setInfectMinimumRemaining,
+  ] = useState(45);
+
   useEffect(() => {
 
     const commandRef = ref(
@@ -760,9 +770,16 @@ function SessionInfectionStatusTable({
 
     setPollTarget(0);
 
+    setResetMinimumRemaining(
+      45
+    );
+
     await setCommand(
       "reset_all"
     );
+
+    const startTime =
+      Date.now();
 
     async function
       pollLoop() {
@@ -777,6 +794,22 @@ function SessionInfectionStatusTable({
 
         return;
       }
+
+      const elapsedSeconds =
+        Math.floor(
+          (Date.now() -
+            startTime) / 1000
+        );
+
+      const remaining =
+        Math.max(
+          0,
+          45 - elapsedSeconds
+        );
+
+      setResetMinimumRemaining(
+        remaining
+      );
 
       const latestSnapshot =
         await get(
@@ -877,12 +910,16 @@ function SessionInfectionStatusTable({
         healthyCount
       );
 
+      const minimumReached =
+        remaining === 0;
+
       const allHealthy =
         activeIds.length > 0 &&
         healthyCount ===
           activeIds.length;
 
       if (
+        minimumReached &&
         allHealthy
       ) {
 
@@ -925,10 +962,17 @@ function SessionInfectionStatusTable({
       true
     );
 
+    setInfectMinimumRemaining(
+      45
+    );
+
     await setCommand(
       "infect",
       infectTarget
     );
+
+    const startTime =
+      Date.now();
 
     async function
       pollLoop() {
@@ -943,6 +987,22 @@ function SessionInfectionStatusTable({
 
         return;
       }
+
+      const elapsedSeconds =
+        Math.floor(
+          (Date.now() -
+            startTime) / 1000
+        );
+
+      const remaining =
+        Math.max(
+          0,
+          45 - elapsedSeconds
+        );
+
+      setInfectMinimumRemaining(
+        remaining
+      );
 
       const latestSnapshot =
         await get(
@@ -976,10 +1036,20 @@ function SessionInfectionStatusTable({
             infectTarget
         ) as any;
 
-      if (
+      const infected =
         targetReading &&
-        (targetReading.infection_status ??
-          0) > 0
+        (
+          targetReading
+            .infection_status ??
+          0
+        ) > 0;
+
+      const minimumReached =
+        remaining === 0;
+
+      if (
+        infected &&
+        minimumReached
       ) {
 
         await setCommand(
@@ -1233,7 +1303,23 @@ function SessionInfectionStatusTable({
                 {pollCount}/
                 {pollTarget}
                 {" "}
-                devices healthy
+                healthy
+              </div>
+            )}
+
+            {resetPolling && (
+              <div className="status-pill status-gold">
+                Minimum reset hold:
+                {" "}
+                {resetMinimumRemaining}s
+              </div>
+            )}
+
+            {infectPolling && (
+              <div className="status-pill status-red">
+                Infect verification:
+                {" "}
+                {infectMinimumRemaining}s
               </div>
             )}
 
