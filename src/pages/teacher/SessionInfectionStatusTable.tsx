@@ -547,6 +547,72 @@ function SessionInfectionStatusTable({
 
     }, [readings]);
 
+  const DEVICE_ALIVE_WINDOW_MS =
+  10000;
+
+  const MAX_INFECT_POLL_MS =
+    120000;
+
+  function getLatestDeviceReading(
+    readingsList: any[],
+    deviceId: string
+  ) {
+
+    const matchingReadings =
+      readingsList
+        .filter(
+          (reading) =>
+            reading.device_id ===
+            deviceId
+        )
+        .sort((a, b) => {
+
+          return (
+            Date.parse(
+              b.timestamp ??
+              ""
+            ) -
+            Date.parse(
+              a.timestamp ??
+              ""
+            )
+          );
+        });
+
+    if (
+      matchingReadings.length === 0
+    ) {
+      return null;
+    }
+
+    return matchingReadings[0];
+  }
+
+  function isReadingAlive(
+    reading: any
+  ) {
+
+    const timestampMs =
+      Date.parse(
+        reading?.timestamp ??
+        ""
+      );
+
+    if (
+      Number.isNaN(
+        timestampMs
+      )
+    ) {
+      return false;
+    }
+
+    return (
+      Date.now() -
+        timestampMs <
+      DEVICE_ALIVE_WINDOW_MS
+    );
+  }
+    
   async function startRound() {
 
     if (
@@ -943,8 +1009,8 @@ function SessionInfectionStatusTable({
     pollLoop();
   }
 
-  async function
-    infectSector() {
+async function
+  infectSector() {
 
     if (
       infectPolling ||
@@ -1004,6 +1070,30 @@ function SessionInfectionStatusTable({
         remaining
       );
 
+      const pollElapsedMs =
+        Date.now() -
+        startTime;
+
+      if (
+        pollElapsedMs >
+        MAX_INFECT_POLL_MS
+      ) {
+
+        console.error(
+          "Infect polling timed out."
+        );
+
+        await setCommand(
+          "pause"
+        );
+
+        setInfectPolling(
+          false
+        );
+
+        return;
+      }
+
       const latestSnapshot =
         await get(
           ref(
@@ -1027,22 +1117,30 @@ function SessionInfectionStatusTable({
       const readingsValue =
         latestSnapshot.val();
 
-      const targetReading =
+      const readingsList =
         Object.values(
           readingsValue
-        ).find(
-          (reading: any) =>
-            reading.device_id ===
-            infectTarget
-        ) as any;
+        ) as any[];
+
+      const targetReading =
+        getLatestDeviceReading(
+          readingsList,
+          infectTarget
+        );
+
+      const targetAlive =
+        targetReading &&
+        isReadingAlive(
+          targetReading
+        );
 
       const infected =
-        targetReading &&
+        targetAlive &&
         (
           targetReading
             .infection_status ??
           0
-        ) > 0;
+        ) >= 1;
 
       const minimumReached =
         remaining === 0;
