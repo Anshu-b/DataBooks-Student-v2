@@ -452,6 +452,8 @@ function JournalPanel() {
 
   const currentRound = gameState.currentRound;
   const [viewedRound, setViewedRound] = useState(currentRound);
+  const [saveMessage, setSaveMessage] = useState("");
+
   const roundConfig = logRounds.find((r) => r.roundNumber === viewedRound);
 
   if (!roundConfig) {
@@ -562,30 +564,63 @@ function JournalPanel() {
 
         {/* Save button */}
         <div className="save-row">
-          <button
-            className="save-btn"
-            onClick={async () => {
-              const answers = getJournalAnswersForRound(viewedRound);
-              await saveJournalRoundAnswers(viewedRound);
-              logger.log({
-                type: roundSubmissionEventType,
-                action: "round_saved",
-                userId: gameState.player.name,
-                sessionId: gameState.sessionId,
-                details: {
-                  round: viewedRound,
-                  answers: answers.map((a) => ({
-                    questionId: a.questionId,
-                    answer: a.answer,
-                    length: a.answer.length,
-                  })),
-                  answerCount: answers.length,
-                },
-              });
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-end",
+              gap: "8px",
             }}
           >
-            Save Round {viewedRound} Answers
-          </button>
+            <button
+              className="save-btn"
+              onClick={async () => {
+                const answers = getJournalAnswersForRound(viewedRound);
+
+                await saveJournalRoundAnswers(viewedRound);
+
+                setSaveMessage(
+                  `Round ${viewedRound} answers saved successfully`
+                );
+
+                setTimeout(() => {
+                  setSaveMessage("");
+                }, 3000);
+
+                logger.log({
+                  type: roundSubmissionEventType,
+                  action: "round_saved",
+                  userId: gameState.player.name,
+                  sessionId: gameState.sessionId,
+                  details: {
+                    round: viewedRound,
+                    answers: answers.map((a) => ({
+                      questionId: a.questionId,
+                      answer: a.answer,
+                      length: a.answer.length,
+                    })),
+                    answerCount: answers.length,
+                  },
+                });
+              }}
+            >
+              Save Round {viewedRound} Answers
+            </button>
+
+            {saveMessage && (
+              <div
+                style={{
+                  fontSize: "13px",
+                  fontWeight: 500,
+                  color: isBridgeCrew ? "#0f766e" : "#b07010",
+                  opacity: 0.9,
+                  paddingRight: "4px",
+                }}
+              >
+                ✓ {saveMessage}
+              </div>
+            )}
+          </div>
         </div>
 
       </div>
