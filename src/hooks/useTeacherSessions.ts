@@ -78,7 +78,8 @@ function isValidSessionName(sessionName: string): boolean {
 }
 
 function isValidFirebaseKey(key: string): boolean {
-  return key.trim().length > 0 && !/[.#$/[\]]/.test(key);
+  return key.trim().length > 0 &&
+  !/[.#$/\[\]]/.test(key);
 }
 
 function parseIsoTimestampToMs(timestamp: unknown): number | null {
@@ -87,6 +88,7 @@ function parseIsoTimestampToMs(timestamp: unknown): number | null {
   }
 
   const parsedMs = Date.parse(timestamp);
+
   return Number.isNaN(parsedMs) ? null : parsedMs;
 }
 
@@ -109,7 +111,10 @@ export function useTeacherSessions() {
   const moveTopLevelReadingsToSession = useCallback(
     async (sessionId: string, activatedAtMs: number) => {
       const topLevelReadingsRef = ref(db, "readings");
-      const sessionReadingsRef = ref(db, `sessions/${sessionId}/readings`);
+      const sessionReadingsRef = ref(
+        db,
+        `sessions/${sessionId}/readings`
+      );
 
       const topLevelSnapshot = await get(topLevelReadingsRef);
 
@@ -127,13 +132,18 @@ export function useTeacherSessions() {
         return;
       }
 
-      const topLevelReadings = topLevelValue as Record<
+      const topLevelReadings =
+        topLevelValue as Record<string, ReadingValue>;
+
+      const readingsToMove: Record<
         string,
         ReadingValue
-      >;
+      > = {};
 
-      const readingsToMove: Record<string, ReadingValue> = {};
-      const readingsToKeep: Record<string, ReadingValue> = {};
+      const readingsToKeep: Record<
+        string,
+        ReadingValue
+      > = {};
 
       for (const [readingId, readingValue] of Object.entries(
         topLevelReadings
@@ -647,6 +657,193 @@ export function useTeacherSessions() {
     await loadSessions();
   }
 
+  async function setSessionParticipants(
+    sessionId: string,
+    playerNames: string[],
+    nonPlayerNames: string[]
+  ) {
+    const playerUpdates: Record<string, PlayerValue> = {};
+    const nonPlayerUpdates: Record<
+      string,
+      PlayerValue
+    > = {};
+
+    for (const playerName of playerNames) {
+      if (isValidFirebaseKey(playerName)) {
+        playerUpdates[playerName] =
+          buildNewParticipantValue();
+      }
+    }
+
+    for (const nonPlayerName of nonPlayerNames) {
+      if (isValidFirebaseKey(nonPlayerName)) {
+        nonPlayerUpdates[nonPlayerName] =
+          buildNewParticipantValue();
+      }
+    }
+
+    await set(
+      ref(db, `sessions/${sessionId}/players`),
+      playerUpdates
+    );
+
+    await set(
+      ref(db, `sessions/${sessionId}/nonPlayers`),
+      nonPlayerUpdates
+    );
+
+    await loadSessions();
+  }
+
+  async function addSessionPlayer(
+    sessionId: string,
+    playerName: string
+  ) {
+    const trimmedName = playerName.trim();
+
+    if (!isValidFirebaseKey(trimmedName)) {
+      throw new Error("Invalid player name.");
+    }
+
+    await set(
+      ref(
+        db,
+        `sessions/${sessionId}/players/${trimmedName}`
+      ),
+      buildNewParticipantValue()
+    );
+
+    await loadSessions();
+  }
+
+  async function addSessionNonPlayer(
+    sessionId: string,
+    participantName: string
+  ) {
+    const trimmedName = participantName.trim();
+
+    if (!isValidFirebaseKey(trimmedName)) {
+      throw new Error(
+        "Invalid participant name."
+      );
+    }
+
+    await set(
+      ref(
+        db,
+        `sessions/${sessionId}/nonPlayers/${trimmedName}`
+      ),
+      buildNewParticipantValue()
+    );
+
+    await loadSessions();
+  }
+
+  async function moveSessionParticipant(
+    sessionId: string,
+    participantName: string,
+    nextType: ParticipantType
+  ) {
+    const trimmedName = participantName.trim();
+
+    if (!trimmedName) {
+      return;
+    }
+
+    const playerRef = ref(
+      db,
+      `sessions/${sessionId}/players/${trimmedName}`
+    );
+
+    const nonPlayerRef = ref(
+      db,
+      `sessions/${sessionId}/nonPlayers/${trimmedName}`
+    );
+
+    const playerSnapshot = await get(playerRef);
+
+    const nonPlayerSnapshot = await get(
+      nonPlayerRef
+    );
+
+    const existingValue =
+      playerSnapshot.val() ??
+      nonPlayerSnapshot.val() ??
+      buildNewParticipantValue();
+
+    await set(playerRef, null);
+    await set(nonPlayerRef, null);
+
+    if (nextType === "player") {
+      await set(playerRef, existingValue);
+    } else {
+      await set(nonPlayerRef, existingValue);
+    }
+
+    await loadSessions();
+  }
+
+  async function removeSessionParticipant(
+    sessionId: string,
+    participantName: string
+  ) {
+    const trimmedName = participantName.trim();
+
+    if (!trimmedName) {
+      return;
+    }
+
+    await set(
+      ref(
+        db,
+        `sessions/${sessionId}/players/${trimmedName}`
+      ),
+      null
+    );
+
+    await set(
+      ref(
+        db,
+        `sessions/${sessionId}/nonPlayers/${trimmedName}`
+      ),
+      null
+    );
+
+    await loadSessions();
+  }
+
+  async function clearSessionParticipants(
+    sessionId: string
+  ) {
+    await set(
+      ref(db, `sessions/${sessionId}/players`),
+      null
+    );
+
+    await set(
+      ref(db, `sessions/${sessionId}/nonPlayers`),
+      null
+    );
+
+    await loadSessions();
+  }
+
+  async function setSessionSlidesLink(
+    sessionId: string,
+    slidesLink: string
+  ) {
+    const trimmedLink = slidesLink.trim();
+
+    await update(
+      ref(db, `sessions/${sessionId}/metadata`),
+      {
+        slidesLink: trimmedLink || null,
+      }
+    );
+
+    await loadSessions();
+  }
+
   return {
     sessions,
     loading,
@@ -656,5 +853,12 @@ export function useTeacherSessions() {
     startMeeting,
     endMeeting,
     sendControlCommand,
+    setSessionParticipants,
+    addSessionPlayer,
+    addSessionNonPlayer,
+    moveSessionParticipant,
+    removeSessionParticipant,
+    clearSessionParticipants,
+    setSessionSlidesLink,
   };
 }
