@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   collection,
+  limit,
   onSnapshot,
   orderBy,
   query,
@@ -41,7 +42,8 @@ export function useSessionActivityLog(sessionId: string | null) {
     const eventsQuery = query(
       collection(db, "ui_events"),
       where("sessionId", "==", sessionId),
-      orderBy("timestamp", "desc")
+      orderBy("timestamp", "desc"),
+      limit(50)
     );
 
     const unsubscribe = onSnapshot(

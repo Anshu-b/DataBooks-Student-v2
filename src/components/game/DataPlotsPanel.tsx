@@ -30,8 +30,17 @@ import { buildScatterPlotData } from "../../utils/buildScatterPlotData";
 import { buildHistogramPlotData } from "../../utils/buildHistogramPlotData";
 import { useLogger } from "../../logging/LoggingProvider";
 import { useGameStateContext } from "../../state/GameStateContext";
-import { getDatabase, onValue, ref } from "firebase/database";
+import {
+  get,
+  getDatabase,
+  onValue,
+  orderByChild,
+  query,
+  ref,
+  startAt,
+} from "firebase/database";
 import type { MeetingLog, SessionData } from "../../analytics/aggregateTelemetry";
+import type { RawReading } from "../../analytics/types";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
@@ -234,6 +243,7 @@ const styles = `
 `;
 
 type PlotTypeId = "line" | "scatter" | "histogram" | "pie";
+const READINGS_POLL_INTERVAL_MS = 10_000;
 
 function getPlotTitle({
   plotType,
@@ -281,6 +291,12 @@ function DataPlotsPanel() {
     setMeetingMarkers([]);
 
     const db = getDatabase();
+    let stopped = false;
+    let pollTimer: ReturnType<typeof setTimeout> | null = null;
+    let pollingReadings = false;
+    let hasStartedPolling = false;
+    let lastSeenTimestamp = "";
+    const seenReadingIds = new Set<string>();
     const sessionParts: SessionData = {
       metadata: { start: { timestamp: "", cadets: 0, sectors: 0 } },
       readings: {},
@@ -288,17 +304,82 @@ function DataPlotsPanel() {
     };
     const loaded = {
       metadata: false,
-      readings: false,
       meetings: false,
     };
 
     function refreshTelemetry() {
-      if (!loaded.metadata || !loaded.readings || !loaded.meetings) {
+      if (!loaded.metadata || !loaded.meetings) {
         return;
       }
 
+      if (stopped) return;
       setTelemetry(aggregateTelemetry(sessionParts));
       setLoading(false);
+    }
+
+    function scheduleReadingsPoll(delayMs: number) {
+      if (stopped) return;
+
+      if (pollTimer) {
+        clearTimeout(pollTimer);
+      }
+
+      pollTimer = setTimeout(() => {
+        void pollReadings();
+      }, delayMs);
+    }
+
+    async function pollReadings() {
+      if (stopped || pollingReadings || !loaded.metadata) {
+        return;
+      }
+
+      pollingReadings = true;
+
+      try {
+        const readingsRef = ref(db, `sessions/${sessionId}/readings`);
+        const lowerBoundTimestamp =
+          lastSeenTimestamp || sessionParts.metadata.start.timestamp;
+        const readingsQuery = lowerBoundTimestamp
+          ? query(
+              readingsRef,
+              orderByChild("timestamp"),
+              startAt(lowerBoundTimestamp)
+            )
+          : query(readingsRef, orderByChild("timestamp"));
+        const snapshot = await get(readingsQuery);
+        const value = snapshot.val();
+
+        if (value && typeof value === "object" && !Array.isArray(value)) {
+          Object.entries(value as Record<string, RawReading>).forEach(
+            ([readingId, reading]) => {
+              if (seenReadingIds.has(readingId)) {
+                return;
+              }
+
+              seenReadingIds.add(readingId);
+              sessionParts.readings[readingId] = reading;
+
+              if (
+                typeof reading.timestamp === "string" &&
+                (!lastSeenTimestamp || reading.timestamp > lastSeenTimestamp)
+              ) {
+                lastSeenTimestamp = reading.timestamp;
+              }
+            }
+          );
+        }
+
+        refreshTelemetry();
+      } catch (error) {
+        console.error("Failed to poll session readings:", error);
+        if (!stopped) {
+          setLoading(false);
+        }
+      } finally {
+        pollingReadings = false;
+        scheduleReadingsPoll(READINGS_POLL_INTERVAL_MS);
+      }
     }
 
     const unsubscribeMetadata = onValue(ref(db, `sessions/${sessionId}/metadata/start`), (snapshot) => {
@@ -309,16 +390,16 @@ function DataPlotsPanel() {
         sectors: typeof value?.sectors === "number" ? value.sectors : 0,
       };
       loaded.metadata = true;
-      refreshTelemetry();
-    });
 
-    const unsubscribeReadings = onValue(ref(db, `sessions/${sessionId}/readings`), (snapshot) => {
-      const value = snapshot.val();
-      sessionParts.readings =
-        value && typeof value === "object" && !Array.isArray(value)
-          ? value
-          : {};
-      loaded.readings = true;
+      if (!lastSeenTimestamp) {
+        lastSeenTimestamp = sessionParts.metadata.start.timestamp;
+      }
+
+      if (!hasStartedPolling) {
+        hasStartedPolling = true;
+        void pollReadings();
+      }
+
       refreshTelemetry();
     });
 
@@ -339,8 +420,11 @@ function DataPlotsPanel() {
     });
 
     return () => {
+      stopped = true;
+      if (pollTimer) {
+        clearTimeout(pollTimer);
+      }
       unsubscribeMetadata();
-      unsubscribeReadings();
       unsubscribeMeetings();
     };
   }, [sessionId]);
